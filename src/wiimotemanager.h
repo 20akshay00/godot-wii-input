@@ -28,8 +28,10 @@ private:
 
     godot::Timer *rumble_timers[MAX_WIIMOTES];
 
-    float nunchuk_deadzone = 0.05f;  // default deadzone
-    float nunchuk_threshold = 0.01f; // default threshold for change detection
+    float nunchuk_deadzone = 0.05f;        // default deadzone
+    float nunchuk_threshold = 0.01f;       // default threshold for change detection
+    float nunchuk_orient_threshold = 0.1f; // default threshold for orientation detection
+    int nunchuk_accel_threshold = 1;       // default threshold for acceleration detection
 
 protected:
     static void _bind_methods();
@@ -43,12 +45,15 @@ public:
 
 private:
     static const int led_masks[4];
+    bool wiimote_index_valid(int index) const;
 
     void relay_button(wiimote *wm, int wiibtn, int device_id, JoyButton godot_btn);
     void relay_button(nunchuk_t *nc, int ncbtn, int device_id, JoyButton godot_btn);
     void emit_joypad_button(int device_id, JoyButton godot_btn, bool pressed);
     void poll_nunchuk_joystick(nunchuk_t *nc, int wiimote_index);
-    void handle_event(wiimote *wm, int wiimote_index);
+    void handle_event(int wiimote_index);
+
+    void initialize_nunchuk(int wiimote_index);
 
     void start_nunchuk_calibration();
     void stop_nunchuk_calibration();
@@ -61,10 +66,15 @@ private:
 
     void set_rumble(int wiimote_index, bool enable);
     void toggle_rumble(int wiimote_index);
-    godot::Timer *pulse_rumble(int wiimote_index, double duration);
+    void pulse_rumble(int wiimote_index, double duration);
 
     void set_motion_sensing(int wiimote_index, bool enable);
     float get_battery_level(int wiimote_index) const;
+
+    void set_orient_threshold(int wiimote_index, float threshold);
+    void set_accel_threshold(int wiimote_index, int threshold);
+    void set_nunchuk_orient_threshold(int wiimote_index, float threshold);
+    void set_nunchuk_accel_threshold(int wiimote_index, int threshold);
 };
 
 #endif

@@ -7,7 +7,8 @@ A scrappy little attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) int
 - Manual joystick calibration (the default from Wiiuse didn't match my controller)
 - LED control and rumble feedback  
 
-## Roadmap  
+## Roadmap
+- Rewrite non button API to spawn GDWiimotes instead of polling through a global manager
 - Hook up accelerometer (Wiimote + Nunchuk) and gyro (MotionPlus) w/ calibration
 - Make initial wiimote connection async w/ loading bar
 - Automatic mac/linux builds
@@ -31,3 +32,7 @@ A scrappy little attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) int
 This started as a simple way to get familiar with writing GDExtensions. The Wiimote felt like a fun target since it is one of the most affordable and accessible motion-centric controllers, even if it’s a bit dated, and it comes with plenty of quirky accessories to experiment with.
 
 For modern, less motion-focused controllers, Godot already has a lot of [ongoing work](https://github.com/godotengine/godot-proposals/issues/2829) to improve support. So this isn't meant for serious usage by any means. It's more of a nostalgia-driven side project than anything else :')
+
+
+### Stuff to check out
+- https://github.com/JibbSmart/GamepadMotionHelpers

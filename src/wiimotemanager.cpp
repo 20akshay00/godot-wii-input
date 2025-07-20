@@ -56,6 +56,10 @@ WiimoteManager::~WiimoteManager()
 void WiimoteManager::_bind_methods()
 {
     ClassDB::bind_method(D_METHOD("connect_wiimotes"), &WiimoteManager::connect_wiimotes);
+
+    ClassDB::bind_method(D_METHOD("set_orient_threshold", "wiimote_index", "threshold"), &WiimoteManager::set_orient_threshold);
+    ClassDB::bind_method(D_METHOD("set_accel_threshold", "wiimote_index", "threshold"), &WiimoteManager::set_accel_threshold);
+
     ClassDB::bind_method(D_METHOD("start_nunchuk_calibration"), &WiimoteManager::start_nunchuk_calibration);
     ClassDB::bind_method(D_METHOD("stop_nunchuk_calibration"), &WiimoteManager::stop_nunchuk_calibration);
 
@@ -66,8 +70,11 @@ void WiimoteManager::_bind_methods()
     ClassDB::bind_method(D_METHOD("pulse_rumble", "wiimote_index", "duration"), &WiimoteManager::pulse_rumble);
     ClassDB::bind_method(D_METHOD("toggle_rumble", "wiimote_index"), &WiimoteManager::toggle_rumble);
 
+    ClassDB::bind_method(D_METHOD("initialize_nunchuk", "wiimote_index"), &WiimoteManager::initialize_nunchuk);
     ClassDB::bind_method(D_METHOD("set_nunchuk_deadzone", "dz"), &WiimoteManager::set_nunchuk_deadzone);
     ClassDB::bind_method(D_METHOD("set_nunchuk_threshold", "dt"), &WiimoteManager::set_nunchuk_threshold);
+    ClassDB::bind_method(D_METHOD("set_nunchuk_orient_threshold", "wiimote_index", "threshold"), &WiimoteManager::set_nunchuk_orient_threshold);
+    ClassDB::bind_method(D_METHOD("set_nunchuk_accel_threshold", "wiimote_index", "threshold"), &WiimoteManager::set_nunchuk_accel_threshold);
     ClassDB::bind_method(D_METHOD("nunchuk_connected", "wiimote_index"), &WiimoteManager::nunchuk_connected);
 
     ClassDB::bind_method(D_METHOD("set_motion_sensing", "wiimote_index", "enable"), &WiimoteManager::set_motion_sensing);
@@ -136,7 +143,7 @@ void WiimoteManager::_process(double delta)
                 // does not seem to fire reliably!
                 UtilityFunctions::print("Nunchuk inserted on Wiimote ", wiimote_index);
                 emit_signal("nunchuk_inserted", wiimote_index);
-                joysticks[wiimote_index]->initialize_joystick(&wm->exp.nunchuk, nunchuk_deadzone, nunchuk_threshold);
+                initialize_nunchuk(wiimote_index);
                 break;
 
             case WIIUSE_NUNCHUK_REMOVED:
@@ -156,7 +163,7 @@ void WiimoteManager::_process(double delta)
 
             case WIIUSE_EVENT:
                 // Handle button events
-                handle_event(wm, wiimote_index);
+                handle_event(wiimote_index);
                 break;
 
             default:
@@ -230,8 +237,10 @@ bool WiimoteManager::nunchuk_connected(int wiimote_index) const
     return false;
 }
 
-void WiimoteManager::handle_event(wiimote *wm, int wiimote_index)
+void WiimoteManager::handle_event(int wiimote_index)
 {
+    wiimote *wm = wiimotes[wiimote_index];
+
     // --- Relay main Wiimote buttons ---
     relay_button(wm, WIIMOTE_BUTTON_A, wiimote_index, godot::JoyButton::JOY_BUTTON_A);
     relay_button(wm, WIIMOTE_BUTTON_B, wiimote_index, godot::JoyButton::JOY_BUTTON_B);
@@ -309,7 +318,7 @@ void WiimoteManager::set_nunchuk_threshold(float dt)
 
 void WiimoteManager::set_leds(int wiimote_index, const godot::Array &led_indices)
 {
-    if (!wiimotes || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
+    if (wiimote_index_valid(wiimote_index))
         return;
 
     int led_mask = 0;
@@ -339,21 +348,21 @@ void WiimoteManager::set_leds(int wiimote_index, const godot::Array &led_indices
 // set rumble state for a specific Wiimote
 void WiimoteManager::set_rumble(int wiimote_index, bool enabled)
 {
-    if (!wiimotes || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
+    if (wiimote_index_valid(wiimote_index))
         return;
 
     wiiuse_rumble(wiimotes[wiimote_index], enabled ? 1 : 0);
 }
 
 // Pulse rumble using preallocated timer
-godot::Timer *WiimoteManager::pulse_rumble(int wiimote_index, double duration_sec)
+void WiimoteManager::pulse_rumble(int wiimote_index, double duration_sec)
 {
-    if (!wiimotes || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
-        return nullptr;
+    if (wiimote_index_valid(wiimote_index))
+        return;
 
     wiiuse_rumble(wiimotes[wiimote_index], 1);
     rumble_timers[wiimote_index]->start(duration_sec);
-    return rumble_timers[wiimote_index];
+    return;
 }
 
 void WiimoteManager::toggle_rumble(int wiimote_index)
@@ -363,7 +372,7 @@ void WiimoteManager::toggle_rumble(int wiimote_index)
 
 void WiimoteManager::set_motion_sensing(int wiimote_index, bool enable)
 {
-    if (!wiimotes || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
+    if (wiimote_index_valid(wiimote_index))
         return;
 
     wiiuse_motion_sensing(wiimotes[wiimote_index], enable ? 1 : 0);
@@ -371,7 +380,7 @@ void WiimoteManager::set_motion_sensing(int wiimote_index, bool enable)
 
 bool WiimoteManager::get_led(int wiimote_index, int led) const
 {
-    if (!wiimotes || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
+    if (wiimote_index_valid(wiimote_index))
         return false;
 
     if (led < 1 || led > 4)
@@ -386,8 +395,66 @@ bool WiimoteManager::get_led(int wiimote_index, int led) const
 
 float WiimoteManager::get_battery_level(int wiimote_index) const
 {
-    if (!wiimotes || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
+    if (wiimote_index_valid(wiimote_index))
         return -1;
 
     return wiimotes[wiimote_index]->battery_level;
+}
+
+void WiimoteManager::set_orient_threshold(int wiimote_index, float threshold)
+{
+    if (wiimote_index_valid(wiimote_index))
+        return;
+
+    wiiuse_set_orient_threshold(wiimotes[wiimote_index], threshold);
+}
+
+void WiimoteManager::set_accel_threshold(int wiimote_index, int threshold)
+{
+    if (wiimote_index_valid(wiimote_index))
+        return;
+
+    wiiuse_set_accel_threshold(wiimotes[wiimote_index], threshold);
+}
+
+void WiimoteManager::set_nunchuk_orient_threshold(int wiimote_index, float threshold)
+{
+    if (wiimote_index_valid(wiimote_index))
+        return;
+
+    nunchuk_orient_threshold = threshold;
+}
+
+void WiimoteManager::set_nunchuk_accel_threshold(int wiimote_index, int threshold)
+{
+    if (wiimote_index_valid(wiimote_index))
+        return;
+    nunchuk_accel_threshold = threshold;
+}
+
+bool WiimoteManager::wiimote_index_valid(int wiimote_index) const
+{
+    if (wiimotes == nullptr || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
+    {
+        UtilityFunctions::print("Invalid Wiimote index: ", wiimote_index);
+        return false;
+    }
+    return true;
+}
+
+void WiimoteManager::initialize_nunchuk(int wiimote_index)
+{
+    wiimote *wm = wiimotes[wiimote_index];
+
+    if (wm->exp.type != EXP_NUNCHUK)
+    {
+        UtilityFunctions::print("Nunchuk not connected to Wiimote ", wiimote_index);
+        return;
+    }
+
+    joysticks[wiimote_index]->initialize_joystick(&wm->exp.nunchuk, nunchuk_deadzone, nunchuk_threshold);
+    // Set the nunchuk orientation threshold
+    wiiuse_set_nunchuk_orient_threshold(wm, nunchuk_orient_threshold);
+    // Set the nunchuk acceleration threshold
+    wiiuse_set_nunchuk_accel_threshold(wm, nunchuk_accel_threshold);
 }
