@@ -62,6 +62,7 @@ void WiimoteManager::_bind_methods()
 
     ClassDB::bind_method(D_METHOD("set_nunchuk_deadzone", "dz"), &WiimoteManager::set_nunchuk_deadzone);
     ClassDB::bind_method(D_METHOD("set_nunchuk_threshold", "dt"), &WiimoteManager::set_nunchuk_threshold);
+    ClassDB::bind_method(D_METHOD("nunchuk_connected", "wiimote_index"), &WiimoteManager::nunchuk_connected);
 
     ClassDB::bind_method(D_METHOD("set_motion_sensing", "wiimote_index", "enable"), &WiimoteManager::set_motion_sensing);
     ClassDB::bind_method(D_METHOD("get_battery_level", "wiimote_index"), &WiimoteManager::get_battery_level);
@@ -83,7 +84,7 @@ void WiimoteManager::connect_wiimotes()
         UtilityFunctions::print("Wiimotes found: ", found, ", connected: ", connected_count);
         connected = (connected_count > 0);
 
-        wiiuse_set_leds(wiimotes[0], WIIMOTE_LED_1 | WIIMOTE_LED_2);
+        wiiuse_set_leds(wiimotes[0], WIIMOTE_LED_1);
         wiiuse_set_leds(wiimotes[1], WIIMOTE_LED_2);
         wiiuse_set_leds(wiimotes[2], WIIMOTE_LED_3);
         wiiuse_set_leds(wiimotes[3], WIIMOTE_LED_4);
@@ -212,6 +213,15 @@ void WiimoteManager::poll_nunchuk_joystick(nunchuk_t *nc, int wiimote_index)
         // Update joystick position only if significant motion is detected
         joystick->update_prev_pos(pos_x, pos_y);
     }
+}
+
+bool WiimoteManager::nunchuk_connected(int wiimote_index) const
+{
+    if (wiimotes && wiimote_index >= 0 && wiimote_index < MAX_WIIMOTES)
+    {
+        return (wiimotes[wiimote_index]->exp.type == EXP_NUNCHUK);
+    }
+    return false;
 }
 
 void WiimoteManager::handle_event(wiimote *wm, int wiimote_index)

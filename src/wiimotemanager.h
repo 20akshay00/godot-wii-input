@@ -54,6 +54,7 @@ private:
     void stop_nunchuk_calibration();
     void set_nunchuk_deadzone(float dz);
     void set_nunchuk_threshold(float dt);
+    bool nunchuk_connected(int wiimote_index) const;
 
     void set_leds(int wiimote_index, const godot::Array &led_indices);
     bool get_led(int wiimote_index, int led) const;

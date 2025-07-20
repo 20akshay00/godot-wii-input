@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cu33gj36ltgis"]
-
-[ext_resource type="Script" uid="uid://bkrebomnas7th" path="res://menu.gd" id="1_lti8b"]
-
-[node name="Menu" type="Node2D"]
-script = ExtResource("1_lti8b")

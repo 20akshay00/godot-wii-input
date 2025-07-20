@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3 uid="uid://cu33gj36ltgis"]
+
+[ext_resource type="Script" uid="uid://bkrebomnas7th" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://cu3nq3m24o7v4" path="res://rumble_example.gd" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://c76pe086forc1" path="res://joystick_example.gd" id="3_1bvp3"]
+[ext_resource type="Script" uid="uid://c04pu5r23vykv" path="res://led_example.gd" id="3_h2yge"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_ig7tw")
+
+[node name="RumbleExample" type="Node2D" parent="."]
+script = ExtResource("2_0xm2m")
+help = "+ : start rumble
+- : stop rumble
+A : toggle rumble state
+B : pulse rumble state"
+
+[node name="JoystickExample" type="Node2D" parent="."]
+script = ExtResource("3_1bvp3")
+help = "minus : stop printing joystick data
+plus : start printing joystick data
+A : toggle calibration"
+
+[node name="LEDExample" type="Node2D" parent="."]
+script = ExtResource("3_h2yge")
+help = "minus : light up all LEDs
+plus : show LEDs status
+A : manual cycle
+B : automatic cycle"
+
+[node name="Title" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 35.0
+offset_right = 188.0
+offset_bottom = 85.0
+theme_override_font_sizes/font_size = 36
+text = "Example"
+
+[node name="Help" type="Label" parent="."]
+offset_left = 46.0
+offset_top = 153.0
+offset_right = 394.0
+offset_bottom = 203.0
+theme_override_font_sizes/font_size = 36
+text = "Instructions go here"
