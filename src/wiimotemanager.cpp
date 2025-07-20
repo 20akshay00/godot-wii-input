@@ -6,6 +6,8 @@
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/variant/callable.hpp>
 
+const int WiimoteManager::led_masks[4] = {WIIMOTE_LED_1, WIIMOTE_LED_2, WIIMOTE_LED_3, WIIMOTE_LED_4};
+
 WiimoteManager::WiimoteManager()
 {
     if (!Engine::get_singleton()->is_editor_hint() && wiimotes == nullptr)
@@ -50,7 +52,9 @@ void WiimoteManager::_bind_methods()
     ClassDB::bind_method(D_METHOD("connect_wiimotes"), &WiimoteManager::connect_wiimotes);
     ClassDB::bind_method(D_METHOD("start_nunchuk_calibration"), &WiimoteManager::start_nunchuk_calibration);
     ClassDB::bind_method(D_METHOD("stop_nunchuk_calibration"), &WiimoteManager::stop_nunchuk_calibration);
+
     ClassDB::bind_method(D_METHOD("set_leds", "wiimote_index", "led_indices"), &WiimoteManager::set_leds);
+    ClassDB::bind_method(D_METHOD("get_led", "wiimote_index", "led"), &WiimoteManager::get_led);
 
     ClassDB::bind_method(D_METHOD("set_rumble", "wiimote_index", "enable"), &WiimoteManager::set_rumble);
     ClassDB::bind_method(D_METHOD("pulse_rumble", "wiimote_index", "duration"), &WiimoteManager::pulse_rumble);
@@ -58,6 +62,8 @@ void WiimoteManager::_bind_methods()
 
     ClassDB::bind_method(D_METHOD("set_nunchuk_deadzone", "dz"), &WiimoteManager::set_nunchuk_deadzone);
     ClassDB::bind_method(D_METHOD("set_nunchuk_threshold", "dt"), &WiimoteManager::set_nunchuk_threshold);
+
+    ClassDB::bind_method(D_METHOD("set_motion_sensing", "wiimote_index", "enable"), &WiimoteManager::set_motion_sensing);
 
     ADD_SIGNAL(godot::MethodInfo("nunchuk_inserted",
                                  godot::PropertyInfo(godot::Variant::INT, "device_id")));
@@ -122,6 +128,7 @@ void WiimoteManager::_process(double delta)
                 // does not seem to fire reliably!
                 UtilityFunctions::print("Nunchuk inserted on Wiimote ", wiimote_index);
                 emit_signal("nunchuk_inserted", wiimote_index);
+                joysticks[wiimote_index]->initialize_joystick(nunchuk_deadzone, nunchuk_threshold);
                 break;
 
             case WIIUSE_NUNCHUK_REMOVED:
@@ -275,18 +282,12 @@ void WiimoteManager::stop_nunchuk_calibration()
 
 void WiimoteManager::set_nunchuk_deadzone(float dz)
 {
-    for (int wiimote_index = 0; wiimote_index < MAX_WIIMOTES; wiimote_index++)
-    {
-        joysticks[wiimote_index]->set_deadzone(dz);
-    }
+    nunchuk_deadzone = dz;
 }
 
 void WiimoteManager::set_nunchuk_threshold(float dt)
 {
-    for (int wiimote_index = 0; wiimote_index < MAX_WIIMOTES; wiimote_index++)
-    {
-        joysticks[wiimote_index]->set_threshold(dt);
-    }
+    nunchuk_threshold = dt;
 }
 
 void WiimoteManager::set_leds(int wiimote_index, const godot::Array &led_indices)
@@ -341,4 +342,27 @@ godot::Timer *WiimoteManager::pulse_rumble(int wiimote_index, double duration_se
 void WiimoteManager::toggle_rumble(int wiimote_index)
 {
     wiiuse_toggle_rumble(wiimotes[wiimote_index]);
+}
+
+void WiimoteManager::set_motion_sensing(int wiimote_index, bool enable)
+{
+    if (!wiimotes || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
+        return;
+
+    wiiuse_motion_sensing(wiimotes[wiimote_index], enable ? 1 : 0);
+}
+
+bool WiimoteManager::get_led(int wiimote_index, int led) const
+{
+    if (!wiimotes || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
+        return false;
+
+    if (led < 1 || led > 4)
+    {
+        UtilityFunctions::print("Invalid LED index: ", led);
+        return false;
+    }
+
+    int led_mask = led_masks[led - 1];
+    return (wiimotes[wiimote_index]->leds & led_mask) == led_mask;
 }

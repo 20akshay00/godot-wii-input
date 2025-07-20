@@ -1,6 +1,13 @@
 #include "joystick.h"
 #include <cmath>
 
+void GDJoystick::initialize_joystick(float deadzone, float threshold)
+{
+    deadzone = deadzone;
+    threshold = threshold;
+    // joystick->initialize_calibration(0.0f, 0.0f); // Initialize with center at (0, 0)
+}
+
 float GDJoystick::normalize_axis(float raw, float min, float max, float center) const
 {
     float delta = raw - center;
@@ -35,16 +42,6 @@ void GDJoystick::set_center(float raw_x, float raw_y)
 {
     center_x = raw_x;
     center_y = raw_y;
-}
-
-void GDJoystick::set_deadzone(float dz)
-{
-    deadzone = dz;
-}
-
-void GDJoystick::set_threshold(float th)
-{
-    threshold = th;
 }
 
 void GDJoystick::initialize_calibration(float raw_x, float raw_y)

@@ -23,11 +23,10 @@ public:
     // Update calibration with new raw values
     void calibrate(float raw_x, float raw_y);
 
+    void initialize_joystick(float deadzone, float threshold);
     float normalize_x(float raw_x) const;
     float normalize_y(float raw_y) const;
     void set_center(float raw_x, float raw_y);
-    void set_deadzone(float dz);
-    void set_threshold(float th);
 
     void update_prev_pos(float raw_x, float raw_y);
     bool is_motion_detected(float raw_x, float raw_y) const;

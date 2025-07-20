@@ -11,15 +11,16 @@ func _on_event(id: int) -> void:
 	print("Hey!")
 
 func _process(delta: float) -> void:
-	for action in ["A", "B", "minus", "plus", "home"]:
+	for action in ["A", "B", "minus", "plus", "home", "C", "Z"]:
 		if Input.is_action_just_pressed(action):
 			print("Pressed ", action)
 	
 	if Input.is_action_just_pressed("B"):
 		led = led % 4 + 1
 		print(led)
+		
 		GlobalWiimoteManager.set_leds(0, [led])
-	#if Input.is_action_just_pressed("B"):
+			#if Input.is_action_just_pressed("B"):
 		#GlobalWiimoteManager.pulse_rumble(0, 1);
 
 	var dir_joy = Input.get_vector("left_joy", "right_joy", "down_joy", "up_joy")	

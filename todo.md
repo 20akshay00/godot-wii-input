@@ -6,7 +6,8 @@
 - acceloremeter (both nunchuk and wiimote)
 - gyro (how to calibrate etc)
 - async connection
-
+- handle motion plus
+  
 - latency??
 - IR?
 - distinguish inputs from multiple wiimotes? (through device id which InputEvent strictly requires, so its already done!)
