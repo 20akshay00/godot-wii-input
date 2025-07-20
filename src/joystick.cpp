@@ -1,11 +1,19 @@
 #include "joystick.h"
 #include <cmath>
 
-void GDJoystick::initialize_joystick(float deadzone, float threshold)
+void GDJoystick::initialize_joystick(nunchuk_t *nc, float deadzone, float threshold)
 {
     deadzone = deadzone;
     threshold = threshold;
-    // joystick->initialize_calibration(0.0f, 0.0f); // Initialize with center at (0, 0)
+
+    min_x = nc->js.min.x;
+    max_x = nc->js.max.x;
+    min_y = nc->js.min.y;
+    max_y = nc->js.max.y;
+    center_x = nc->js.center.x;
+    center_y = nc->js.center.y;
+    prev_x = nc->js.x;
+    prev_y = nc->js.y;
 }
 
 float GDJoystick::normalize_axis(float raw, float min, float max, float center) const

@@ -32,6 +32,12 @@ WiimoteManager::~WiimoteManager()
 {
     if (wiimotes)
     {
+        for (int i = 0; i < MAX_WIIMOTES; i++)
+        {
+            wiiuse_set_leds(wiimotes[i], WIIMOTE_LED_2 | WIIMOTE_LED_4);
+            wiiuse_rumble(wiimotes[i], 0);
+        }
+
         wiiuse_cleanup(wiimotes, MAX_WIIMOTES);
         wiimotes = nullptr;
     }
@@ -130,7 +136,7 @@ void WiimoteManager::_process(double delta)
                 // does not seem to fire reliably!
                 UtilityFunctions::print("Nunchuk inserted on Wiimote ", wiimote_index);
                 emit_signal("nunchuk_inserted", wiimote_index);
-                joysticks[wiimote_index]->initialize_joystick(nunchuk_deadzone, nunchuk_threshold);
+                joysticks[wiimote_index]->initialize_joystick(&wm->exp.nunchuk, nunchuk_deadzone, nunchuk_threshold);
                 break;
 
             case WIIUSE_NUNCHUK_REMOVED:
