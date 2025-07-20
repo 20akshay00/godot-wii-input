@@ -64,6 +64,7 @@ void WiimoteManager::_bind_methods()
     ClassDB::bind_method(D_METHOD("set_nunchuk_threshold", "dt"), &WiimoteManager::set_nunchuk_threshold);
 
     ClassDB::bind_method(D_METHOD("set_motion_sensing", "wiimote_index", "enable"), &WiimoteManager::set_motion_sensing);
+    ClassDB::bind_method(D_METHOD("get_battery_level", "wiimote_index"), &WiimoteManager::get_battery_level);
 
     ADD_SIGNAL(godot::MethodInfo("nunchuk_inserted",
                                  godot::PropertyInfo(godot::Variant::INT, "device_id")));
@@ -365,4 +366,12 @@ bool WiimoteManager::get_led(int wiimote_index, int led) const
 
     int led_mask = led_masks[led - 1];
     return (wiimotes[wiimote_index]->leds & led_mask) == led_mask;
+}
+
+float WiimoteManager::get_battery_level(int wiimote_index) const
+{
+    if (!wiimotes || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
+        return -1;
+
+    return wiimotes[wiimote_index]->battery_level;
 }

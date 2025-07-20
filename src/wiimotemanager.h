@@ -60,10 +60,10 @@ private:
 
     void set_rumble(int wiimote_index, bool enable);
     void toggle_rumble(int wiimote_index);
+    godot::Timer *pulse_rumble(int wiimote_index, double duration);
 
     void set_motion_sensing(int wiimote_index, bool enable);
-
-    godot::Timer *pulse_rumble(int wiimote_index, double duration);
+    float get_battery_level(int wiimote_index) const;
 };
 
 #endif

@@ -7,7 +7,7 @@
 - gyro (how to calibrate etc)
 - async connection
 - handle motion plus
-  
+- speaker  
+
 - latency??
 - IR?
-- distinguish inputs from multiple wiimotes? (through device id which InputEvent strictly requires, so its already done!)
