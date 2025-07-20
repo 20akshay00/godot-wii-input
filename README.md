@@ -8,10 +8,10 @@ A scrappy little attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) int
 - LED control and rumble feedback  
 
 ## Roadmap  
-- Make Nunchuk/Wiimote connect/disconnect detection more reliable  
 - Hook up accelerometer (Wiimote + Nunchuk) and gyro (MotionPlus) w/ calibration
 - Make initial wiimote connection async w/ loading bar
 - Automatic mac/linux builds
+- Make Nunchuk/Wiimote connect/disconnect detection more reliable?  
 
 ### Wishlist
 - Standalone bluetooth connection w/o external programs
@@ -26,6 +26,8 @@ A scrappy little attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) int
 - **Windows-only for now.** Wiiuse *does* support Linux and macOS, so it should be doable once all features are added.  
 - **Limited hardware testing.** I only have a MotionPlus Wiimote and a cheap third-party Nunchuk (no sensor bar), so I can't test how other setups behave.  
 
-## Why!?
+## Why!?  
 
-Because motion control deserves more love <3 and VR shouldn't be the only way to access it through a PC. 
+This started as a simple way to get familiar with writing GDExtensions. The Wiimote felt like a fun target since it is one of the most affordable and accessible motion-centric controllers, even if it’s a bit dated, and it comes with plenty of quirky accessories to experiment with.
+
+For modern, less motion-focused controllers, Godot already has a lot of [ongoing work](https://github.com/godotengine/godot-proposals/issues/2829) to improve support. So this isn't meant for serious usage by any means. It's more of a nostalgia-driven side project than anything else :')
