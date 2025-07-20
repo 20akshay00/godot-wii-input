@@ -1,12 +1,12 @@
-- rumble w/ duration
-- figure out if nunchuk connect/disconnect signal can be more robust
+- [x] rumble w/ duration (callbacks are bit wonky..)
+- [x] led
 - [x] joystick deadzone handling, etc
-- latency??
+
+- figure out if nunchuk/wiimote connect/disconnect signal can be more robust
 - acceloremeter (both nunchuk and wiimote)
 - gyro (how to calibrate etc)
-- led
 - async connection
-- handle wiimote disconnect
 
+- latency??
 - IR?
 - distinguish inputs from multiple wiimotes? (through device id which InputEvent strictly requires, so its already done!)

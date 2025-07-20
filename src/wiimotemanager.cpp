@@ -63,6 +63,8 @@ void WiimoteManager::_bind_methods()
                                  godot::PropertyInfo(godot::Variant::INT, "device_id")));
     ADD_SIGNAL(godot::MethodInfo("nunchuk_removed",
                                  godot::PropertyInfo(godot::Variant::INT, "device_id")));
+    ADD_SIGNAL(godot::MethodInfo("wiimote_disconnected",
+                                 godot::PropertyInfo(godot::Variant::INT, "device_id")));
 }
 
 void WiimoteManager::connect_wiimotes()
@@ -125,6 +127,16 @@ void WiimoteManager::_process(double delta)
             case WIIUSE_NUNCHUK_REMOVED:
                 UtilityFunctions::print("Nunchuk removed on Wiimote ", wiimote_index);
                 emit_signal("nunchuk_removed", wiimote_index);
+                break;
+
+            case WIIUSE_UNEXPECTED_DISCONNECT:
+                UtilityFunctions::print("Wiimote ", wiimote_index, " disconnected unexpectedly");
+                emit_signal("wiimote_disconnected", wiimote_index);
+                break;
+
+            case WIIUSE_DISCONNECT:
+                UtilityFunctions::print("Wiimote ", wiimote_index, " disconnected");
+                emit_signal("wiimote_disconnected", wiimote_index);
                 break;
 
             case WIIUSE_EVENT:
