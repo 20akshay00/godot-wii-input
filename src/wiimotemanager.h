@@ -3,6 +3,8 @@
 
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/core/class_db.hpp>
+
+#include <godot_cpp/classes/timer.hpp>
 #include <joystick.h>
 
 extern "C"
@@ -24,6 +26,8 @@ private:
     GDJoystick **joysticks = nullptr;
     bool is_calibrating_nunchuk = false;
 
+    godot::Timer *rumble_timers[MAX_WIIMOTES];
+
 protected:
     static void _bind_methods();
 
@@ -43,6 +47,14 @@ private:
 
     void start_nunchuk_calibration();
     void stop_nunchuk_calibration();
+    void set_nunchuk_deadzone(float dz);
+    void set_nunchuk_threshold(float dt);
+
+    void set_leds(int wiimote_index, const godot::Array &led_indices);
+    void set_rumble(int wiimote_index, bool enable);
+    void toggle_rumble(int wiimote_index);
+
+    godot::Timer *pulse_rumble(int wiimote_index, double duration);
 };
 
 #endif

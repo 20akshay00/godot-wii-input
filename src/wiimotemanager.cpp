@@ -4,6 +4,7 @@
 #include <godot_cpp/classes/input_event_joypad_motion.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/variant/callable.hpp>
 
 WiimoteManager::WiimoteManager()
 {
@@ -49,6 +50,14 @@ void WiimoteManager::_bind_methods()
     ClassDB::bind_method(D_METHOD("connect_wiimotes"), &WiimoteManager::connect_wiimotes);
     ClassDB::bind_method(D_METHOD("start_nunchuk_calibration"), &WiimoteManager::start_nunchuk_calibration);
     ClassDB::bind_method(D_METHOD("stop_nunchuk_calibration"), &WiimoteManager::stop_nunchuk_calibration);
+    ClassDB::bind_method(D_METHOD("set_leds", "wiimote_index", "led_indices"), &WiimoteManager::set_leds);
+
+    ClassDB::bind_method(D_METHOD("set_rumble", "wiimote_index", "enable"), &WiimoteManager::set_rumble);
+    ClassDB::bind_method(D_METHOD("pulse_rumble", "wiimote_index", "duration"), &WiimoteManager::pulse_rumble);
+    ClassDB::bind_method(D_METHOD("toggle_rumble", "wiimote_index"), &WiimoteManager::toggle_rumble);
+
+    ClassDB::bind_method(D_METHOD("set_nunchuk_deadzone", "dz"), &WiimoteManager::set_nunchuk_deadzone);
+    ClassDB::bind_method(D_METHOD("set_nunchuk_threshold", "dt"), &WiimoteManager::set_nunchuk_threshold);
 
     ADD_SIGNAL(godot::MethodInfo("nunchuk_inserted",
                                  godot::PropertyInfo(godot::Variant::INT, "device_id")));
@@ -65,10 +74,20 @@ void WiimoteManager::connect_wiimotes()
         UtilityFunctions::print("Wiimotes found: ", found, ", connected: ", connected_count);
         connected = (connected_count > 0);
 
-        wiiuse_set_leds(wiimotes[0], WIIMOTE_LED_1);
+        wiiuse_set_leds(wiimotes[0], WIIMOTE_LED_1 | WIIMOTE_LED_2);
         wiiuse_set_leds(wiimotes[1], WIIMOTE_LED_2);
         wiiuse_set_leds(wiimotes[2], WIIMOTE_LED_3);
         wiiuse_set_leds(wiimotes[3], WIIMOTE_LED_4);
+
+        // Initialize rumble timers for each Wiimote
+        for (int i = 0; i < MAX_WIIMOTES; i++)
+        {
+            rumble_timers[i] = memnew(godot::Timer);
+            rumble_timers[i]->set_one_shot(true);
+            rumble_timers[i]->set_autostart(false);
+            add_child(rumble_timers[i]);
+            rumble_timers[i]->connect("timeout", callable_mp(this, &WiimoteManager::set_rumble).bind(i, false));
+        }
     }
     else
     {
@@ -98,6 +117,7 @@ void WiimoteManager::_process(double delta)
             switch (wm->event)
             {
             case WIIUSE_NUNCHUK_INSERTED:
+                // does not seem to fire reliably!
                 UtilityFunctions::print("Nunchuk inserted on Wiimote ", wiimote_index);
                 emit_signal("nunchuk_inserted", wiimote_index);
                 break;
@@ -149,10 +169,10 @@ void WiimoteManager::poll_nunchuk_joystick(nunchuk_t *nc, int wiimote_index)
     float pos_y = nc->js.y;
     GDJoystick *joystick = joysticks[wiimote_index];
 
-    if (fabs(pos_x - joystick->prev_x) > 0.01f)
+    if (joystick->is_motion_detected(pos_x, pos_y))
     {
+        // Normalize and emit X axis motion
         pos_x = joystick->normalize_x(pos_x);
-
         Ref<InputEventJoypadMotion> ev_x;
         ev_x.instantiate();
         ev_x->set_device(wiimote_index);
@@ -160,13 +180,8 @@ void WiimoteManager::poll_nunchuk_joystick(nunchuk_t *nc, int wiimote_index)
         ev_x->set_axis_value(pos_x);
         godot::Input::get_singleton()->parse_input_event(ev_x);
 
-        joystick->prev_x = pos_x;
-    }
-
-    if (fabs(pos_y - joystick->prev_y) > 0.01f)
-    {
+        // Normalize and emit Y axis motion
         pos_y = joystick->normalize_y(pos_y);
-
         Ref<InputEventJoypadMotion> ev_y;
         ev_y.instantiate();
         ev_y->set_device(wiimote_index);
@@ -174,7 +189,8 @@ void WiimoteManager::poll_nunchuk_joystick(nunchuk_t *nc, int wiimote_index)
         ev_y->set_axis_value(pos_y);
         godot::Input::get_singleton()->parse_input_event(ev_y);
 
-        joystick->prev_y = pos_y;
+        // Update joystick position only if significant motion is detected
+        joystick->update_prev_pos(pos_x, pos_y);
     }
 }
 
@@ -243,4 +259,74 @@ void WiimoteManager::stop_nunchuk_calibration()
     {
         UtilityFunctions::print("Nunchuk calibration is not in progress!");
     }
+}
+
+void WiimoteManager::set_nunchuk_deadzone(float dz)
+{
+    for (int wiimote_index = 0; wiimote_index < MAX_WIIMOTES; wiimote_index++)
+    {
+        joysticks[wiimote_index]->set_deadzone(dz);
+    }
+}
+
+void WiimoteManager::set_nunchuk_threshold(float dt)
+{
+    for (int wiimote_index = 0; wiimote_index < MAX_WIIMOTES; wiimote_index++)
+    {
+        joysticks[wiimote_index]->set_threshold(dt);
+    }
+}
+
+void WiimoteManager::set_leds(int wiimote_index, const godot::Array &led_indices)
+{
+    if (!wiimotes || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
+        return;
+
+    int led_mask = 0;
+    for (int i = 0; i < led_indices.size(); i++)
+    {
+        int led_num = (int)led_indices[i];
+        switch (led_num)
+        {
+        case 1:
+            led_mask |= WIIMOTE_LED_1;
+            break;
+        case 2:
+            led_mask |= WIIMOTE_LED_2;
+            break;
+        case 3:
+            led_mask |= WIIMOTE_LED_3;
+            break;
+        case 4:
+            led_mask |= WIIMOTE_LED_4;
+            break;
+        }
+    }
+
+    wiiuse_set_leds(wiimotes[wiimote_index], led_mask);
+}
+
+// set rumble state for a specific Wiimote
+void WiimoteManager::set_rumble(int wiimote_index, bool enabled)
+{
+    if (!wiimotes || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
+        return;
+
+    wiiuse_rumble(wiimotes[wiimote_index], enabled ? 1 : 0);
+}
+
+// Pulse rumble using preallocated timer
+godot::Timer *WiimoteManager::pulse_rumble(int wiimote_index, double duration_sec)
+{
+    if (!wiimotes || wiimote_index < 0 || wiimote_index >= MAX_WIIMOTES)
+        return nullptr;
+
+    wiiuse_rumble(wiimotes[wiimote_index], 1);
+    rumble_timers[wiimote_index]->start(duration_sec);
+    return rumble_timers[wiimote_index];
+}
+
+void WiimoteManager::toggle_rumble(int wiimote_index)
+{
+    wiiuse_toggle_rumble(wiimotes[wiimote_index]);
 }

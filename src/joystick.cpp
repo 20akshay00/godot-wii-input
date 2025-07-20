@@ -1,4 +1,5 @@
 #include "joystick.h"
+#include <cmath>
 
 float GDJoystick::normalize_axis(float raw, float min, float max, float center) const
 {
@@ -41,6 +42,11 @@ void GDJoystick::set_deadzone(float dz)
     deadzone = dz;
 }
 
+void GDJoystick::set_threshold(float th)
+{
+    threshold = th;
+}
+
 void GDJoystick::initialize_calibration(float raw_x, float raw_y)
 {
     min_x = 1e9f;
@@ -49,4 +55,15 @@ void GDJoystick::initialize_calibration(float raw_x, float raw_y)
     max_y = -1e9f;
     center_x = raw_x;
     center_y = raw_y;
+}
+
+void GDJoystick::update_prev_pos(float raw_x, float raw_y)
+{
+    prev_x = raw_x;
+    prev_y = raw_y;
+}
+
+bool GDJoystick::is_motion_detected(float raw_x, float raw_y) const
+{
+    return (fabs(raw_x - prev_x) > threshold || fabs(raw_y - prev_y) > threshold);
 }
