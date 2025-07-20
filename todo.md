@@ -1,0 +1,9 @@
+- rumble w/ duration
+- figure out if nunchuk connect/disconnect signal can be more robust
+- joystick deadzone handling, etc
+- latency??
+- acceloremeter (both nunchuk and wiimote)
+- gyro (how to calibrate etc)
+- led
+- async connection
+- handle wiimote disconnect
