@@ -3,3 +3,5 @@
 */android/
 *.obj
 *.dll
+*.exp
+*.lib
