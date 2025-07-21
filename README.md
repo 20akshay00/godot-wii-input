@@ -10,7 +10,6 @@ A scrappy little attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) int
 ## Roadmap
 - Hook up accelerometer (Wiimote + Nunchuk) and gyro (MotionPlus) w/ calibration
 - Automatic mac/linux builds
-- Make Nunchuk/Wiimote connect/disconnect detection more reliable?  
 - Better deadzone detection
 
 ### Wishlist
@@ -26,9 +25,9 @@ A scrappy little attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) int
 - **Limited hardware testing.** I only have a MotionPlus Wiimote and a cheap third-party Nunchuk (no sensor bar), so I can't test how other setups behave.
 
 ## Permanent limitations
-Most of these are due to inherent limitations in Wiiuse. Perhaps a solution can be found if one just directly uses a HID layer to communicate with the Wiimote, but that goes beyond the scope of this project.
+
 - **Third party accessories cannot be reliably supported.** They use all sorts of non-standard ways to initialize unfortunately.
-- **Controllers cannot be added/removed mid game.** This really is just because of how Wiiuse is written. Additionally, adding/removing extensions mid-game also may cause issues. The library runs on the assumption that all devices of interest are connected prior to launching the application.
+- **Controllers cannot be added/removed mid session.** This includes Wiimotes and their extensions. Wiiuse runs on the assumption that all devices of interest are paired prior to launching the application and connected only once at the start. Perhaps a solution can be found if one just directly uses a HID layer to communicate with the Wiimote, but that goes beyond the scope of this project. 
 
 ## Why!?  
 
