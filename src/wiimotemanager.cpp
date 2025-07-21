@@ -14,6 +14,7 @@ void WiimoteManager::_bind_methods()
     ADD_PROPERTY(PropertyInfo(Variant::INT, "max_wiimotes"), "set_max_wiimotes", "get_max_wiimotes");
 
     ClassDB::bind_method(D_METHOD("connect_wiimotes"), &WiimoteManager::connect_wiimotes);
+    ClassDB::bind_method(D_METHOD("finalize_connection"), &WiimoteManager::finalize_connection);
     ClassDB::bind_method(D_METHOD("disconnect_wiimotes"), &WiimoteManager::disconnect_wiimotes);
     ClassDB::bind_method(D_METHOD("get_connected_wiimotes"), &WiimoteManager::get_connected_wiimotes);
 }
@@ -38,7 +39,7 @@ WiimoteManager::~WiimoteManager()
 
 void WiimoteManager::set_max_wiimotes(int max)
 {
-    if (connected)
+    if (num_connected >= 0)
     {
         UtilityFunctions::print("Cannot change max_wiimotes while connected!");
         return;
@@ -51,41 +52,12 @@ int WiimoteManager::get_max_wiimotes() const
     return max_wiimotes;
 }
 
-TypedArray<GDWiimote> WiimoteManager::connect_wiimotes()
+TypedArray<GDWiimote> WiimoteManager::finalize_connection()
 {
-    if (connected)
-    {
-        UtilityFunctions::print("Cannot connect during runtime!");
-        return gdwiimotes;
-    }
-
-    // Allocate wiimote structures
-    wiimotes = wiiuse_init(max_wiimotes);
-
-    int found = wiiuse_find(wiimotes, max_wiimotes, 5);
-    if (found <= 0)
-    {
-        UtilityFunctions::print("No Wiimotes found.");
-        wiiuse_cleanup(wiimotes, max_wiimotes);
-        wiimotes = nullptr;
-        return gdwiimotes;
-    }
-
-    int connected_count = wiiuse_connect(wiimotes, max_wiimotes);
-    if (connected_count <= 0)
-    {
-        UtilityFunctions::print("Found ", found, " but could not connect to any.");
-        wiiuse_cleanup(wiimotes, max_wiimotes);
-        wiimotes = nullptr;
-        return gdwiimotes;
-    }
-
-    UtilityFunctions::print("Wiimotes found: ", found, ", connected: ", connected_count);
-
     // Wrap each connected wiimote
     gdwiimotes.clear();
 
-    for (int i = 0; i < connected_count; i++)
+    for (int i = 0; i < num_connected; i++)
     {
         if (!wiimotes[i] || !WIIMOTE_IS_CONNECTED(wiimotes[i]))
             continue;
@@ -103,14 +75,47 @@ TypedArray<GDWiimote> WiimoteManager::connect_wiimotes()
         wiiuse_rumble(wiimotes[i], 0);
     }
 
-    connected = true;                                          // only allow one connection per session; courtesy of wiiuse
     set_process_mode(Node::ProcessMode::PROCESS_MODE_INHERIT); // start polling
     return gdwiimotes;
 }
 
+void WiimoteManager::connect_wiimotes()
+{
+    if (num_connected >= 0)
+    {
+        UtilityFunctions::print("Cannot connect during runtime!");
+        return;
+    }
+
+    // Allocate wiimote structures
+    wiimotes = wiiuse_init(max_wiimotes);
+
+    int found = wiiuse_find(wiimotes, max_wiimotes, 5);
+    if (found <= 0)
+    {
+        UtilityFunctions::print("No Wiimotes found.");
+        wiiuse_cleanup(wiimotes, max_wiimotes);
+        wiimotes = nullptr;
+        return;
+    }
+
+    num_connected = wiiuse_connect(wiimotes, max_wiimotes);
+    if (num_connected <= 0)
+    {
+        UtilityFunctions::print("Found ", found, " but could not connect to any.");
+        wiiuse_cleanup(wiimotes, max_wiimotes);
+        wiimotes = nullptr;
+        return;
+    }
+
+    UtilityFunctions::print("Wiimotes found: ", found, ", connected: ", num_connected);
+
+    return;
+}
+
 void WiimoteManager::disconnect_wiimotes()
 {
-    if (!connected)
+    if (num_connected < 0)
         return;
 
     // Turn off LEDs and rumble before disconnect
@@ -133,7 +138,7 @@ void WiimoteManager::disconnect_wiimotes()
     }
 
     gdwiimotes.clear();
-    connected = false;
+    num_connected = -1; // reset connection state
     set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
 }
 
@@ -149,7 +154,7 @@ void WiimoteManager::stop_polling()
 
 void WiimoteManager::_process(double delta)
 {
-    if (!connected || !wiimotes)
+    if ((num_connected < 0) || !wiimotes)
         return;
 
     // Poll events

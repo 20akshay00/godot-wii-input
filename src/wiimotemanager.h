@@ -14,7 +14,7 @@ class WiimoteManager : public godot::Node
 
 private:
     int max_wiimotes = 4;
-    bool connected = false;
+    int num_connected = -1; // -1 means not connected
 
     wiimote **wiimotes = nullptr;            // raw wiimote pointers
     godot::TypedArray<GDWiimote> gdwiimotes; // wrapped GDWiimotes
@@ -30,7 +30,8 @@ public:
     int get_max_wiimotes() const;
 
     // Explicitly connect to Wiimotes, returns an Array of GDWiimote instances.
-    godot::TypedArray<GDWiimote> connect_wiimotes();
+    godot::TypedArray<GDWiimote> finalize_connection();
+    void connect_wiimotes();
 
     // Disconnect and cleanup
     void disconnect_wiimotes();
