@@ -213,9 +213,9 @@ void GDWiimote::poll_nunchuk_joystick()
 }
 
 // wiimote button relay
-void GDWiimote::relay_button(wiimote *wm_ptr, int wiibtn, godot::JoyButton godot_btn)
+void GDWiimote::relay_button(wiimote *wm, int wiibtn, godot::JoyButton godot_btn)
 {
-    bool pressed = IS_PRESSED(wm_ptr, wiibtn);
+    bool pressed = IS_PRESSED(wm, wiibtn);
     godot::Ref<godot::InputEventJoypadButton> ev;
     ev.instantiate();
     ev->set_device(device_id);
