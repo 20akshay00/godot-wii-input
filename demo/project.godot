@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GlobalWiimoteManager="*res://wiimote_manager.tscn"
+GDWiimoteManager="*res://wiimote_manager.tscn"
 
 [input]
 

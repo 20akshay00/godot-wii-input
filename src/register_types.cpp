@@ -16,6 +16,7 @@ void initialize_example_module(ModuleInitializationLevel p_level)
     }
 
     GDREGISTER_RUNTIME_CLASS(WiimoteManager);
+    GDREGISTER_RUNTIME_CLASS(GDWiimote);
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level)
