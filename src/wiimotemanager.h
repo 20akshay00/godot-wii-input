@@ -2,36 +2,22 @@
 #define WIIMOTE_MANAGER_H
 
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/variant/array.hpp>
 #include <godot_cpp/core/class_db.hpp>
-
-#include <godot_cpp/classes/timer.hpp>
-#include <joystick.h>
-
-extern "C"
-{
 #include <wiiuse.h>
-}
 
-using namespace godot;
+#include "gdwiimote.h"
 
-class WiimoteManager : public Node
+class WiimoteManager : public godot::Node
 {
-    GDCLASS(WiimoteManager, Node);
+    GDCLASS(WiimoteManager, godot::Node);
 
 private:
-    static constexpr int MAX_WIIMOTES = 4;
-    wiimote **wiimotes = nullptr;
+    int max_wiimotes = 4;
     bool connected = false;
 
-    GDJoystick **joysticks = nullptr;
-    bool is_calibrating_nunchuk = false;
-
-    godot::Timer *rumble_timers[MAX_WIIMOTES];
-
-    float nunchuk_deadzone = 0.05f;        // default deadzone
-    float nunchuk_threshold = 0.01f;       // default threshold for change detection
-    float nunchuk_orient_threshold = 0.1f; // default threshold for orientation detection
-    int nunchuk_accel_threshold = 1;       // default threshold for acceleration detection
+    wiimote **wiimotes = nullptr;            // raw wiimote pointers
+    godot::TypedArray<GDWiimote> gdwiimotes; // wrapped GDWiimotes
 
 protected:
     static void _bind_methods();
@@ -40,41 +26,22 @@ public:
     WiimoteManager();
     ~WiimoteManager();
 
-    void connect_wiimotes();
+    void set_max_wiimotes(int max);
+    int get_max_wiimotes() const;
+
+    // Explicitly connect to Wiimotes, returns an Array of GDWiimote instances.
+    godot::TypedArray<GDWiimote> connect_wiimotes();
+
+    // Disconnect and cleanup
+    void disconnect_wiimotes();
+
+    // Poll for events
     void _process(double delta) override;
+    void start_polling();
+    void stop_polling();
 
-private:
-    static const int led_masks[4];
-    bool wiimote_index_valid(int index) const;
-
-    void relay_button(wiimote *wm, int wiibtn, int device_id, JoyButton godot_btn);
-    void relay_button(nunchuk_t *nc, int ncbtn, int device_id, JoyButton godot_btn);
-    void emit_joypad_button(int device_id, JoyButton godot_btn, bool pressed);
-    void poll_nunchuk_joystick(nunchuk_t *nc, int wiimote_index);
-    void handle_event(int wiimote_index);
-
-    void initialize_nunchuk(int wiimote_index);
-
-    void start_nunchuk_calibration();
-    void stop_nunchuk_calibration();
-    void set_nunchuk_deadzone(float dz);
-    void set_nunchuk_threshold(float dt);
-    bool nunchuk_connected(int wiimote_index) const;
-
-    void set_leds(int wiimote_index, const godot::Array &led_indices);
-    bool get_led(int wiimote_index, int led) const;
-
-    void set_rumble(int wiimote_index, bool enable);
-    void toggle_rumble(int wiimote_index);
-    void pulse_rumble(int wiimote_index, double duration);
-
-    void set_motion_sensing(int wiimote_index, bool enable);
-    float get_battery_level(int wiimote_index) const;
-
-    void set_orient_threshold(int wiimote_index, float threshold);
-    void set_accel_threshold(int wiimote_index, int threshold);
-    void set_nunchuk_orient_threshold(int wiimote_index, float threshold);
-    void set_nunchuk_accel_threshold(int wiimote_index, int threshold);
+    // Access connected GDWiimotes
+    godot::TypedArray<GDWiimote> get_connected_wiimotes() const { return gdwiimotes; }
 };
 
 #endif

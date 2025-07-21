@@ -1,11 +1,11 @@
 extends Node2D
 
 var _is_rumbling: bool = false
-
+var wiimote: GDWiimote
 @export_multiline var help: String
 
 func init() -> void:
-	pass
+	wiimote = GDWiimoteManager.get_connected_wiimotes()[0]
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
@@ -13,16 +13,15 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("plus"):
 		print("Rumble state set to true")
-		GlobalWiimoteManager.set_rumble(0, true)
+		wiimote.set_rumble(true)
 	elif Input.is_action_just_pressed("minus"):
 		print("Rumble state set to false")
-		GlobalWiimoteManager.set_rumble(0, false)
+		wiimote.set_rumble(false)
 		
 	if Input.is_action_just_pressed("A"):
 		print("Rumble toggled!")
-		GlobalWiimoteManager.toggle_rumble(0)
+		wiimote.toggle_rumble()
 
 	if Input.is_action_just_pressed("B"):
 		print("Rumble pulse started!")
-		# returns a timer node; connections should be cleared manually since timer is persistent
-		GlobalWiimoteManager.pulse_rumble(0, 0.2)
+		#wiimote.pulse_rumble(0.2)

@@ -3,16 +3,24 @@ extends Node2D
 var _is_calibrating: bool= false
 var _is_connected: bool = false
 var _can_print: bool = false
+var wiimote: GDWiimote
 
 @export_multiline var help: String
 
 func init() -> void:
-	_is_connected = GlobalWiimoteManager.nunchuk_connected(0)
-	if not _is_connected: print("Nunchuk not connected!")
+	wiimote = GDWiimoteManager.get_connected_wiimotes()[0]
+	_is_connected = wiimote.is_nunchuk_connected()
+	if not _is_connected:
+		print("Nunchuk not connected!")
+
+	# Only connect if not already connected
+	if not wiimote.nunchuk_inserted.is_connected(_on_nunchuk_inserted):
+		wiimote.nunchuk_inserted.connect(_on_nunchuk_inserted)
+
+	if not wiimote.nunchuk_removed.is_connected(_on_nunchuk_removed):
+		wiimote.nunchuk_removed.connect(_on_nunchuk_removed)
 
 func _ready() -> void:
-	GlobalWiimoteManager.nunchuk_inserted.connect(_on_nunchuk_inserted)
-	GlobalWiimoteManager.nunchuk_removed.connect(_on_nunchuk_removed)
 	process_mode = Node.PROCESS_MODE_DISABLED
 
 func _process(delta: float) -> void:
@@ -24,10 +32,10 @@ func _process(delta: float) -> void:
 		if _is_connected:
 			if _is_calibrating:
 				print("Calibration completed.")
-				GlobalWiimoteManager.stop_nunchuk_calibration()
+				wiimote.stop_nunchuk_calibration()
 			else:
 				print("Calibration begun. Please rotate the joystick to maximum limits for a few seconds. Terminate calibration with A.")
-				GlobalWiimoteManager.start_nunchuk_calibration()
+				wiimote.start_nunchuk_calibration()
 			_is_calibrating = !_is_calibrating
 		else:
 			print("Nunchuk not connected! Unable to initiate calibration.")
