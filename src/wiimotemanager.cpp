@@ -259,18 +259,12 @@ void WiimoteManager::handle_event(int wiimote_index)
         if (!is_calibrating_nunchuk)
         {
             poll_nunchuk_joystick(&wm->exp.nunchuk, wiimote_index);
-            // UtilityFunctions::print(joysticks[wiimote_index]->normalize_x(wm->exp.nunchuk.js.x), " ", joysticks[wiimote_index]->normalize_y(wm->exp.nunchuk.js.y), " ", joysticks[wiimote_index]->min_x, " ", joysticks[wiimote_index]->min_y,
-            //                         " ", joysticks[wiimote_index]->max_x, " ", joysticks[wiimote_index]->max_y);
         }
         else
         {
             float raw_x = wm->exp.nunchuk.js.x;
             float raw_y = wm->exp.nunchuk.js.y;
             joysticks[wiimote_index]->calibrate(raw_x, raw_y);
-
-            // UtilityFunctions::print("Nunchuk joystick calibration (raw):", joysticks[wiimote_index]->center_x, " ", joysticks[wiimote_index]->center_y,
-            //                         " Min:", joysticks[wiimote_index]->min_x, " ", joysticks[wiimote_index]->min_y,
-            //                         " Max:", joysticks[wiimote_index]->max_x, " ", joysticks[wiimote_index]->max_y);
         }
 
         relay_button(&wm->exp.nunchuk, NUNCHUK_BUTTON_C, wiimote_index, godot::JoyButton::JOY_BUTTON_LEFT_SHOULDER);

@@ -13,6 +13,7 @@ A scrappy little attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) int
 - Make initial wiimote connection async w/ loading bar
 - Automatic mac/linux builds
 - Make Nunchuk/Wiimote connect/disconnect detection more reliable?  
+- Better deadzone detection
 
 ### Wishlist
 - Standalone bluetooth connection w/o external programs
@@ -21,11 +22,16 @@ A scrappy little attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) int
 - Motion plus attachment
 - Motion board
 
-## Current limitations  
-- **No built-in connection handling yet.** On Windows especially, Bluetooth can be a pain. For now, I just open Dolphin Emulator with continuous scanning on, pair the Wiimote, close Dolphin, and *then* run my Godot game. Eventually I'll dig into whatever Dolphin uses and see if it can be reused here.
-- **Short initial delay during connection.** Right now, it takes a few seconds for wiiuse to find a paired wiimote, so the Godot preview window hangs for a couple of seconds. I'll probably make this a manual function to be called that can be added by the user along with a loading bar or some such.
+## Current limitations
+- **No built-in connection handling yet.** The Wii remote uses somewhat non-standard bluetooth protocols to communicate with devices, so there is a degree of variability in how the remote must be paired with the OS. On Linux, simply press 1+2 and then launch the Godot game to connect. On Windows, this doesn't really work. My workaround for now is to open the Dolphin Emulator with continuous scanning on, pair the Wiimote, close Dolphin, and *then* run my Godot game. Eventually I'll dig into whatever Dolphin uses and see if it can be reused here.
+- **Short initial delay during connection.** Right now, it takes a few seconds for Wiiuse to find a paired wiimote, so the Godot preview window hangs for a couple of seconds. I'll probably make this a function that runs asynchronously.
 - **Windows-only for now.** Wiiuse *does* support Linux and macOS, so it should be doable once all features are added.  
-- **Limited hardware testing.** I only have a MotionPlus Wiimote and a cheap third-party Nunchuk (no sensor bar), so I can't test how other setups behave.  
+- **Limited hardware testing.** I only have a MotionPlus Wiimote and a cheap third-party Nunchuk (no sensor bar), so I can't test how other setups behave.
+
+## Permanent limitations
+Most of these are due to inherent limitations in Wiiuse. Perhaps a solution can be found if one just directly uses a HID layer to communicate with the Wiimote, but that goes beyond the scope of this project.
+- **Third party accessories cannot be reliably supported.** They use all sorts of non-standard ways to initialize unfortunately.
+- **Controllers cannot be added/removed mid game.** This really is just because of how Wiiuse is written. Additionally, adding/removing extensions mid-game also may cause issues. The library runs on the assumption that all devices of interest are connected prior to launching the application.
 
 ## Why!?  
 
@@ -36,3 +42,4 @@ For modern, less motion-focused controllers, Godot already has a lot of [ongoing
 
 ### Stuff to check out
 - https://github.com/JibbSmart/GamepadMotionHelpers
+- https://wiiuse.net/?nav=api
