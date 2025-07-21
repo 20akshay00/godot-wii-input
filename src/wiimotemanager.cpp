@@ -17,6 +17,9 @@ void WiimoteManager::_bind_methods()
     ClassDB::bind_method(D_METHOD("finalize_connection"), &WiimoteManager::finalize_connection);
     ClassDB::bind_method(D_METHOD("disconnect_wiimotes"), &WiimoteManager::disconnect_wiimotes);
     ClassDB::bind_method(D_METHOD("get_connected_wiimotes"), &WiimoteManager::get_connected_wiimotes);
+
+    ClassDB::bind_method(D_METHOD("start_polling"), &WiimoteManager::start_polling);
+    ClassDB::bind_method(D_METHOD("stop_polling"), &WiimoteManager::stop_polling);
 }
 
 WiimoteManager::WiimoteManager()
