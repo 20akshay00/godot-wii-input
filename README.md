@@ -11,10 +11,8 @@ A scrappy attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) into Godot
 ### Roadmap
 - Accelerometer/Gyroscope calibration
 - Basic motion control utilities through [GamepadMotionHelpers](https://github.com/JibbSmart/GamepadMotionHelpers)
-
 - Speaker support
 - Automatic releases w/ Github actions
-
 - IR data
 - Out of the box gyro-based pointer controls
 
@@ -32,6 +30,7 @@ A scrappy attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) into Godot
 - `git clone --recursive` to clone the repository including `godot-cpp`.
 - `cd godot-cpp; scons platform=<platform>; cd ..` to build the cpp bindings as described in the [GDExtension documentation](https://docs.godotengine.org/en/4.4/tutorials/scripting/gdextension/gdextension_cpp_example.html).
 - `scons platform=<platform>` to build `gdwiiinput`.
+
 You should now be able to run the demo project from Godot. Once this extension is more mature, it may be put up on the asset library. Also note that for now, the Wiiuse shared libraries for Windows and Linux are shipped with this repository, so building it is not necessary.
 
 ## Current limitations
