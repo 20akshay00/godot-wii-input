@@ -13,6 +13,10 @@
 			<return type="void" />
 			<description>
 				Initiate the connection process for Wiimotes. This method will search for available Wiimotes and connect them, allowing access to their features through the [GDWiimote] class. This must be followed by a call to [method finalize_connection] to complete the connection process and retrieve the connected Wiimotes.
+
+				[b]Linux:[/b] Press 1+2 on each Wiimote after this method is called.
+				[b]Windows:[/b] Pair the Wiimotes through Dolphin emulator or some other hidapi manager for Wii before calling this method.
+
 				[b]Note:[/b] This method should be called only once at the start of the session. Subsequent calls will not reinitialize the connection process. This method is also blocking, so it may be prefered to call it in a separate thread.
 				[codeblocks]
 				[gdscript]
