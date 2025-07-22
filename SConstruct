@@ -17,7 +17,7 @@ env.Append(CPPPATH=["src/"])
 sources = Glob("src/*.cpp")
 
 env.Append(CPPPATH=["include/"])
-env.Append(LIBPATH=["libs/"])
+env.Append(LIBPATH=["demo/bin/"])
 env.Append(LIBS=["wiiuse"])
 
 if env["platform"] == "macos":
