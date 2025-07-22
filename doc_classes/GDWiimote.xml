@@ -4,15 +4,34 @@
 		A container for the Wiimote controller, providing access to its features such as motion sensing, LED control, and Nunchuk accessory management.
 	</brief_description>
 	<description>
-		
 	</description>
 	<tutorials>
 	</tutorials>
 	<methods>
+		<method name="get_accel" qualifiers="const">
+			<return type="Vector3" />
+			<description>
+			Get the current raw acceleration data along the X, Y, and Z axes. The values are in G-force units (1G = 9.81 m/s^2).
+			</description>
+		</method>
 		<method name="get_battery_level" qualifiers="const">
 			<return type="float" />
 			<description>
 				Get the battery level of the Wiimote, as a percentage (0-100).
+			</description>
+		</method>
+		<method name="get_gforce" qualifiers="const">
+			<return type="Vector3" />
+			<description>
+				Get the current G-force data along the X, Y, and Z axes. The values are in G-force units (1G = 9.81 m/s^2).
+			</description>
+		</method>
+		<method name="get_gyro" qualifiers="const">
+			<return type="Vector3" />
+			<description>
+				Get the current gyroscope data from the Wiimote, if available. The values represent the angular velocity around the X, Y, and Z axes in degrees per second.
+
+				[b]Note:[/b] This method only returns data if the Wiimote is using a MotionPlus accessory or has built-in gyroscope support. In such a case, [method set_motion_plus] should be enabled first.
 			</description>
 		</method>
 		<method name="get_led" qualifiers="const">
@@ -20,6 +39,42 @@
 			<param index="0" name="led_index" type="int" />
 			<description>
 				Get whether a specific LED is on or off. Indices are 1-4.
+			</description>
+		</method>
+		<method name="get_nunchuk_accel" qualifiers="const">
+			<return type="Vector3" />
+			<description>
+				Get the current raw acceleration data from the Nunchuk accessory along the X, Y, and Z axes. The values are in G-force units (1G = 9.81 m/s^2).
+			</description>
+		</method>
+		<method name="get_nunchuk_gforce" qualifiers="const">
+			<return type="Vector3" />
+			<description>
+				Get the current G-force data from the Nunchuk accessory along the X, Y, and Z axes. The values are in G-force units (1G = 9.81 m/s^2).
+			</description>
+		</method>
+		<method name="get_nunchuk_raw_tilt" qualifiers="const">
+			<return type="Vector2" />
+			<description>
+				Get the current raw tilt data from the Nunchuk accessory. The values represent the pitch and roll angles in degrees.
+			</description>
+		</method>
+		<method name="get_nunchuk_smoothed_tilt" qualifiers="const">
+			<return type="Vector2" />
+			<description>
+				Get the current smoothed tilt data from the Nunchuk accessory. The values represent the pitch and roll angles in degrees, smoothed over time to reduce noise.
+			</description>
+		</method>
+		<method name="get_raw_tilt" qualifiers="const">
+			<return type="Vector2" />
+			<description>
+				Get the current raw tilt data from the Wiimote. The values represent the pitch and roll angles in degrees.
+			</description>
+		</method>
+		<method name="get_smoothed_tilt" qualifiers="const">
+			<return type="Vector2" />
+			<description>
+				Get the current smoothed tilt data from the Wiimote. The values represent the pitch and roll angles in degrees, smoothed over time to reduce noise.
 			</description>
 		</method>
 		<method name="initialize_nunchuk">
@@ -55,11 +110,19 @@
 				Set the state of the LEDs on the Wiimote. The [code]led_indices[/code] array should contain integers representing the LED indices (1-4) that should be turned on. If an index is not included, that LED will be turned off.
 			</description>
 		</method>
+		<method name="set_motion_plus">
+			<return type="void" />
+			<param index="0" name="enable" type="bool" />
+			<description>
+				Enable or disable reporting of gyroscope data. Used to save power when motion plus sensing is not needed.
+			</description>
+		</method>
 		<method name="set_motion_sensing">
 			<return type="void" />
 			<param index="0" name="enable" type="bool" />
 			<description>
-				Enable or disable reporting of acceleration and orientation data. Used to save power when motion sensing is not needed.
+				Enable or disable reporting of acceleration and orientation data. Used to save power when motion sensing is not needed. 
+				See also [method set_motion_plus].
 			</description>
 		</method>
 		<method name="set_nunchuk_accel_threshold">
@@ -108,7 +171,7 @@
 			<return type="void" />
 			<description>
 				Start the calibration process for the Nunchuk's joystick. At the moment of calling this method, the Nunchuk's joystick should be centered and not moving. During the calibration process, the Nunchuk's joystick should be moved around to capture its range of motion. The calibration must then be manually completed by calling [method stop_nunchuk_calibration].
-				[b] Note: [/b] This stops firing [InputEventJoypadMotion] until the calibration is complete. 
+				[b] Note: [/b] This stops firing [InputEventJoypadMotion] until the calibration is complete.
 			</description>
 		</method>
 		<method name="stop_nunchuk_calibration">

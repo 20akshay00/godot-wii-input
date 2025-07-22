@@ -25,3 +25,6 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("B"):
 		print("Rumble pulse started!")
 		wiimote.pulse_rumble(300)
+
+func exit():
+	pass

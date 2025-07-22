@@ -61,6 +61,7 @@ public:
 
     // Motion + thresholds
     void set_motion_sensing(bool enable);
+    void set_motion_plus(bool enable);
     void set_orient_threshold(float threshold);
     void set_accel_threshold(int threshold);
 
@@ -71,6 +72,19 @@ public:
 
     bool is_nunchuk_connected() const;
     void initialize_nunchuk();
+
+    // Accelerometer
+    godot::Vector3 get_accel() const;
+    godot::Vector3 get_gforce() const;
+    godot::Vector2 get_raw_tilt() const;
+    godot::Vector2 get_smoothed_tilt() const;
+
+    godot::Vector3 get_nunchuk_accel() const;
+    godot::Vector3 get_nunchuk_gforce() const;
+    godot::Vector2 get_nunchuk_raw_tilt() const;
+    godot::Vector2 get_nunchuk_smoothed_tilt() const;
+
+    godot::Vector3 get_gyro() const;
 
     // Battery
     float get_battery_level() const;

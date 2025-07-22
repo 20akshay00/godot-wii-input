@@ -30,3 +30,6 @@ func _process(delta: float) -> void:
 			if wiimote.get_led(led):
 				print("LED ", led, " is turned on.")
 		print("-------\n")
+
+func exit():
+	pass

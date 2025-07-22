@@ -45,13 +45,27 @@ void GDWiimote::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("pulse_rumble", "duration_msec"), &GDWiimote::pulse_rumble);
 
     godot::ClassDB::bind_method(godot::D_METHOD("set_motion_sensing", "enable"), &GDWiimote::set_motion_sensing);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_motion_plus", "enable"), &GDWiimote::set_motion_plus);
+
     godot::ClassDB::bind_method(godot::D_METHOD("set_orient_threshold", "threshold"), &GDWiimote::set_orient_threshold);
     godot::ClassDB::bind_method(godot::D_METHOD("set_accel_threshold", "threshold"), &GDWiimote::set_accel_threshold);
 
+    godot::ClassDB::bind_method(godot::D_METHOD("get_accel"), &GDWiimote::get_accel);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_gforce"), &GDWiimote::get_gforce);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_raw_tilt"), &GDWiimote::get_raw_tilt);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_smoothed_tilt"), &GDWiimote::get_smoothed_tilt);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_gyro"), &GDWiimote::get_gyro);
+
     godot::ClassDB::bind_method(godot::D_METHOD("set_nunchuk_deadzone", "dz"), &GDWiimote::set_nunchuk_deadzone);
     godot::ClassDB::bind_method(godot::D_METHOD("set_nunchuk_threshold", "dt"), &GDWiimote::set_nunchuk_threshold);
+
     godot::ClassDB::bind_method(godot::D_METHOD("set_nunchuk_orient_threshold", "threshold"), &GDWiimote::set_nunchuk_orient_threshold);
     godot::ClassDB::bind_method(godot::D_METHOD("set_nunchuk_accel_threshold", "threshold"), &GDWiimote::set_nunchuk_accel_threshold);
+
+    godot::ClassDB::bind_method(godot::D_METHOD("get_nunchuk_accel"), &GDWiimote::get_nunchuk_accel);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_nunchuk_gforce"), &GDWiimote::get_nunchuk_gforce);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_nunchuk_raw_tilt"), &GDWiimote::get_nunchuk_raw_tilt);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_nunchuk_smoothed_tilt"), &GDWiimote::get_nunchuk_smoothed_tilt);
 
     godot::ClassDB::bind_method(godot::D_METHOD("is_nunchuk_connected"), &GDWiimote::is_nunchuk_connected);
     godot::ClassDB::bind_method(godot::D_METHOD("initialize_nunchuk"), &GDWiimote::initialize_nunchuk);
@@ -122,6 +136,28 @@ void GDWiimote::set_motion_sensing(bool enable)
 {
     if (wm)
         wiiuse_motion_sensing(wm, enable ? 1 : 0);
+}
+
+void GDWiimote::set_motion_plus(bool enable)
+{
+    if (wm)
+    {
+        if (enable)
+        {
+            if (WIIUSE_USING_EXP(wm))
+            {
+                wiiuse_set_motion_plus(wm, 2); // nunchuck pass-through
+            }
+            else
+            {
+                wiiuse_set_motion_plus(wm, 1); // standalone
+            }
+        }
+        else
+        {
+            wiiuse_set_motion_plus(wm, 0); // disable
+        }
+    }
 }
 
 void GDWiimote::set_orient_threshold(float threshold)
@@ -307,4 +343,78 @@ void GDWiimote::handle_event()
     default:
         break;
     }
+}
+
+godot::Vector3 GDWiimote::get_accel() const
+{
+    if (!wm)
+        return godot::Vector3();
+
+    return godot::Vector3(wm->accel.x, wm->accel.y, wm->accel.z);
+}
+
+godot::Vector3 GDWiimote::get_gforce() const
+{
+    if (!wm)
+        return godot::Vector3();
+
+    return godot::Vector3(wm->gforce.x, wm->gforce.y, wm->gforce.z);
+}
+
+godot::Vector2 GDWiimote::get_raw_tilt() const
+{
+    if (!wm)
+        return godot::Vector2();
+
+    return godot::Vector2(wm->orient.roll, wm->orient.pitch);
+}
+
+godot::Vector2 GDWiimote::get_smoothed_tilt() const
+{
+    if (!wm)
+        return godot::Vector2();
+
+    return godot::Vector2(wm->orient.a_roll, wm->orient.a_pitch);
+}
+
+godot::Vector3 GDWiimote::get_nunchuk_accel() const
+{
+    if (!is_nunchuk_connected())
+        return godot::Vector3();
+
+    return godot::Vector3(wm->exp.nunchuk.accel.x, wm->exp.nunchuk.accel.y, wm->exp.nunchuk.accel.z);
+}
+
+godot::Vector3 GDWiimote::get_nunchuk_gforce() const
+{
+    if (!wm)
+        return godot::Vector3();
+
+    return godot::Vector3(wm->exp.nunchuk.gforce.x, wm->exp.nunchuk.gforce.y, wm->exp.nunchuk.gforce.z);
+}
+
+godot::Vector2 GDWiimote::get_nunchuk_raw_tilt() const
+{
+    if (!is_nunchuk_connected())
+        return godot::Vector2();
+
+    return godot::Vector2(wm->exp.nunchuk.orient.pitch, wm->exp.nunchuk.orient.roll);
+}
+
+godot::Vector2 GDWiimote::get_nunchuk_smoothed_tilt() const
+{
+    if (!is_nunchuk_connected())
+        return godot::Vector2();
+
+    return godot::Vector2(wm->exp.nunchuk.orient.a_pitch, wm->exp.nunchuk.orient.a_roll);
+}
+
+godot::Vector3 GDWiimote::get_gyro() const
+{
+    if (!wm || !(wm->exp.type == EXP_MOTION_PLUS || wm->exp.type == EXP_MOTION_PLUS_NUNCHUK))
+        return godot::Vector3();
+
+    return godot::Vector3(wm->exp.mp.angle_rate_gyro.pitch,
+                          wm->exp.mp.angle_rate_gyro.roll,
+                          wm->exp.mp.angle_rate_gyro.yaw);
 }

@@ -22,7 +22,7 @@
 				[gdscript]
 				func _ready():
 				    Thread.new().start(self, "_connect_wiimotes_thread")
-				
+
 				func _connect_wiimotes_thread():
 				    # Initialize loading screen
 				    # ... 
@@ -38,7 +38,6 @@
 				    var connected_wiimotes = WiimoteManager.finalize_connection()
 				[/gdscript]
 				[/codeblocks]
-
 			</description>
 		</method>
 		<method name="disconnect_wiimotes">
@@ -51,7 +50,7 @@
 			<return type="GDWiimote[]" />
 			<description>
 				Finalize the connection process and return an array of connected [GDWiimote] instances. This method should be called after [method connect_wiimotes] to retrieve the connected Wiimotes. 
-				[b]Note:[/b] This method is not blocking, so it may be called on the main thread. 
+				[b]Note:[/b] This method is not blocking, so it may be called on the main thread.
 			</description>
 		</method>
 		<method name="get_connected_wiimotes" qualifiers="const">
@@ -75,9 +74,6 @@
 	</methods>
 	<members>
 		<member name="max_wiimotes" type="int" setter="set_max_wiimotes" getter="get_max_wiimotes" default="4">
-			<description>
-				The maximum number of Wiimotes that can be connected at once. This is set to 4 by default, but the actual limit depends on the bluetooth stack of your device.
-			</description>
 		</member>
 		<member name="process_mode" type="int" setter="set_process_mode" getter="get_process_mode" overrides="Node" enum="Node.ProcessMode" default="4" />
 	</members>

@@ -52,3 +52,6 @@ func _on_nunchuk_inserted(id: int) -> void:
 
 func _on_nunchuk_removed(id: int) -> void:
 	_is_connected = false
+
+func exit():
+	pass
