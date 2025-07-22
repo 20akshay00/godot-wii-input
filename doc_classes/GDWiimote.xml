@@ -30,7 +30,6 @@
 			<return type="Vector3" />
 			<description>
 				Get the current gyroscope data from the Wiimote, if available. The values represent the angular velocity around the X, Y, and Z axes in degrees per second.
-
 				[b]Note:[/b] This method only returns data if the Wiimote is using a MotionPlus accessory or has built-in gyroscope support. In such a case, [method set_motion_plus] should be enabled first.
 			</description>
 		</method>
