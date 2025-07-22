@@ -24,4 +24,4 @@ func _process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("B"):
 		print("Rumble pulse started!")
-		#wiimote.pulse_rumble(0.2)
+		wiimote.pulse_rumble(300)
