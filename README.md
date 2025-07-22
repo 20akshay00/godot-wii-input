@@ -9,19 +9,22 @@ A scrappy little attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) int
 
 ## Roadmap
 - Hook up accelerometer (Wiimote + Nunchuk) and gyro (MotionPlus) w/ calibration
-- Automatic mac/linux builds
-- Better deadzone detection
+- Speaker support
+
+- Add basic motion control utilities through GamepadMotionHelpers
+- Automatic releases w/ Github actions
 
 ### Wishlist
+- IR data
+- Out of the box gyro-based pointer controls
 - Standalone bluetooth connection w/o external programs
-- Speaker support
-- Read IR data  
 - Motion plus attachment
 - Motion board
+- Better nunchuk deadzone detection
 
 ## Current limitations
 - **No built-in connection handling yet.** The Wii remote uses somewhat non-standard bluetooth protocols to communicate with devices, so there is a degree of variability in how the remote must be paired with the OS. On Linux, simply press 1+2 and then launch the Godot game to connect. On Windows, this doesn't really work. My workaround for now is to open the Dolphin Emulator with continuous scanning on, pair the Wiimote, close Dolphin, and *then* run my Godot game. Eventually I'll dig into whatever Dolphin uses and see if it can be reused here.
-- **Windows-only for now.** Wiiuse *does* support Linux and macOS, so it should be doable once all features are added.  
+- **Windows and Linux only for now.** I just don't have access to a Mac.
 - **Limited hardware testing.** I only have a MotionPlus Wiimote and a cheap third-party Nunchuk (no sensor bar), so I can't test how other setups behave.
 
 ## Permanent limitations

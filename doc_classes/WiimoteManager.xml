@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="WiimoteManager" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		A manager for handling multiple Wiimote controllers.
+	</brief_description>
+	<description>
+		The [WiimoteManager] node should be added as a global singleton (autoload) in your project settings in order to manage Wiimote interactions during the session. It handles connecting, disconnecting, and polling multiple Wiimotes, providing access to their features through the [GDWiimote] class.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="connect_wiimotes">
+			<return type="void" />
+			<description>
+				Initiate the connection process for Wiimotes. This method will search for available Wiimotes and connect them, allowing access to their features through the [GDWiimote] class. This must be followed by a call to [method finalize_connection] to complete the connection process and retrieve the connected Wiimotes.
+				[b]Note:[/b] This method should be called only once at the start of the session. Subsequent calls will not reinitialize the connection process. This method is also blocking, so it may be prefered to call it in a separate thread.
+				[codeblocks]
+				[gdscript]
+				func _ready():
+				    Thread.new().start(self, "_connect_wiimotes_thread")
+				
+				func _connect_wiimotes_thread():
+				    # Initialize loading screen
+				    # ... 
+
+				    WiimoteManager.connect_wiimotes()
+				    call_deferred("_on_connection_complete")
+
+				func _on_connection_complete():
+				    # Hide loading screen
+				    # ...
+
+				    # Retrieve connected Wiimotes 
+				    var connected_wiimotes = WiimoteManager.finalize_connection()
+				[/gdscript]
+				[/codeblocks]
+
+			</description>
+		</method>
+		<method name="disconnect_wiimotes">
+			<return type="void" />
+			<description>
+				Disconnect all currently connected Wiimotes. This will stop any ongoing polling and release resources associated with the Wiimotes.
+			</description>
+		</method>
+		<method name="finalize_connection">
+			<return type="GDWiimote[]" />
+			<description>
+				Finalize the connection process and return an array of connected [GDWiimote] instances. This method should be called after [method connect_wiimotes] to retrieve the connected Wiimotes. 
+				[b]Note:[/b] This method is not blocking, so it may be called on the main thread. 
+			</description>
+		</method>
+		<method name="get_connected_wiimotes" qualifiers="const">
+			<return type="GDWiimote[]" />
+			<description>
+				Get an array of currently connected [GDWiimote] instances. This will include all Wiimotes that have been successfully connected and initialized.
+			</description>
+		</method>
+		<method name="start_polling">
+			<return type="void" />
+			<description>
+				Start polling the connected Wiimotes for input data. This will enable the Wiimotes to send updates about their state, such as button presses and motion data. [b] Polling is enabled by default.[/b]
+			</description>
+		</method>
+		<method name="stop_polling">
+			<return type="void" />
+			<description>
+				Stop polling the connected Wiimotes. This will pause the updates from the Wiimotes, preventing any further input data from being processed until polling is restarted with [method start_polling].
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="max_wiimotes" type="int" setter="set_max_wiimotes" getter="get_max_wiimotes" default="4">
+			<description>
+				The maximum number of Wiimotes that can be connected at once. This is set to 4 by default, but the actual limit depends on the bluetooth stack of your device.
+			</description>
+		</member>
+		<member name="process_mode" type="int" setter="set_process_mode" getter="get_process_mode" overrides="Node" enum="Node.ProcessMode" default="4" />
+	</members>
+</class>

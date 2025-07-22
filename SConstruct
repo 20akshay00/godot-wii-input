@@ -16,8 +16,18 @@ env = SConscript("godot-cpp/SConstruct")
 env.Append(CPPPATH=["src/"])
 sources = Glob("src/*.cpp")
 
+# documentation
+try:
+    doc_data = env.GodotCPPDocData(
+        "src/gen/doc_data.gen.cpp", source=Glob("doc_classes/*.xml")
+    )
+    sources.append(doc_data)
+except AttributeError:
+    print("Not including class reference as we're targeting a pre-4.3 baseline.")
+
+
 env.Append(CPPPATH=["include/"])
-env.Append(LIBPATH=["demo/bin/"])
+env.Append(LIBPATH=["libs/"])
 env.Append(LIBS=["wiiuse"])
 
 if env["platform"] == "macos":

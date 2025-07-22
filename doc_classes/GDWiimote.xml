@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GDWiimote" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		A container for the Wiimote controller, providing access to its features such as motion sensing, LED control, and Nunchuk accessory management.
+	</brief_description>
+	<description>
+		
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_battery_level" qualifiers="const">
+			<return type="float" />
+			<description>
+				Get the battery level of the Wiimote, as a percentage (0-100).
+			</description>
+		</method>
+		<method name="get_led" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="led_index" type="int" />
+			<description>
+				Get whether a specific LED is on or off. Indices are 1-4.
+			</description>
+		</method>
+		<method name="initialize_nunchuk">
+			<return type="void" />
+			<description>
+				Initialize the Nunchuk accessory with default calibration values. This should be called immediately after the Nunchuk is connected.
+			</description>
+		</method>
+		<method name="is_nunchuk_connected" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Check if the Nunchuk accessory is connected to the Wiimote.
+			</description>
+		</method>
+		<method name="pulse_rumble">
+			<return type="void" />
+			<param index="0" name="duration_msec" type="float" />
+			<description>
+				Pulse the rumble motor for a specified duration in [i]milliseconds[/i].
+			</description>
+		</method>
+		<method name="set_accel_threshold">
+			<return type="void" />
+			<param index="0" name="threshold" type="int" />
+			<description>
+				Set a threshold used to determine when a change in the Wiimote's acceleration is reported. The threshold indicates the decimal place that should be considered a significant change.
+			</description>
+		</method>
+		<method name="set_leds">
+			<return type="void" />
+			<param index="0" name="led_indices" type="Array" />
+			<description>
+				Set the state of the LEDs on the Wiimote. The [code]led_indices[/code] array should contain integers representing the LED indices (1-4) that should be turned on. If an index is not included, that LED will be turned off.
+			</description>
+		</method>
+		<method name="set_motion_sensing">
+			<return type="void" />
+			<param index="0" name="enable" type="bool" />
+			<description>
+				Enable or disable reporting of acceleration and orientation data. Used to save power when motion sensing is not needed.
+			</description>
+		</method>
+		<method name="set_nunchuk_accel_threshold">
+			<return type="void" />
+			<param index="0" name="threshold" type="int" />
+			<description>
+				Set a threshold used to determine when a change in the Nunchuk's acceleration is reported. See also [method set_accel_threshold].
+			</description>
+		</method>
+		<method name="set_nunchuk_deadzone">
+			<return type="void" />
+			<param index="0" name="dz" type="float" />
+			<description>
+				Set the deadzone for the Nunchuk's joystick. This is the width of a cross-shaped area around the center of the joystick where movement is ignored.
+			</description>
+		</method>
+		<method name="set_nunchuk_orient_threshold">
+			<return type="void" />
+			<param index="0" name="threshold" type="float" />
+			<description>
+				Set a threshold used to determine when a change in the Nunchuk's orientation is reported. See also [method set_orient_threshold].
+			</description>
+		</method>
+		<method name="set_nunchuk_threshold">
+			<return type="void" />
+			<param index="0" name="dt" type="float" />
+			<description>
+				Set the threshold for the Nunchuk's joystick. This is the minimum distance the joystick must move from its previous position before a change is reported.
+			</description>
+		</method>
+		<method name="set_orient_threshold">
+			<return type="void" />
+			<param index="0" name="threshold" type="float" />
+			<description>
+				Set a threshold used to determine when a change in the Wiimote's orientation is reported. The threshold indicates the decimal place that should be considered a significant change.
+			</description>
+		</method>
+		<method name="set_rumble">
+			<return type="void" />
+			<param index="0" name="enabled" type="bool" />
+			<description>
+				Set whether the rumble motor is enabled or disabled.
+			</description>
+		</method>
+		<method name="start_nunchuk_calibration">
+			<return type="void" />
+			<description>
+				Start the calibration process for the Nunchuk's joystick. At the moment of calling this method, the Nunchuk's joystick should be centered and not moving. During the calibration process, the Nunchuk's joystick should be moved around to capture its range of motion. The calibration must then be manually completed by calling [method stop_nunchuk_calibration].
+				[b] Note: [/b] This stops firing [InputEventJoypadMotion] until the calibration is complete. 
+			</description>
+		</method>
+		<method name="stop_nunchuk_calibration">
+			<return type="void" />
+			<description>
+				Stop the calibration process for the Nunchuk's joystick. This should be called after [method start_nunchuk_calibration] to finalize the calibration data.
+				[b] Note: [/b] This resumes firing [InputEventJoypadMotion] after the calibration is complete.
+			</description>
+		</method>
+		<method name="toggle_rumble">
+			<return type="void" />
+			<description>
+				Toggle the rumble motor on or off. If the rumble motor is currently enabled, it will be disabled, and vice versa.
+			</description>
+		</method>
+	</methods>
+	<signals>
+		<signal name="nunchuk_inserted">
+			<param index="0" name="device_id" type="int" />
+			<description>
+				Emitted when a Nunchuk accessory is connected to the Wiimote. The [code]device_id[/code] parameter indicates which Wiimote the Nunchuk is connected to. This is not reliable in the middle of an ongoing session.
+			</description>
+		</signal>
+		<signal name="nunchuk_removed">
+			<param index="0" name="device_id" type="int" />
+			<description>
+				Emitted when a Nunchuk accessory is disconnected from the Wiimote. The [code]device_id[/code] parameter indicates which Wiimote the Nunchuk was connected to. This is not reliable in the middle of an ongoing session.
+			</description>
+		</signal>
+		<signal name="wiimote_disconnected">
+			<param index="0" name="device_id" type="int" />
+			<description>
+				Emitted when a Wiimote is disconnected. The [code]device_id[/code] parameter indicates which Wiimote was disconnected. This is not reliable in the middle of an ongoing session.
+			</description>
+		</signal>
+	</signals>
+</class>
