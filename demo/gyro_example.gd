@@ -12,7 +12,11 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
 
 func _process(delta: float) -> void:
-	print(wiimote.get_gforce())
+	#print(wiimote.get_accel())
+	#print(wiimote.get_raw_tilt())
+	#print(wiimote.get_smoothed_tilt())
+	#print(wiimote.get_gforce())
+	print(wiimote.get_nunchuk_accel())
 
 func exit():
 	wiimote.set_motion_sensing(false)

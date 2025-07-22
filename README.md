@@ -1,35 +1,39 @@
 # GDWiiInput – WIP!  
 
-A scrappy little attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) into Godot so you can play around with the Wii Remote (and some of its accessories) directly from GDScript. I honestly have no idea what I'm doing here as its my first GDExtension, so if this interests you, contributions and tips are *very* welcome!  
+A scrappy attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) into Godot so you can play around with the Wii Remote (and some of its accessories) directly from GDScript. I honestly have no idea what I'm doing here as its my first GDExtension, so if this interests you, contributions and tips are *very* welcome!
 
 ## Features 
-- All button presses (including the Nunchuk joystick) are routed through Godot's Input system  
+- All button presses (including the Nunchuk joystick) are routed through Godot's Input system (check the demo project to see the mappings)
 - Manual joystick calibration (in case the default from Wiiuse does not match, typically for third party nunchuks)
 - LED control and rumble feedback
 - Raw accelerometer and gyroscope data
 
 ### Roadmap
-- Build instructions
 - Accelerometer/Gyroscope calibration
-- Basic motion control utilities through GamepadMotionHelpers
+- Basic motion control utilities through [GamepadMotionHelpers](https://github.com/JibbSmart/GamepadMotionHelpers)
 
 - Speaker support
 - Automatic releases w/ Github actions
 
-### Wishlist
 - IR data
 - Out of the box gyro-based pointer controls
+
+### Wishlist
 - Standalone bluetooth connection w/o external programs
 - Motion plus attachment
 - Motion board
 - Better nunchuk deadzone detection
 
-## Compiling 
-
 ## Connecting Wiimotes
 - **Linux:** After `WiimoteManager.connect_wiimotes()` is called, press 1+2 on all the Wiimotes.
 - **Windows:** The bluetooth stack of Windows is a bit quirky so the procedure is a bit more involved. If you use a bluetooth passthrough device such as the Dolphinbar, it should work similar to Linux. If not, you may use something like [WiiPair](https://github.com/jordanbtucker/WiiPair) beforehand and then launch the Godot session. Alternatively, you can use the continuous scanning option in [Dolphin emulator](https://github.com/dolphin-emu/dolphin). Apparently there are also ways to connect it via the native Windows bluetooth prompts, but I've not had any luck with these. Ideally a port of whatever Dolphin emulator is using would be the long-term solution.
- 
+
+## Compiling the project
+- `git clone --recursive` to clone the repository including `godot-cpp`.
+- `cd godot-cpp; scons platform=<platform>; cd ..` to build the cpp bindings as described in the [GDExtension documentation](https://docs.godotengine.org/en/4.4/tutorials/scripting/gdextension/gdextension_cpp_example.html).
+- `scons platform=<platform>` to build `gdwiiinput`.
+You should now be able to run the demo project from Godot. Once this extension is more mature, it may be put up on the asset library. Also note that for now, the Wiiuse shared libraries for Windows and Linux are shipped with this repository, so building it is not necessary.
+
 ## Current limitations
 - **No built-in pairing handling for Windows.** 
 - **Tested only on Windows and Linux.** I just don't have access to a Mac.
@@ -37,7 +41,7 @@ A scrappy little attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) int
 
 ## Permanent limitations
 - **Third party accessories cannot be reliably supported.** They use all sorts of non-standard ways to initialize unfortunately.
-- **Controllers cannot be added/removed mid session.** This includes Wiimotes and their extensions. For whatever reason, wiiuse runs on the assumption that all devices of interest are paired prior to launching the application and connected only once at the start. This is not a strict limitation of the Wiimote and a solution can be found if one just directly uses a HID layer to communicate with it, but that goes beyond the scope of this project. 
+- **Controllers cannot be added/removed mid session.** This includes Wiimotes and their extensions. For whatever reason, Wiiuse runs on the assumption that all devices of interest are paired prior to launching the application and connected only once at the start. This is not a strict limitation of the Wiimote and a solution can be found if one just directly uses a HID layer to communicate with it, but that goes beyond the scope of this project. 
 
 ## Why!?  
 
@@ -47,5 +51,4 @@ For modern, less motion-focused controllers, Godot already has a lot of [ongoing
 
 
 ### Stuff to check out
-- https://github.com/JibbSmart/GamepadMotionHelpers
 - https://wiiuse.net/?nav=api
