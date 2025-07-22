@@ -26,7 +26,11 @@ A scrappy attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) into Godot
 - **Linux:** After `WiimoteManager.connect_wiimotes()` is called, press 1+2 on all the Wiimotes.
 - **Windows:** The bluetooth stack of Windows is a bit quirky so the procedure is a bit more involved. If you use a bluetooth passthrough device such as the Dolphinbar, it should work similar to Linux. If not, you may use something like [WiiPair](https://github.com/jordanbtucker/WiiPair) beforehand and then launch the Godot session. Alternatively, you can use the continuous scanning option in [Dolphin emulator](https://github.com/dolphin-emu/dolphin). Apparently there are also ways to connect it via the native Windows bluetooth prompts, but I've not had any luck with these. Ideally a port of whatever Dolphin emulator is using would be the long-term solution.
 
+Upon successful connection, the LED should light up along with a rumble just like the standard connection with the Wii.
+
 ## Compiling the project
+The project is made for Godot 4.4+.
+
 - `git clone --recursive` to clone the repository including `godot-cpp`.
 - `cd godot-cpp; scons platform=<platform>; cd ..` to build the cpp bindings as described in the [GDExtension documentation](https://docs.godotengine.org/en/4.4/tutorials/scripting/gdextension/gdextension_cpp_example.html).
 - `scons platform=<platform>` to build `gdwiiinput`.
