@@ -144,7 +144,7 @@ void GDWiimote::set_motion_plus(bool enable)
     {
         if (enable)
         {
-            if (WIIUSE_USING_EXP(wm))
+            if ((wm->exp.type == EXP_NUNCHUK) || (wm->exp.type == EXP_MOTION_PLUS_NUNCHUK))
             {
                 wiiuse_set_motion_plus(wm, 2); // nunchuck pass-through
             }
@@ -182,7 +182,7 @@ void GDWiimote::set_nunchuk_accel_threshold(int th) { nunchuk_accel_threshold = 
 
 bool GDWiimote::is_nunchuk_connected() const
 {
-    return wm && wm->exp.type == EXP_NUNCHUK;
+    return wm && ((wm->exp.type == EXP_NUNCHUK) || (wm->exp.type == EXP_MOTION_PLUS_NUNCHUK));
 }
 
 void GDWiimote::initialize_nunchuk()
