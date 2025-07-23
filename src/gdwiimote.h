@@ -74,15 +74,15 @@ public:
     void initialize_nunchuk();
 
     // Accelerometer
+    godot::Vector3 get_raw_accel() const;
     godot::Vector3 get_accel() const;
-    godot::Vector3 get_gforce() const;
-    godot::Vector2 get_raw_tilt() const;
-    godot::Vector2 get_smoothed_tilt() const;
+    godot::Vector3 get_raw_tilt() const;
+    godot::Vector3 get_smoothed_tilt() const;
 
+    godot::Vector3 get_nunchuk_raw_accel() const;
     godot::Vector3 get_nunchuk_accel() const;
-    godot::Vector3 get_nunchuk_gforce() const;
-    godot::Vector2 get_nunchuk_raw_tilt() const;
-    godot::Vector2 get_nunchuk_smoothed_tilt() const;
+    godot::Vector3 get_nunchuk_raw_tilt() const;
+    godot::Vector3 get_nunchuk_smoothed_tilt() const;
 
     godot::Vector3 get_gyro() const;
 

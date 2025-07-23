@@ -72,9 +72,6 @@
 	</methods>
 	<members>
 		<member name="max_wiimotes" type="int" setter="set_max_wiimotes" getter="get_max_wiimotes" default="4">
-			<description>
-				The maximum number of Wiimotes that can be connected at once. The actual limit depends on the bluetooth stack of your device.
-			</description>
 		</member>
 		<member name="process_mode" type="int" setter="set_process_mode" getter="get_process_mode" overrides="Node" enum="Node.ProcessMode" default="4" />
 	</members>

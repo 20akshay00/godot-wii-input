@@ -8,10 +8,10 @@
 	<tutorials>
 	</tutorials>
 	<methods>
-		<method name="get_accel" qualifiers="const">
+		<method name="get_raw_accel" qualifiers="const">
 			<return type="Vector3" />
 			<description>
-			Get the current raw acceleration data along the X, Y, and Z axes. The values are in G-force units (1G = 9.81 m/s^2).
+				Get the current raw acceleration data along the X, Y, and Z axes.
 			</description>
 		</method>
 		<method name="get_battery_level" qualifiers="const">
@@ -20,10 +20,10 @@
 				Get the battery level of the Wiimote, as a percentage (0-100).
 			</description>
 		</method>
-		<method name="get_gforce" qualifiers="const">
+		<method name="get_accel" qualifiers="const">
 			<return type="Vector3" />
 			<description>
-				Get the current G-force data along the X, Y, and Z axes. The values are in G-force units (1G = 9.81 m/s^2).
+				Get the current acceleration data along the X, Y, and Z axes in G-force units (1G = 9.81 m/s^2).
 			</description>
 		</method>
 		<method name="get_gyro" qualifiers="const">
@@ -40,40 +40,40 @@
 				Get whether a specific LED is on or off. Indices are 1-4.
 			</description>
 		</method>
+		<method name="get_nunchuk_raw_accel" qualifiers="const">
+			<return type="Vector3" />
+			<description>
+				Get the current raw acceleration data from the Nunchuk accessory along the X, Y, and Z axes.
+			</description>
+		</method>
 		<method name="get_nunchuk_accel" qualifiers="const">
 			<return type="Vector3" />
 			<description>
-				Get the current raw acceleration data from the Nunchuk accessory along the X, Y, and Z axes. The values are in G-force units (1G = 9.81 m/s^2).
-			</description>
-		</method>
-		<method name="get_nunchuk_gforce" qualifiers="const">
-			<return type="Vector3" />
-			<description>
-				Get the current G-force data from the Nunchuk accessory along the X, Y, and Z axes. The values are in G-force units (1G = 9.81 m/s^2).
+				Get the current acceleration data from the Nunchuk accessory along the X, Y, and Z axes in G-force units (1G = 9.81 m/s^2).
 			</description>
 		</method>
 		<method name="get_nunchuk_raw_tilt" qualifiers="const">
-			<return type="Vector2" />
+			<return type="Vector3" />
 			<description>
-				Get the current raw tilt data from the Nunchuk accessory. The values represent the pitch and roll angles in degrees.
+				Get the current raw tilt data computed from the acceleration data of the Nunchuk accessory. The values represent the roll, pitch and yaw angles in degrees.
 			</description>
 		</method>
 		<method name="get_nunchuk_smoothed_tilt" qualifiers="const">
-			<return type="Vector2" />
+			<return type="Vector3" />
 			<description>
-				Get the current smoothed tilt data from the Nunchuk accessory. The values represent the pitch and roll angles in degrees, smoothed over time to reduce noise.
+				Get the current smoothed tilt data computed from the acceleration data of the Nunchuk accessory. The values represent the roll, pitch and yaw angles in degrees, smoothed over time to reduce noise.
 			</description>
 		</method>
 		<method name="get_raw_tilt" qualifiers="const">
-			<return type="Vector2" />
+			<return type="Vector3" />
 			<description>
-				Get the current raw tilt data from the Wiimote. The values represent the pitch and roll angles in degrees.
+				Get the current raw tilt data computed from the acceleration data of the Wiimote. The values represent the roll, pitch and yaw angles in degrees.
 			</description>
 		</method>
 		<method name="get_smoothed_tilt" qualifiers="const">
-			<return type="Vector2" />
+			<return type="Vector3" />
 			<description>
-				Get the current smoothed tilt data from the Wiimote. The values represent the pitch and roll angles in degrees, smoothed over time to reduce noise.
+				Get the current smoothed tilt data computed from the acceleration data of the Wiimote. The values represent the roll, pitch and yaw angles in degrees, smoothed over time to reduce noise.
 			</description>
 		</method>
 		<method name="initialize_nunchuk">
