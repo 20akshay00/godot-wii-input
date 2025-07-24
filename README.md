@@ -29,7 +29,7 @@
 ## Connecting Wiimotes
 
 - **Linux**: After calling `WiimoteManager.connect_wiimotes()`, press 1+2 on the Wiimotes to connect.
-- **Windows**: The Bluetooth stack on Windows can be quirky. If you're using a Bluetooth passthrough device like the [Dolphinbar](https://www.mayflash.com/product/W010.html), it should work similarly to Linux. Alternatively, you can use [WiiPair](https://github.com/jordanbtucker/WiiPair) before launching Godot, or use continuous scanning in [Dolphin Emulator](https://github.com/dolphin-emu/dolphin). There are also native Windows Bluetooth prompts, but they can be unreliable. Ideally, a port of whatever Dolphin Emulator uses will be a long-term solution.
+- **Windows**: The Bluetooth stack on Windows can be quirky. If you're using a Bluetooth passthrough device like the [Dolphinbar](https://www.mayflash.com/product/W010.html), it should work similarly to Linux. Alternatively, you can use something like [WiiPair](https://github.com/jordanbtucker/WiiPair) or use continuous scanning in [Dolphin Emulator](https://github.com/dolphin-emu/dolphin) to connect the Wiimotes before launching the Godot session. Ideally, a port of whatever Dolphin Emulator uses will be a long-term solution.
 
 Upon successful connection, the LED should light up, and you’ll feel a rumble just like the standard connection with the Wii.
 
