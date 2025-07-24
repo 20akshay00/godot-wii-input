@@ -1,11 +1,5 @@
 #include "gdwiimote.h"
-#include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/input_event_joypad_button.hpp>
-#include <godot_cpp/classes/input_event_joypad_motion.hpp>
-#include <godot_cpp/variant/utility_functions.hpp>
-
-#include <godot_cpp/classes/timer.hpp>
-#include <godot_cpp/variant/callable.hpp>
 
 #include <thread>
 #include <chrono>
@@ -17,6 +11,7 @@ GDWiimote::GDWiimote() {}
 GDWiimote::GDWiimote(wiimote *wm_ptr, int dev_id)
 {
     assign_wiimote(wm_ptr, dev_id);
+    motion_state.SetCalibrationMode(GamepadMotionHelpers::CalibrationMode::Manual);
 }
 
 GDWiimote::~GDWiimote()
@@ -37,43 +32,69 @@ void GDWiimote::assign_wiimote(wiimote *wm_ptr, int dev_id)
 
 void GDWiimote::_bind_methods()
 {
-    godot::ClassDB::bind_method(godot::D_METHOD("set_leds", "led_indices"), &GDWiimote::set_leds);
+    // LED control
     godot::ClassDB::bind_method(godot::D_METHOD("get_led", "led_index"), &GDWiimote::get_led);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_leds", "led_indices"), &GDWiimote::set_leds);
 
+    // Rumble control
     godot::ClassDB::bind_method(godot::D_METHOD("set_rumble", "enabled"), &GDWiimote::set_rumble);
     godot::ClassDB::bind_method(godot::D_METHOD("toggle_rumble"), &GDWiimote::toggle_rumble);
     godot::ClassDB::bind_method(godot::D_METHOD("pulse_rumble", "duration_msec"), &GDWiimote::pulse_rumble);
 
+    // Wiimote status
+    godot::ClassDB::bind_method(godot::D_METHOD("get_battery_level"), &GDWiimote::get_battery_level);
+
+    // Motion controls
+
+    /// Enable/disable motion sensing capabilities
     godot::ClassDB::bind_method(godot::D_METHOD("set_motion_sensing", "enable"), &GDWiimote::set_motion_sensing);
     godot::ClassDB::bind_method(godot::D_METHOD("set_motion_plus", "enable"), &GDWiimote::set_motion_plus);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_motion_processing", "enable"), &GDWiimote::set_motion_processing);
 
+    /// Motion thresholds
     godot::ClassDB::bind_method(godot::D_METHOD("set_orient_threshold", "threshold"), &GDWiimote::set_orient_threshold);
     godot::ClassDB::bind_method(godot::D_METHOD("set_accel_threshold", "threshold"), &GDWiimote::set_accel_threshold);
-
-    godot::ClassDB::bind_method(godot::D_METHOD("get_raw_accel"), &GDWiimote::get_raw_accel);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_accel"), &GDWiimote::get_accel);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_raw_tilt"), &GDWiimote::get_raw_tilt);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_smoothed_tilt"), &GDWiimote::get_smoothed_tilt);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_gyro"), &GDWiimote::get_gyro);
-
-    godot::ClassDB::bind_method(godot::D_METHOD("set_nunchuk_deadzone", "dz"), &GDWiimote::set_nunchuk_deadzone);
-    godot::ClassDB::bind_method(godot::D_METHOD("set_nunchuk_threshold", "dt"), &GDWiimote::set_nunchuk_threshold);
 
     godot::ClassDB::bind_method(godot::D_METHOD("set_nunchuk_orient_threshold", "threshold"), &GDWiimote::set_nunchuk_orient_threshold);
     godot::ClassDB::bind_method(godot::D_METHOD("set_nunchuk_accel_threshold", "threshold"), &GDWiimote::set_nunchuk_accel_threshold);
 
+    /// Accelerometer
+    godot::ClassDB::bind_method(godot::D_METHOD("get_raw_accel"), &GDWiimote::get_raw_accel);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_accel"), &GDWiimote::get_accel);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_processed_accel"), &GDWiimote::get_processed_accel);
+
     godot::ClassDB::bind_method(godot::D_METHOD("get_nunchuk_raw_accel"), &GDWiimote::get_nunchuk_raw_accel);
     godot::ClassDB::bind_method(godot::D_METHOD("get_nunchuk_accel"), &GDWiimote::get_nunchuk_accel);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_nunchuk_raw_tilt"), &GDWiimote::get_nunchuk_raw_tilt);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_nunchuk_smoothed_tilt"), &GDWiimote::get_nunchuk_smoothed_tilt);
 
+    /// Gyroscope
+    godot::ClassDB::bind_method(godot::D_METHOD("start_gyro_calibration"), &GDWiimote::start_gyro_calibration);
+    godot::ClassDB::bind_method(godot::D_METHOD("stop_gyro_calibration"), &GDWiimote::stop_gyro_calibration);
+    godot::ClassDB::bind_method(godot::D_METHOD("reset_gyro_calibration"), &GDWiimote::reset_gyro_calibration);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_gyro_calibration_mode", "mode"), &GDWiimote::set_gyro_calibration_mode);
+
+    godot::ClassDB::bind_method(godot::D_METHOD("get_raw_gyro"), &GDWiimote::get_raw_gyro);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_world_space_gyro", "side_reduction_threshold"), &GDWiimote::get_world_space_gyro);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_player_space_gyro", "yaw_relax_factor"), &GDWiimote::get_player_space_gyro);
+
+    /// Orientation
+    godot::ClassDB::bind_method(godot::D_METHOD("get_fusion_orientation"), &GDWiimote::get_fusion_orientation);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_raw_orientation"), &GDWiimote::get_raw_orientation);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_smoothed_orientation"), &GDWiimote::get_smoothed_orientation);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_nunchuk_raw_orientation"), &GDWiimote::get_nunchuk_raw_orientation);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_nunchuk_smoothed_orientation"), &GDWiimote::get_nunchuk_smoothed_orientation);
+
+    // Nunchuk settings
+
+    /// Nunchuk status
     godot::ClassDB::bind_method(godot::D_METHOD("is_nunchuk_connected"), &GDWiimote::is_nunchuk_connected);
     godot::ClassDB::bind_method(godot::D_METHOD("initialize_nunchuk"), &GDWiimote::initialize_nunchuk);
 
-    godot::ClassDB::bind_method(godot::D_METHOD("start_nunchuk_calibration"), &GDWiimote::start_nunchuk_calibration);
-    godot::ClassDB::bind_method(godot::D_METHOD("stop_nunchuk_calibration"), &GDWiimote::stop_nunchuk_calibration);
+    godot::ClassDB::bind_method(godot::D_METHOD("start_nunchuk_joystick_calibration"), &GDWiimote::start_nunchuk_joystick_calibration);
+    godot::ClassDB::bind_method(godot::D_METHOD("stop_nunchuk_joystick_calibration"), &GDWiimote::stop_nunchuk_joystick_calibration);
 
-    godot::ClassDB::bind_method(godot::D_METHOD("get_battery_level"), &GDWiimote::get_battery_level);
+    /// Nunchuk thresholds
+    godot::ClassDB::bind_method(godot::D_METHOD("set_nunchuk_joystick_deadzone", "dz"), &GDWiimote::set_nunchuk_joystick_deadzone);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_nunchuk_joystick_threshold", "dt"), &GDWiimote::set_nunchuk_joystick_threshold);
 
     ADD_SIGNAL(godot::MethodInfo("nunchuk_inserted",
                                  godot::PropertyInfo(godot::Variant::INT, "device_id")));
@@ -83,7 +104,17 @@ void GDWiimote::_bind_methods()
                                  godot::PropertyInfo(godot::Variant::INT, "device_id")));
 }
 
-// LED & rumble
+// LED control
+
+bool GDWiimote::get_led(int led_index) const
+{
+    if (!wm)
+        return false;
+    if (led_index < 1 || led_index > 4)
+        return false;
+    return (wm->leds & LED_MASKS[led_index - 1]) != 0;
+}
+
 void GDWiimote::set_leds(const godot::Array &led_indices)
 {
     if (!wm)
@@ -98,15 +129,7 @@ void GDWiimote::set_leds(const godot::Array &led_indices)
     wiiuse_set_leds(wm, led_mask);
 }
 
-bool GDWiimote::get_led(int led_index) const
-{
-    if (!wm)
-        return false;
-    if (led_index < 1 || led_index > 4)
-        return false;
-    return (wm->leds & LED_MASKS[led_index - 1]) != 0;
-}
-
+// Rumble control
 void GDWiimote::set_rumble(bool enabled)
 {
     if (!wm)
@@ -131,121 +154,12 @@ void GDWiimote::pulse_rumble(double duration_msec)
     wiiuse_rumble(wm, 0);
 }
 
-// Motion thresholds
-void GDWiimote::set_motion_sensing(bool enable)
+// Battery
+float GDWiimote::get_battery_level() const
 {
-    if (wm)
-        wiiuse_motion_sensing(wm, enable ? 1 : 0);
-}
-
-void GDWiimote::set_motion_plus(bool enable)
-{
-    if (wm)
-    {
-        if (enable)
-        {
-            if ((wm->exp.type == EXP_NUNCHUK) || (wm->exp.type == EXP_MOTION_PLUS_NUNCHUK))
-            {
-                wiiuse_set_motion_plus(wm, 2); // nunchuck pass-through
-            }
-            else
-            {
-                wiiuse_set_motion_plus(wm, 1); // standalone
-            }
-        }
-        else
-        {
-            wiiuse_set_motion_plus(wm, 0); // disable
-        }
-    }
-}
-
-void GDWiimote::set_orient_threshold(float threshold)
-{
-    orient_threshold = threshold;
-    if (wm)
-        wiiuse_set_orient_threshold(wm, threshold);
-}
-
-void GDWiimote::set_accel_threshold(int threshold)
-{
-    accel_threshold = threshold;
-    if (wm)
-        wiiuse_set_accel_threshold(wm, threshold);
-}
-
-// Nunchuk thresholds
-void GDWiimote::set_nunchuk_deadzone(float dz) { nunchuk_deadzone = dz; }
-void GDWiimote::set_nunchuk_threshold(float dt) { nunchuk_threshold = dt; }
-void GDWiimote::set_nunchuk_orient_threshold(float th) { nunchuk_orient_threshold = th; }
-void GDWiimote::set_nunchuk_accel_threshold(int th) { nunchuk_accel_threshold = th; }
-
-bool GDWiimote::is_nunchuk_connected() const
-{
-    return wm && ((wm->exp.type == EXP_NUNCHUK) || (wm->exp.type == EXP_MOTION_PLUS_NUNCHUK));
-}
-
-void GDWiimote::initialize_nunchuk()
-{
-    if (!is_nunchuk_connected())
-    {
-        godot::UtilityFunctions::print("Nunchuk not connected to Wiimote ", device_id);
-        return;
-    }
-    joystick->initialize_joystick(&wm->exp.nunchuk, nunchuk_deadzone, nunchuk_threshold);
-    wiiuse_set_nunchuk_orient_threshold(wm, nunchuk_orient_threshold);
-    wiiuse_set_nunchuk_accel_threshold(wm, nunchuk_accel_threshold);
-}
-
-void GDWiimote::start_nunchuk_calibration()
-{
-    if (!is_calibrating_nunchuk)
-    {
-        is_calibrating_nunchuk = true;
-        joystick->initialize_calibration(wm->exp.nunchuk.js.x, wm->exp.nunchuk.js.y);
-    }
-    else
-    {
-        godot::UtilityFunctions::print("Calibration already in progress!");
-    }
-}
-
-void GDWiimote::stop_nunchuk_calibration()
-{
-    if (is_calibrating_nunchuk)
-        is_calibrating_nunchuk = false;
-    else
-        godot::UtilityFunctions::print("Calibration not in progress!");
-}
-
-// Poll joystick
-void GDWiimote::poll_nunchuk_joystick()
-{
-    float pos_x = wm->exp.nunchuk.js.x;
-    float pos_y = wm->exp.nunchuk.js.y;
-    if (joystick->is_motion_detected(pos_x, pos_y))
-    {
-        pos_x = joystick->normalize_x(pos_x);
-        pos_y = joystick->normalize_y(pos_y);
-
-        auto input = godot::Input::get_singleton();
-
-        godot::Ref<godot::InputEventJoypadMotion> ev_x;
-        ev_x.instantiate();
-        ev_x->set_device(device_id);
-        ev_x->set_axis(godot::JoyAxis::JOY_AXIS_LEFT_X);
-        ev_x->set_axis_value(pos_x);
-        input->parse_input_event(ev_x);
-
-        godot::Ref<godot::InputEventJoypadMotion> ev_y;
-        ev_y.instantiate();
-        ev_y->set_device(device_id);
-        ev_y->set_axis(godot::JoyAxis::JOY_AXIS_LEFT_Y);
-        ev_y->set_axis_value(pos_y);
-        input->parse_input_event(ev_y);
-
-        joystick->update_prev_pos(pos_x, pos_y);
-    }
+    if (!wm)
+        return -1;
+    return wm->battery_level;
 }
 
 // wiimote button relay
@@ -272,19 +186,24 @@ void GDWiimote::relay_button(nunchuk_t *nc, int ncbtn, godot::JoyButton godot_bt
     godot::Input::get_singleton()->parse_input_event(ev);
 }
 
-// Battery
-float GDWiimote::get_battery_level() const
-{
-    if (!wm)
-        return -1;
-    return wm->battery_level;
-}
-
 // Handle wm->event
-void GDWiimote::handle_event()
+void GDWiimote::handle_event(double delta)
 {
     if (!wm)
         return;
+
+    // update GamePadMotion state if motion plus is enabled
+    if (process_motion)
+    {
+        motion_state.ProcessMotion(
+            wm->exp.mp.angle_rate_gyro.pitch,
+            wm->exp.mp.angle_rate_gyro.yaw,
+            wm->exp.mp.angle_rate_gyro.roll,
+            wm->gforce.x,
+            wm->gforce.y,
+            wm->gforce.z,
+            delta);
+    }
 
     switch (wm->event)
     {
@@ -343,78 +262,4 @@ void GDWiimote::handle_event()
     default:
         break;
     }
-}
-
-godot::Vector3 GDWiimote::get_raw_accel() const
-{
-    if (!wm)
-        return godot::Vector3();
-
-    return godot::Vector3(wm->accel.x, wm->accel.y, wm->accel.z);
-}
-
-godot::Vector3 GDWiimote::get_accel() const
-{
-    if (!wm)
-        return godot::Vector3();
-
-    return godot::Vector3(wm->gforce.x, wm->gforce.y, wm->gforce.z);
-}
-
-godot::Vector3 GDWiimote::get_raw_tilt() const
-{
-    if (!wm)
-        return godot::Vector3();
-
-    return godot::Vector3(wm->orient.yaw, wm->orient.pitch, wm->orient.roll);
-}
-
-godot::Vector3 GDWiimote::get_smoothed_tilt() const
-{
-    if (!wm)
-        return godot::Vector3();
-
-    return godot::Vector3(0.f, wm->orient.a_pitch, wm->orient.a_roll);
-}
-
-godot::Vector3 GDWiimote::get_nunchuk_raw_accel() const
-{
-    if (!is_nunchuk_connected())
-        return godot::Vector3();
-
-    return godot::Vector3(wm->exp.nunchuk.accel.x, wm->exp.nunchuk.accel.y, wm->exp.nunchuk.accel.z);
-}
-
-godot::Vector3 GDWiimote::get_nunchuk_accel() const
-{
-    if (!wm)
-        return godot::Vector3();
-
-    return godot::Vector3(wm->exp.nunchuk.gforce.x, wm->exp.nunchuk.gforce.y, wm->exp.nunchuk.gforce.z);
-}
-
-godot::Vector3 GDWiimote::get_nunchuk_raw_tilt() const
-{
-    if (!is_nunchuk_connected())
-        return godot::Vector3();
-
-    return godot::Vector3(wm->exp.nunchuk.orient.yaw, wm->exp.nunchuk.orient.pitch, wm->exp.nunchuk.orient.roll);
-}
-
-godot::Vector3 GDWiimote::get_nunchuk_smoothed_tilt() const
-{
-    if (!is_nunchuk_connected())
-        return godot::Vector3();
-
-    return godot::Vector3(0.f, wm->exp.nunchuk.orient.a_pitch, wm->exp.nunchuk.orient.a_roll);
-}
-
-godot::Vector3 GDWiimote::get_gyro() const
-{
-    if (!wm || !(wm->exp.type == EXP_MOTION_PLUS || wm->exp.type == EXP_MOTION_PLUS_NUNCHUK))
-        return godot::Vector3();
-
-    return godot::Vector3(wm->exp.mp.angle_rate_gyro.yaw,
-                          wm->exp.mp.angle_rate_gyro.pitch,
-                          wm->exp.mp.angle_rate_gyro.roll);
 }

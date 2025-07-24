@@ -32,10 +32,10 @@ func _process(delta: float) -> void:
 		if _is_connected:
 			if _is_calibrating:
 				print("Calibration completed.")
-				wiimote.stop_nunchuk_calibration()
+				wiimote.stop_nunchuk_joystick_calibration()
 			else:
 				print("Calibration begun. Please rotate the joystick to maximum limits for a few seconds. Terminate calibration with A.")
-				wiimote.start_nunchuk_calibration()
+				wiimote.start_nunchuk_joystick_calibration()
 			_is_calibrating = !_is_calibrating
 		else:
 			print("Nunchuk not connected! Unable to initiate calibration.")

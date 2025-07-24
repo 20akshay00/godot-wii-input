@@ -173,7 +173,7 @@ void WiimoteManager::_process(double delta)
             if (!wm || !WIIMOTE_IS_CONNECTED(wm))
                 continue;
 
-            gdwm->handle_event();
+            gdwm->handle_event(delta);
         }
     }
 }
