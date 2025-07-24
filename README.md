@@ -1,59 +1,73 @@
-# GDWiiInput – WIP!  
+# GDWiiInput – WIP!
 
-![logo](./resources/GDWiiInputLogo.png)
+<p align="center">
+  <img src="./resources/GDWiiInputLogo.png" />
+</p>
 
-A scrappy attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) into Godot so you can play around with the Wii Remote (and some of its accessories) directly from GDScript. I honestly have no idea what I'm doing here as its my first GDExtension, so if this interests you, contributions and tips are *very* welcome!
+**GDWiiInput** is a Godot interface for communication with the Wii remote and its accessories, powered by [Wiiuse](https://github.com/wiiuse/wiiuse). This is my first GDExtension and the project is still a work in progress, so any contributions or tips are very welcome!
 
-## Features 
-- All button presses (including the Nunchuk joystick) are routed through Godot's Input system (check the demo project to see the mappings)
-- Manual joystick calibration (in case the default from Wiiuse does not match, typically for third party nunchuks)
-- LED control and rumble feedback
-- Read raw accelerometer and gyroscope data
-- Basic motion control utilities through [GamepadMotionHelpers](https://github.com/JibbSmart/GamepadMotionHelpers) - **Very likely incorrect at the moment.**
+## Features
+
+- **Button Input**: All button presses, including the Nunchuk joystick motion, are routed through Godot's Input system. (Check the demo project to see the mappings)
+- **LED Control & Rumble Feedback**: Control the LED lights on the Wiimote and trigger rumble feedback.
+- **Motion Control**: In addition to access to raw accelerometer and gyroscope data, there are also basic motion control processing utilities from [GamepadMotionHelpers](https://github.com/JibbSmart/GamepadMotionHelpers) (**currenly not reliable!**).
 
 ### Roadmap
 
-- Out of the box gyro-based pointer controls
+- Gyro-based pointer controls
 - Speaker support
-- Automatic releases w/ Github actions
-- IR data
+- IR data support
+- Automatic releases with GitHub Actions
 
 ### Wishlist
-- Standalone bluetooth connection w/o external programs
-- Motion plus attachment
-- Motion board
-- Better nunchuk deadzone detection
+
+- Standalone Bluetooth connection without external programs
+- MotionPlus attachment support
+- Motion board integration
+- Better Nunchuk deadzone detection
 
 ## Connecting Wiimotes
-- **Linux:** After `WiimoteManager.connect_wiimotes()` is called, press 1+2 on all the Wiimotes.
-- **Windows:** The bluetooth stack of Windows is a bit quirky so the procedure is a bit more involved. If you use a bluetooth passthrough device such as the Dolphinbar, it should work similar to Linux. If not, you may use something like [WiiPair](https://github.com/jordanbtucker/WiiPair) beforehand and then launch the Godot session. Alternatively, you can use the continuous scanning option in [Dolphin emulator](https://github.com/dolphin-emu/dolphin). Apparently there are also ways to connect it via the native Windows bluetooth prompts, but I've not had any luck with these. Ideally a port of whatever Dolphin emulator is using would be the long-term solution.
 
-Upon successful connection, the LED should light up along with a rumble just like the standard connection with the Wii.
+- **Linux**: After calling `WiimoteManager.connect_wiimotes()`, press 1+2 on the Wiimotes to connect.
+- **Windows**: The Bluetooth stack on Windows can be quirky. If you're using a Bluetooth passthrough device like the [Dolphinbar](https://www.mayflash.com/product/W010.html), it should work similarly to Linux. Alternatively, you can use [WiiPair](https://github.com/jordanbtucker/WiiPair) before launching Godot, or use continuous scanning in [Dolphin Emulator](https://github.com/dolphin-emu/dolphin). There are also native Windows Bluetooth prompts, but they can be unreliable. Ideally, a port of whatever Dolphin Emulator uses will be a long-term solution.
 
-## Compiling the project
-The project is made for Godot 4.4+.
+Upon successful connection, the LED should light up, and you’ll feel a rumble just like the standard connection with the Wii.
 
-- `git clone --recursive` to clone the repository including `godot-cpp`.
-- `cd godot-cpp; scons platform=<platform>; cd ..` to build the cpp bindings as described in the [GDExtension documentation](https://docs.godotengine.org/en/4.4/tutorials/scripting/gdextension/gdextension_cpp_example.html).
-- `scons platform=<platform>` to build `gdwiiinput`.
+## Compiling the Project
 
-You should now be able to run the demo project from Godot. Once this extension is more mature, it may be put up on the asset library. Also note that for now, the Wiiuse shared libraries for Windows and Linux are shipped with this repository, so building it is not necessary.
+This project is made for Godot 4.4+.
 
-## Current limitations
-- **No built-in pairing handling for Windows.** 
-- **Tested only on Windows and Linux.** I just don't have access to a Mac.
-- **Limited hardware testing.** I only have a MotionPlus Wiimote and a cheap third-party Nunchuk (no sensor bar), so I can't test how other setups behave. 
+1. Clone the repository:
+    ```
+    git clone --recursive https://github.com/20akshay00/godot-wii-input
+    ```
+2. Build the `godot-cpp` bindings:
+    ```
+    cd godot-cpp; scons platform=<platform>; cd ..
+    ```
+3. Build the `gdwiiinput` extension:
+    ```
+    scons platform=<platform>
+    ```
 
-## Permanent limitations
-- **Third party accessories cannot be reliably supported.** They use all sorts of non-standard ways to initialize unfortunately.
-- **Controllers cannot be added/removed mid session.** This includes Wiimotes and their extensions. For whatever reason, Wiiuse runs on the assumption that all devices of interest are paired prior to launching the application and connected only once at the start. This is not a strict limitation of the Wiimote and a solution can be found if one just directly uses a HID layer to communicate with it, but that goes beyond the scope of this project. 
+After this, you should be able to run the demo project in Godot. Once the extension matures, it may be published to the Godot Asset Library with pre-built binaries. Note that the Wiiuse shared libraries for Windows and Linux are already included, so you don’t need to build them yourself for now.
 
-## Why!?  
+## Current Limitations
 
-This started as a simple way to get familiar with writing GDExtensions. The Wiimote felt like a fun target since it is one of the most affordable and accessible motion-centric controllers, even if it’s a bit dated, and it comes with plenty of quirky accessories to experiment with.
+- **No built-in pairing handling for Windows.**
+- **Tested only on Windows and Linux**. I currently don't have access to a Mac.
+- **Limited hardware testing**. I have a MotionPlus Wiimote and a third-party Nunchuk (no sensor bar), so I can’t test all possible setups.
 
-For modern, less motion-focused controllers, Godot already has a lot of [ongoing work](https://github.com/godotengine/godot-proposals/issues/2829) to improve support. So this isn't meant for serious usage by any means. It's more of a nostalgia-driven side project than anything else :')
+## Permanent Limitations
 
+- **Third-party accessories** cannot be reliably supported due to the non-standard initialization methods they use.
+- **Controllers cannot be added/removed mid-session**. This includes Wiimotes and their extensions. Wiiuse assumes all devices are paired and connected at the start of the session, and unfortunately, adding or removing controllers afterward is not supported. While a solution exists using a direct HID layer, this is outside the scope of this project.
+
+## Why!?
+
+This started as a simple way to get familiar with writing GDExtensions. The Wiimote seemed like a fun target since it's an affordable and accessible motion-centric controller, and it offers a variety of quirky accessories to experiment with.
+
+For modern controllers that largely use motion-controls for aiming, Godot already has a lot of [ongoing work](https://github.com/godotengine/godot-proposals/issues/2829) to improve support. So this isn't meant for serious usage and is more of a nostalgia-driven side project.
 
 ### Stuff to check out
-- https://wiiuse.net/?nav=api
+- [Wiiuse API](https://wiiuse.net/?nav=api)
