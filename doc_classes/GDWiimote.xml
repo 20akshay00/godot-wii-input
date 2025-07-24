@@ -29,7 +29,7 @@
 		<method name="get_gyro" qualifiers="const">
 			<return type="Vector3" />
 			<description>
-				Get the current gyroscope data from the Wiimote, if available. The values represent the angular velocity around the X, Y, and Z axes in degrees per second.
+				Get the current gyroscope data from the Wiimote, if available. The values represent the angular velocity corresponding to the yaw, pitch and roll angles in degrees per second.
 				[b]Note:[/b] This method only returns data if the Wiimote is using a MotionPlus accessory or has built-in gyroscope support. In such a case, [method set_motion_plus] should be enabled first.
 			</description>
 		</method>
@@ -55,25 +55,25 @@
 		<method name="get_nunchuk_raw_tilt" qualifiers="const">
 			<return type="Vector3" />
 			<description>
-				Get the current raw tilt data computed from the acceleration data of the Nunchuk accessory. The values represent the roll, pitch and yaw angles in degrees.
+				Get the current raw tilt data computed from the acceleration data of the Nunchuk accessory. The values represent the yaw, pitch and roll angles in degrees.
 			</description>
 		</method>
 		<method name="get_nunchuk_smoothed_tilt" qualifiers="const">
 			<return type="Vector3" />
 			<description>
-				Get the current smoothed tilt data computed from the acceleration data of the Nunchuk accessory. The values represent the roll, pitch and yaw angles in degrees, smoothed over time to reduce noise.
+				Get the current smoothed tilt data computed from the acceleration data of the Nunchuk accessory. The values represent the yaw, pitch and roll angles in degrees, smoothed over time to reduce noise.
 			</description>
 		</method>
 		<method name="get_raw_tilt" qualifiers="const">
 			<return type="Vector3" />
 			<description>
-				Get the current raw tilt data computed from the acceleration data of the Wiimote. The values represent the roll, pitch and yaw angles in degrees.
+				Get the current raw tilt data computed from the acceleration data of the Wiimote. The values represent the yaw, pitch and roll angles in degrees.
 			</description>
 		</method>
 		<method name="get_smoothed_tilt" qualifiers="const">
 			<return type="Vector3" />
 			<description>
-				Get the current smoothed tilt data computed from the acceleration data of the Wiimote. The values represent the roll, pitch and yaw angles in degrees, smoothed over time to reduce noise.
+				Get the current smoothed tilt data computed from the acceleration data of the Wiimote. The values represent the yaw, pitch and roll angles in degrees, smoothed over time to reduce noise.
 			</description>
 		</method>
 		<method name="initialize_nunchuk">

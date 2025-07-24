@@ -366,7 +366,7 @@ godot::Vector3 GDWiimote::get_raw_tilt() const
     if (!wm)
         return godot::Vector3();
 
-    return godot::Vector3(wm->orient.roll, wm->orient.pitch, wm->orient.yaw);
+    return godot::Vector3(wm->orient.yaw, wm->orient.pitch, wm->orient.roll);
 }
 
 godot::Vector3 GDWiimote::get_smoothed_tilt() const
@@ -374,7 +374,7 @@ godot::Vector3 GDWiimote::get_smoothed_tilt() const
     if (!wm)
         return godot::Vector3();
 
-    return godot::Vector3(wm->orient.a_roll, wm->orient.a_pitch, 0.f);
+    return godot::Vector3(0.f, wm->orient.a_pitch, wm->orient.a_roll);
 }
 
 godot::Vector3 GDWiimote::get_nunchuk_raw_accel() const
@@ -398,7 +398,7 @@ godot::Vector3 GDWiimote::get_nunchuk_raw_tilt() const
     if (!is_nunchuk_connected())
         return godot::Vector3();
 
-    return godot::Vector3(wm->exp.nunchuk.orient.pitch, wm->exp.nunchuk.orient.roll, wm->exp.nunchuk.orient.yaw);
+    return godot::Vector3(wm->exp.nunchuk.orient.yaw, wm->exp.nunchuk.orient.pitch, wm->exp.nunchuk.orient.roll);
 }
 
 godot::Vector3 GDWiimote::get_nunchuk_smoothed_tilt() const
@@ -406,7 +406,7 @@ godot::Vector3 GDWiimote::get_nunchuk_smoothed_tilt() const
     if (!is_nunchuk_connected())
         return godot::Vector3();
 
-    return godot::Vector3(wm->exp.nunchuk.orient.a_pitch, wm->exp.nunchuk.orient.a_roll, 0.f);
+    return godot::Vector3(0.f, wm->exp.nunchuk.orient.a_pitch, wm->exp.nunchuk.orient.a_roll);
 }
 
 godot::Vector3 GDWiimote::get_gyro() const
@@ -414,7 +414,7 @@ godot::Vector3 GDWiimote::get_gyro() const
     if (!wm || !(wm->exp.type == EXP_MOTION_PLUS || wm->exp.type == EXP_MOTION_PLUS_NUNCHUK))
         return godot::Vector3();
 
-    return godot::Vector3(wm->exp.mp.angle_rate_gyro.pitch,
-                          wm->exp.mp.angle_rate_gyro.roll,
-                          wm->exp.mp.angle_rate_gyro.yaw);
+    return godot::Vector3(wm->exp.mp.angle_rate_gyro.yaw,
+                          wm->exp.mp.angle_rate_gyro.pitch,
+                          wm->exp.mp.angle_rate_gyro.roll);
 }
