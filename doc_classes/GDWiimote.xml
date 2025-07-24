@@ -8,10 +8,10 @@
 	<tutorials>
 	</tutorials>
 	<methods>
-		<method name="get_raw_accel" qualifiers="const">
+		<method name="get_accel" qualifiers="const">
 			<return type="Vector3" />
 			<description>
-				Get the current raw acceleration data along the X, Y, and Z axes.
+				Get the current acceleration data along the X, Y, and Z axes in G-force units (1G = 9.81 m/s^2).
 			</description>
 		</method>
 		<method name="get_battery_level" qualifiers="const">
@@ -20,17 +20,10 @@
 				Get the battery level of the Wiimote, as a percentage (0-100).
 			</description>
 		</method>
-		<method name="get_accel" qualifiers="const">
-			<return type="Vector3" />
+		<method name="get_fusion_orientation">
+			<return type="Quaternion" />
 			<description>
-				Get the current acceleration data along the X, Y, and Z axes in G-force units (1G = 9.81 m/s^2).
-			</description>
-		</method>
-		<method name="get_gyro" qualifiers="const">
-			<return type="Vector3" />
-			<description>
-				Get the current gyroscope data from the Wiimote, if available. The values represent the angular velocity corresponding to the yaw, pitch and roll angles in degrees per second.
-				[b]Note:[/b] This method only returns data if the Wiimote is using a MotionPlus accessory or has built-in gyroscope support. In such a case, [method set_motion_plus] should be enabled first.
+				Get the current orientation of the Wiimote as a quaternion. This is calculated using the accelerometer and gyroscope data. 
 			</description>
 		</method>
 		<method name="get_led" qualifiers="const">
@@ -40,40 +33,73 @@
 				Get whether a specific LED is on or off. Indices are 1-4.
 			</description>
 		</method>
-		<method name="get_nunchuk_raw_accel" qualifiers="const">
-			<return type="Vector3" />
-			<description>
-				Get the current raw acceleration data from the Nunchuk accessory along the X, Y, and Z axes.
-			</description>
-		</method>
 		<method name="get_nunchuk_accel" qualifiers="const">
 			<return type="Vector3" />
 			<description>
 				Get the current acceleration data from the Nunchuk accessory along the X, Y, and Z axes in G-force units (1G = 9.81 m/s^2).
 			</description>
 		</method>
-		<method name="get_nunchuk_raw_tilt" qualifiers="const">
+		<method name="get_nunchuk_raw_accel" qualifiers="const">
+			<return type="Vector3" />
+			<description>
+				Get the current raw acceleration data from the Nunchuk accessory along the X, Y, and Z axes.
+			</description>
+		</method>
+		<method name="get_nunchuk_raw_orientation" qualifiers="const">
 			<return type="Vector3" />
 			<description>
 				Get the current raw tilt data computed from the acceleration data of the Nunchuk accessory. The values represent the yaw, pitch and roll angles in degrees.
 			</description>
 		</method>
-		<method name="get_nunchuk_smoothed_tilt" qualifiers="const">
+		<method name="get_nunchuk_smoothed_orientation" qualifiers="const">
 			<return type="Vector3" />
 			<description>
 				Get the current smoothed tilt data computed from the acceleration data of the Nunchuk accessory. The values represent the yaw, pitch and roll angles in degrees, smoothed over time to reduce noise.
 			</description>
 		</method>
-		<method name="get_raw_tilt" qualifiers="const">
+		<method name="get_player_space_gyro">
+			<return type="Vector2" />
+			<param index="0" name="yaw_relax_factor" type="float" />
+			<description>
+				Check [url={https://github.com/JibbSmart/GamepadMotionHelpers}]{GamepadMotionHelpers' documentation}[/url] for more information on how to use this method.
+			</description>
+		</method>
+		<method name="get_processed_accel">
+			<return type="Vector3" />
+			<description>
+				Get the current acceleration data with gravity subtracted, along the X, Y, and Z axes in G-force units (1G = 9.81 m/s^2).
+			</description>
+		</method>
+		<method name="get_raw_accel" qualifiers="const">
+			<return type="Vector3" />
+			<description>
+				Get the current raw acceleration data along the X, Y, and Z axes. Not sure what units.
+			</description>
+		</method>
+		<method name="get_raw_gyro" qualifiers="const">
+			<return type="Vector3" />
+			<description>
+				Get the current gyroscope data from the Wiimote, if available. The values represent the angular velocity corresponding to the yaw, pitch and roll angles in degrees per second.
+				[b]Note:[/b] This method only returns data if the Wiimote is using a MotionPlus accessory or has built-in gyroscope support. In such a case, [method set_motion_plus] should be enabled first.
+			</description>
+		</method>
+		<method name="get_raw_orientation" qualifiers="const">
 			<return type="Vector3" />
 			<description>
 				Get the current raw tilt data computed from the acceleration data of the Wiimote. The values represent the yaw, pitch and roll angles in degrees.
 			</description>
 		</method>
-		<method name="get_smoothed_tilt" qualifiers="const">
+		<method name="get_smoothed_orientation" qualifiers="const">
 			<return type="Vector3" />
 			<description>
 				Get the current smoothed tilt data computed from the acceleration data of the Wiimote. The values represent the yaw, pitch and roll angles in degrees, smoothed over time to reduce noise.
+			</description>
+		</method>
+		<method name="get_world_space_gyro">
+			<return type="Vector2" />
+			<param index="0" name="side_reduction_threshold" type="float" />
+			<description>
+				Check [url={https://github.com/JibbSmart/GamepadMotionHelpers}]{GamepadMotionHelpers' documentation}[/url] for more information on how to use this method.
 			</description>
 		</method>
 		<method name="initialize_nunchuk">
@@ -95,11 +121,29 @@
 				Pulse the rumble motor for a specified duration in [i]milliseconds[/i].
 			</description>
 		</method>
+		<method name="reset_gyro_calibration">
+			<return type="void" />
+			<description>
+				Reset the previously computed gyroscope calibration data.
+				[b] Note: [/b] This requires enabling motion processing.
+			</description>
+		</method>
 		<method name="set_accel_threshold">
 			<return type="void" />
 			<param index="0" name="threshold" type="int" />
 			<description>
 				Set a threshold used to determine when a change in the Wiimote's acceleration is reported. The threshold indicates the decimal place that should be considered a significant change.
+			</description>
+		</method>
+		<method name="set_gyro_calibration_mode">
+			<return type="void" />
+			<param index="0" name="mode" type="int" />
+			<description>
+				Set the gyroscope calibration mode. The [code]mode[/code] parameter can be one of the following:
+				- 0: [code]CalibrationMode::Manual[/code] - No auto-calibration. This is the default.
+				- 1: [code]CalibrationMode::Stillness[/code] - CalibrationMode::Stillnes
+				- 2: [code]CalibrationMode::SensorFusion[/code] - Calculate an angular velocity from changes in the gravity direction as detected by the accelerometer.
+				Check [url={https://github.com/JibbSmart/GamepadMotionHelpers}]{GamepadMotionHelpers' documentation}[/url] for more information
 			</description>
 		</method>
 		<method name="set_leds">
@@ -116,12 +160,18 @@
 				Enable or disable reporting of gyroscope data. Used to save power when motion plus sensing is not needed.
 			</description>
 		</method>
+		<method name="set_motion_processing">
+			<return type="void" />
+			<param index="0" name="enable" type="bool" />
+			<description>
+				Enable or disable the processing of motion data using GamepadMotionHelper utilities. When enabled, [method get_fusion_orientation], [method get_player_space_gyro] and [method get_world_space_gyro] will return processed data.
+			</description>
+		</method>
 		<method name="set_motion_sensing">
 			<return type="void" />
 			<param index="0" name="enable" type="bool" />
 			<description>
-				Enable or disable reporting of acceleration and orientation data. Used to save power when motion sensing is not needed. 
-				See also [method set_motion_plus].
+				Enable or disable reporting of acceleration and orientation data. Used to save power when motion sensing is not needed. See also [method set_motion_plus].
 			</description>
 		</method>
 		<method name="set_nunchuk_accel_threshold">
@@ -131,11 +181,18 @@
 				Set a threshold used to determine when a change in the Nunchuk's acceleration is reported. See also [method set_accel_threshold].
 			</description>
 		</method>
-		<method name="set_nunchuk_deadzone">
+		<method name="set_nunchuk_joystick_deadzone">
 			<return type="void" />
 			<param index="0" name="dz" type="float" />
 			<description>
 				Set the deadzone for the Nunchuk's joystick. This is the width of a cross-shaped area around the center of the joystick where movement is ignored.
+			</description>
+		</method>
+		<method name="set_nunchuk_joystick_threshold">
+			<return type="void" />
+			<param index="0" name="dt" type="float" />
+			<description>
+				Set the threshold for the Nunchuk's joystick. This is the minimum distance the joystick must move from its previous position before a change is reported.
 			</description>
 		</method>
 		<method name="set_nunchuk_orient_threshold">
@@ -143,13 +200,6 @@
 			<param index="0" name="threshold" type="float" />
 			<description>
 				Set a threshold used to determine when a change in the Nunchuk's orientation is reported. See also [method set_orient_threshold].
-			</description>
-		</method>
-		<method name="set_nunchuk_threshold">
-			<return type="void" />
-			<param index="0" name="dt" type="float" />
-			<description>
-				Set the threshold for the Nunchuk's joystick. This is the minimum distance the joystick must move from its previous position before a change is reported.
 			</description>
 		</method>
 		<method name="set_orient_threshold">
@@ -166,14 +216,28 @@
 				Set whether the rumble motor is enabled or disabled.
 			</description>
 		</method>
-		<method name="start_nunchuk_calibration">
+		<method name="start_gyro_calibration">
+			<return type="void" />
+			<description>
+				Start the calibration process for the Wiimote's gyroscope. The Wiimote must be kept still (probably on a flat surface) for a few seconds. The calibration must then be manually completed by calling [method stop_gyro_calibration].
+				[b] Note: [/b] This requires enabling motion processing.
+			</description>
+		</method>
+		<method name="start_nunchuk_joystick_calibration">
 			<return type="void" />
 			<description>
 				Start the calibration process for the Nunchuk's joystick. At the moment of calling this method, the Nunchuk's joystick should be centered and not moving. During the calibration process, the Nunchuk's joystick should be moved around to capture its range of motion. The calibration must then be manually completed by calling [method stop_nunchuk_calibration].
 				[b] Note: [/b] This stops firing [InputEventJoypadMotion] until the calibration is complete.
 			</description>
 		</method>
-		<method name="stop_nunchuk_calibration">
+		<method name="stop_gyro_calibration">
+			<return type="void" />
+			<description>
+				Stop the calibration process for the Wiimote's gyroscope.
+				[b] Note: [/b] This requires enabling motion processing.
+			</description>
+		</method>
+		<method name="stop_nunchuk_joystick_calibration">
 			<return type="void" />
 			<description>
 				Stop the calibration process for the Nunchuk's joystick. This should be called after [method start_nunchuk_calibration] to finalize the calibration data.
