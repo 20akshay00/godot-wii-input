@@ -1,5 +1,7 @@
 # GDWiiInput – WIP!  
 
+![logo](./resources/GDWiiInputLogo.png)
+
 A scrappy attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) into Godot so you can play around with the Wii Remote (and some of its accessories) directly from GDScript. I honestly have no idea what I'm doing here as its my first GDExtension, so if this interests you, contributions and tips are *very* welcome!
 
 ## Features 
