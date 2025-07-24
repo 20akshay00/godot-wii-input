@@ -6,15 +6,15 @@ A scrappy attempt to bring [Wiiuse](https://github.com/wiiuse/wiiuse) into Godot
 - All button presses (including the Nunchuk joystick) are routed through Godot's Input system (check the demo project to see the mappings)
 - Manual joystick calibration (in case the default from Wiiuse does not match, typically for third party nunchuks)
 - LED control and rumble feedback
-- Raw accelerometer and gyroscope data
+- Read raw accelerometer and gyroscope data
+- Basic motion control utilities through [GamepadMotionHelpers](https://github.com/JibbSmart/GamepadMotionHelpers) - **Very likely incorrect at the moment.**
 
 ### Roadmap
-- Accelerometer/Gyroscope calibration
-- Basic motion control utilities through [GamepadMotionHelpers](https://github.com/JibbSmart/GamepadMotionHelpers)
+
+- Out of the box gyro-based pointer controls
 - Speaker support
 - Automatic releases w/ Github actions
 - IR data
-- Out of the box gyro-based pointer controls
 
 ### Wishlist
 - Standalone bluetooth connection w/o external programs
