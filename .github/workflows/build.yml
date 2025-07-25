@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-${{ matrix.platform }}
-          path: build/addons/gdwiiinput
+          path: build/addons/gdwiiinput/${{ matrix.platform }}
 
   package:
     needs: build
@@ -70,19 +70,8 @@ jobs:
         with:
           path: artifacts
 
-      - name: Prepare final addon folder
-        run: |
-          mkdir -p ${ADDON_BUILD_DIR}
-          cp -r artifacts/build-*/addons/gdwiiinput/* ${ADDON_BUILD_DIR}/
-          cp -r build/addons/gdwiiinput/* ${ADDON_BUILD_DIR}/
-
-      - name: Zip final addon
-        run: |
-          cd build
-          zip -r ../GDWiiInput-v${{ github.event.inputs.version }}.zip addons/gdwiiinput
-
-      - name: Upload final zip artifact
+      - name: Upload final addon folder
         uses: actions/upload-artifact@v4
         with:
           name: GDWiiInput
-          path: GDWiiInput-v${{ github.event.inputs.version }}.zip
+          path: artifacts/build-*/addons/gdwiiinput
