@@ -3,6 +3,7 @@
 
 #include <thread>
 #include <chrono>
+#include "debug.h"
 
 static const int LED_MASKS[4] = {WIIMOTE_LED_1, WIIMOTE_LED_2, WIIMOTE_LED_3, WIIMOTE_LED_4};
 
@@ -210,23 +211,23 @@ void GDWiimote::handle_event(double delta)
     {
     case WIIUSE_NUNCHUK_INSERTED:
         emit_signal("nunchuk_inserted", device_id);
-        godot::UtilityFunctions::print("Nunchuk inserted on Wiimote ", device_id);
+        DEBUG_PRINT("Nunchuk inserted on Wiimote ", device_id);
         initialize_nunchuk();
         break;
 
     case WIIUSE_NUNCHUK_REMOVED:
         emit_signal("nunchuk_removed", device_id);
-        godot::UtilityFunctions::print("Nunchuk removed on Wiimote ", device_id);
+        DEBUG_PRINT("Nunchuk removed on Wiimote ", device_id);
         break;
 
     case WIIUSE_UNEXPECTED_DISCONNECT:
         emit_signal("wiimote_disconnected", device_id);
-        godot::UtilityFunctions::print("Wiimote ", device_id, " disconnected");
+        DEBUG_PRINT("Wiimote ", device_id, " disconnected");
         break;
 
     case WIIUSE_DISCONNECT:
         emit_signal("wiimote_disconnected", device_id);
-        godot::UtilityFunctions::print("Wiimote ", device_id, " disconnected");
+        DEBUG_PRINT("Wiimote ", device_id, " disconnected");
         break;
 
     case WIIUSE_EVENT:
