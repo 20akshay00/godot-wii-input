@@ -28,7 +28,7 @@ If you are interested in contributing to this project, following are the steps t
 
 After this, the demo project should be runnable from the Godot editor.
 
-Wiiuse Compilation
+Compiling Wiiuse
 ===========================
 
 This project uses Wiiuse as a static library from the ``/libs`` directory so compiling it again is not necessary.
@@ -52,3 +52,18 @@ This project uses Wiiuse as a static library from the ``/libs`` directory so com
 
    & "C:\Program Files\CMake\bin\cmake.exe" -S .. -B build -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS_RELEASE="/MT" -DCMAKE_CXX_FLAGS_RELEASE="/MT"
    & "C:\Program Files\CMake\bin\cmake.exe" --build build --config Release
+
+Building documentation
+======================
+
+Navigate to the ``demo`` project folder inside the repository and run the following to generate the XML documentation for all the exposed classes and methods.
+
+.. code-block:: bash
+   # Replace "godot" with the full path to a Godot editor binary
+   # if Godot is not installed in your `PATH`.
+   godot --doctool ../ --gdextension-docs
+
+Add the documentation to the files generated in ``/doc_classes`` and generate the RST files for the online documentation like so.
+
+.. code-block:: bash
+   curl -sSL https://raw.githubusercontent.com/godotengine/godot/master/doc/tools/make_rst.py | python3 - -o "docs/classes" -l "en" doc_classes

@@ -1,9 +1,9 @@
-short_name = "godot"
-name = "Godot Engine"
-major = 4
-minor = 5
+short_name = "gdwiiinput"
+name = "GDWiiInput"
+major = 0
+minor = 1
 patch = 0
 status = "beta"
 module_config = ""
-website = "https://godotengine.org"
+website = "https://godot-wii-input.readthedocs.io/"
 docs = "latest"
