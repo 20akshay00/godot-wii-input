@@ -25,10 +25,15 @@ try:
 except AttributeError:
     print("Not including class reference as we're targeting a pre-4.3 baseline.")
 
+env.Append(CPPDEFINES=["WIIUSE_STATIC"])
 
 env.Append(CPPPATH=["include/"])
 env.Append(LIBPATH=["libs/"])
-env.Append(LIBS=["wiiuse"])
+
+if env["platform"] == "windows":
+    env.Append(LIBS=["wiiuse", "ws2_32", "setupapi", "hid"])
+else:
+    env.Append(LIBS=["wiiuse"])
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
