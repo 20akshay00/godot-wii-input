@@ -1,13 +1,18 @@
-name: Builds
+name: Manual Build & Release
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 0.1
+        required: true
 
 env:
   LIBNAME: GDWiiInput
+  ADDON_DIR: addons/gdwiiinput
 
 concurrency:
-  group: ci-${{github.actor}}-${{github.head_ref || github.run_number}}-${{github.ref}}-build
+  group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -17,91 +22,89 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - identifier: windows-debug
-            os: windows-latest
-            name: Windows Debug
-            target: template_debug
-            mode: debug
-            platform: windows
-            arch: x86_64
           - identifier: windows-release
             os: windows-latest
-            name: Windows Release
             target: template_release
-            mode: release
             platform: windows
-            arch: x86_64
-          - identifier: linux-debug
-            os: ubuntu-latest
-            name: Linux Debug
-            target: template_debug
-            mode: debug
-            platform: linux
             arch: x86_64
           - identifier: linux-release
             os: ubuntu-latest
-            name: Linux Release
             target: template_release
-            mode: release
             platform: linux
             arch: x86_64
 
     steps:
-      - name: Checkout project
+      - name: Checkout source
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
-      - name: Cache SCons and godot-cpp
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/pip
-            godot-cpp
-          key: ${{ runner.os }}-build-${{ hashFiles('scons') }}-${{ hashFiles('godot-cpp/**') }}
+      - name: Set up SCons
+        run: |
+          python -m pip install scons
+          scons --version
 
-      - name: Install SCons
-        run: python -m pip install scons
-
-      - name: Linux dependencies
+      - name: Install Linux dependencies
         if: ${{ matrix.platform == 'linux' }}
         run: |
           sudo apt-get update -qq
           sudo apt-get install -qqq build-essential pkg-config libbluetooth-dev
 
-      - name: Compile Extension
+      - name: Cache godot-cpp
+        uses: actions/cache@v4
+        with:
+          path: godot-cpp
+          key: ${{ runner.os }}-godot-cpp-${{ matrix.identifier }}
+          restore-keys: |
+            ${{ runner.os }}-godot-cpp-
+
+      - name: Compile extension
         run: |
           scons target=${{ matrix.target }} platform=${{ matrix.platform }} arch=${{ matrix.arch }}
 
-      - name: Clean Windows build artifacts
-        if: ${{ matrix.platform == 'windows' }}
-        run: Remove-Item demo/bin/* -Include *.exp,*.lib,*.pdb -Force
+      - name: Move built library
+        run: |
+          mkdir -p ${{ env.ADDON_DIR }}/${{ matrix.platform }}
+          mv demo/bin/*${{ matrix.platform }}* ${{ env.ADDON_DIR }}/${{ matrix.platform }}/ || true
+        shell: bash
 
-      - name: Upload artifact
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-${{ matrix.identifier }}
-          path: demo/bin/*
+          name: ${{ matrix.identifier }}
+          path: ${{ env.ADDON_DIR }}
 
-      - name: Archive Release
-        if: github.event_name == 'workflow_dispatch'
-        uses: thedoctor0/zip-release@v0.7.1
-        with:
-          type: zip
-          filename: '${{ env.LIBNAME }}.${{ matrix.platform }}.${{ matrix.arch }}.zip'
-          path: 'demo/bin/'
+  package:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
 
-      - name: Create and upload GitHub Release asset
-        if: github.event_name == 'workflow_dispatch'
-        uses: ncipollo/release-action@v1
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
         with:
-          allowUpdates: true
-          artifacts: '${{ env.LIBNAME }}.${{ matrix.platform }}.${{ matrix.arch }}.zip'
-          omitNameDuringUpdate: true
-          omitBodyDuringUpdate: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          path: artifacts
+
+      - name: Assemble final addon
+        run: |
+          mkdir -p dist/${{ env.ADDON_DIR }}
+          cp -r addons/gdwiiinput/* dist/${{ env.ADDON_DIR }}/
+          cp -r artifacts/*/${{ env.ADDON_DIR }}/* dist/${{ env.ADDON_DIR }}/
+
+      - name: Zip addon
+        uses: vimtor/action-zip@v1
+        with:
+          files: dist/addons/gdwiiinput
+          dest: GDWiiInput-v${{ github.event.inputs.version }}.zip
+
+      - name: Upload final zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: GDWiiInput
+          path: GDWiiInput-v${{ github.event.inputs.version }}.zip
