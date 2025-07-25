@@ -24,7 +24,7 @@ Windows
 -------
 Windows treats the Wiimote as a standard Bluetooth device by default, which often leads to broken or partial pairing. This occurs because the Windows Bluetooth stack does not fully support the HID extensions the Wiimote uses, preventing proper communication.
 
-One solution is to use Bluetooth passthrough devices to bypass the OS’s default handling—hardware such as the `Mayflash DolphinBar <https://www.mayflash.com/product/W010.html>`__ allowing the process to work similarly to Linux.
+One solution is to use Bluetooth passthrough devices such as the `Mayflash DolphinBar <https://www.mayflash.com/product/W010.html>`__ to bypass the OS’s default handling, allowing the process to work similarly to Linux.
 
 Alternatively, custom drivers like `WiiPair <https://github.com/jordanbtucker/WiiPair>`__ or `HID Wiimote <https://www.julianloehr.de/educational-work/hid-wiimote/>`__ can handle pairing correctly. Another reliable method is to pair the remote using the `Dolphin Emulator <https://github.com/dolphin-emu/dolphin>`__ with continuous scanning enabled, then close the emulator. Since the remote remains connected, calling :ref:`WiimoteManager.connect_wiimotes() <class_WiimoteManager_method_connect_wiimotes>` afterwards will detect it without requiring any button presses.
 
@@ -32,7 +32,7 @@ Finding the connected Wiimotes
 ==============================
 Once detected by the application, the Wiimote will briefly rumble and light an LED, just like on the original console. The next step is to call :ref:`WiimoteManager.finalize_wiimotes() <class_WiimoteManager_method_finalize_connection>` to initialize the :ref:`GDWiimote <class_GDWiimote>` objects and begin using the remotes in your project. A typical initialization would look something like this.
 
-.. code-block:: python
+.. code-block:: gdscript
 
     func _ready():
         # WiimoteManager.connect_wiimotes is blocking!

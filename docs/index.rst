@@ -22,6 +22,7 @@ Table of Contents
    :name: sec-learn
 
    setup/connecting
+   setup/inputs
    setup/building
    setup/alternatives
 
