@@ -59,6 +59,7 @@ Building documentation
 Navigate to the ``demo`` project folder inside the repository and run the following to generate the XML documentation for all the exposed classes and methods.
 
 .. code-block:: bash
+
    # Replace "godot" with the full path to a Godot editor binary
    # if Godot is not installed in your `PATH`.
    godot --doctool ../ --gdextension-docs
@@ -66,4 +67,5 @@ Navigate to the ``demo`` project folder inside the repository and run the follow
 Add the documentation to the files generated in ``/doc_classes`` and generate the RST files for the online documentation like so.
 
 .. code-block:: bash
+   
    curl -sSL https://raw.githubusercontent.com/godotengine/godot/master/doc/tools/make_rst.py | python3 - -o "docs/classes" -l "en" doc_classes
