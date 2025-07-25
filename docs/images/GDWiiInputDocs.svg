@@ -24,9 +24,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="0.4204826"
-     inkscape:cx="-5.9455492"
-     inkscape:cy="640.9302"
+     inkscape:zoom="0.5946522"
+     inkscape:cx="364.07836"
+     inkscape:cy="303.53877"
      inkscape:window-width="2560"
      inkscape:window-height="1490"
      inkscape:window-x="-12"
@@ -104,12 +104,12 @@
          style="fill:#478cbf;fill-opacity:1;stroke:none;stroke-width:0.400001;stroke-linecap:round;stop-color:#000000"
          d="m 249.86791,169.94632 c 4.26657,0 7.70083,-3.43515 7.70083,-7.70176 v -35.47977 c 0,-4.26659 -3.43426,-7.70084 -7.70083,-7.70084 H 31.567117 c -4.266524,0 -7.701759,3.43425 -7.701759,7.70084 v 35.47977 c 0,4.26661 3.435235,7.70176 7.701759,7.70176 H 48.84799 v -8.60606 c 0,-2.38473 1.654969,-4.41528 3.826129,-4.41528 2.171159,0 3.829816,2.03055 3.829816,4.41528 v 8.60606 h 5.104241 v -8.60606 c 0,-2.38473 1.655881,-4.41528 3.827047,-4.41528 2.171144,0 3.829777,2.03055 3.829777,4.41528 v 8.60606 h 18.072482 v -8.60606 c 0,-2.43643 1.978842,-4.41528 4.415278,-4.41528 h 99.37158 c 2.43643,0 4.41527,1.97885 4.41527,4.41528 v 8.60606 h 23.16301 v -8.60606 c 0,-2.43643 1.98166,-4.41528 4.41801,-4.41528 h 1.33036 c 2.43642,0 4.41801,1.97885 4.41801,4.41528 v 8.60606 z m -22.23855,0 v -8.60606 c 0,-1.77034 -1.40805,-3.17563 -3.17837,-3.17563 h -1.33036 c -1.77034,0 -3.1747,1.40529 -3.1747,3.17563 v 8.60606 z m -33.33031,0 v -8.60606 c 0,-1.77034 -1.40438,-3.17563 -3.17471,-3.17563 H 91.75276 c -1.770338,0 -3.175634,1.40529 -3.175634,3.17563 v 8.60606 z m -126.277359,0 v -8.60606 c 0,-1.82202 -1.203789,-3.17563 -2.586468,-3.17563 -1.382684,0 -2.586486,1.35361 -2.586486,3.17563 v 8.60606 z m -12.760149,0 v -8.60606 c 0,-1.82202 -1.204734,-3.17563 -2.587423,-3.17563 -1.38269,0 -2.586484,1.35361 -2.586484,3.17563 v 8.60606 z M 233.4208,128.77957 H 47.751267 c -1.065217,0 -1.923152,-0.85701 -1.923152,-1.92225 0,-1.06521 0.857935,-1.92313 1.923152,-1.92313 H 233.4208 c 1.06522,0 1.92223,0.85792 1.92223,1.92313 0,1.06524 -0.85701,1.92225 -1.92223,1.92225 z" /><text
          xml:space="preserve"
-         transform="matrix(0.84988591,0,0,0.84988591,-205.18298,16.662865)"
+         transform="matrix(1.027772,0,0,1.0308389,-277.58191,-10.556604)"
          id="text509"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.0351px;font-family:Inter;-inkscape-font-specification:'Inter, @opsz=32.0,wght=700';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'opsz' 32, 'wght' 700;white-space:pre;shape-inside:url(#rect511);display:inline;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.35298856;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000;stroke-opacity:1"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.0351px;font-family:Inter;-inkscape-font-specification:'Inter, @opsz=32.0,wght=700';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'opsz' 32, 'wght' 700;white-space:pre;shape-inside:url(#rect511);display:inline;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.97152999;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"><tspan
            x="332.12695"
            y="155.51624"
-           id="tspan1381">GDWiiInput Docs</tspan></text></g><rect
+           id="tspan7305">GDWiiInput Docs</tspan></text></g><rect
        style="fill:#478cbf;fill-opacity:1;stroke:none;stroke-width:0.4;stroke-linecap:round;stop-color:#000000"
        id="rect358-7"
        width="131.81287"
@@ -132,7 +132,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.0351px;font-family:Inter;-inkscape-font-specification:'Inter, @opsz=32.0,wght=700';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'opsz' 32, 'wght' 700;white-space:pre;shape-inside:url(#rect511-3);display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.656541;stroke-linecap:round;stroke-dasharray:none;stop-color:#000000"><tspan
          x="332.12695"
          y="155.51624"
-         id="tspan1383">GDWiiInput Docs</tspan></text><rect
+         id="tspan7307">GDWiiInput Docs</tspan></text><rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.1;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
        id="rect3804-0"
        width="60.328125"
