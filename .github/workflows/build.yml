@@ -40,7 +40,9 @@ jobs:
       - name: Build GDWiiInput
         env:
           SCONS_CACHE: ${{ github.workspace }}/.scons_cache
-        run: scons target=${{ matrix.build_target_type }} platform=${{ matrix.target.platform }} arch=${{ matrix.target.arch }} out=${{ github.workspace }}/build
+        run: |
+          mkdir -p ${{ github.workspace }}/build/addons/GDWiiInput/${{ matrix.target.platform }}
+          scons target=${{ matrix.build_target_type }} platform=${{ matrix.target.platform }} arch=${{ matrix.target.arch }} out=${{ github.workspace }}/build/addons/GDWiiInput/${{ matrix.target.platform }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
