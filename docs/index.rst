@@ -17,14 +17,20 @@ Table of Contents
 .. Add :hidden: to each to hide them on this page. For now it's better to have them for quick navigation.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Setup
    :name: sec-learn
 
    setup/connecting
    setup/inputs
-   setup/building
-   setup/alternatives
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Contribute
+   :name: sec-learn
+
+   contribute/building
+   contribute/alternatives
 
 .. toctree::
    :maxdepth: 2
