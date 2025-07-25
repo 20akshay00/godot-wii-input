@@ -10,7 +10,6 @@ on:
 jobs:
   build:
     strategy:
-        fail-fast: false
       matrix:
         target:
           - { platform: linux, arch: x86_64, os: ubuntu-22.04 }
