@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version (e.g. 0.1)'
+        description: 0.1.0
         required: true
 
 env:
   LIBNAME: GDWiiInput
   BUILD_ADDON_DIR: build/addons/gdwiiinput
-  ZIP_ROOT_DIR: addons/gdwiiinput
+  ZIP_ADDON_DIR: addons/gdwiiinput
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -23,14 +23,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - identifier: windows-release
-            os: windows-latest
-            target: template_release
+          - os: windows-latest
             platform: windows
             arch: x86_64
-          - identifier: linux-release
-            os: ubuntu-latest
-            target: template_release
+          - os: ubuntu-latest
             platform: linux
             arch: x86_64
 
@@ -45,46 +41,38 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Set up SCons
-        run: |
-          python -m pip install scons
-          scons --version
-
       - name: Install Linux dependencies
         if: ${{ matrix.platform == 'linux' }}
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -qqq build-essential pkg-config libbluetooth-dev
+          sudo apt-get install -qq build-essential pkg-config libbluetooth-dev
 
       - name: Cache godot-cpp
         uses: actions/cache@v4
         with:
           path: godot-cpp
-          key: ${{ runner.os }}-godot-cpp-${{ matrix.identifier }}
-          restore-keys: |
-            ${{ runner.os }}-godot-cpp-
+          key: ${{ runner.os }}-godot-cpp
 
-      - name: Compile extension
-        run: |
-          scons target=${{ matrix.target }} platform=${{ matrix.platform }} arch=${{ matrix.arch }}
+      - name: Cache SCons cache
+        uses: actions/cache@v4
+        with:
+          path: .scons_cache
+          key: ${{ runner.os }}-scons-cache-${{ matrix.platform }}-${{ matrix.arch }}
 
-      - name: Move built library (Linux)
-        if: ${{ matrix.platform == 'linux' }}
+      - name: Build extension
         run: |
-          mkdir -p ${{ env.BUILD_ADDON_DIR }}/linux
-          mv demo/bin/*linux* ${{ env.BUILD_ADDON_DIR }}/linux/ || true
+          scons target=template_release platform=${{ matrix.platform }} arch=${{ matrix.arch }}
+
+      - name: Organize built libs
+        run: |
+          mkdir -p ${{ env.BUILD_ADDON_DIR }}/${{ matrix.platform }}
+          mv demo/bin/*${{ matrix.platform }}* ${{ env.BUILD_ADDON_DIR }}/${{ matrix.platform }}/ || true
         shell: bash
 
-      - name: Move built library (Windows)
-        if: ${{ matrix.platform == 'windows' }}
-        run: |
-          mkdir -p ${{ env.BUILD_ADDON_DIR }}/windows
-          powershell -Command "Move-Item -Path 'demo/bin/*windows*' -Destination '${{ env.BUILD_ADDON_DIR }}/windows/' -ErrorAction SilentlyContinue"
-
-      - name: Upload artifacts
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.identifier }}
+          name: build-${{ matrix.platform }}
           path: ${{ env.BUILD_ADDON_DIR }}
 
   package:
@@ -94,28 +82,27 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Download all artifacts
+      - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          path: build-artifacts
 
-      - name: Prepare addon folder
+      - name: Copy addon files and built libs
         run: |
-          # Copy your existing addon files from build/addons/gdwiiinput to a temp folder
-          cp -r build/addons/gdwiiinput addon-temp
+          cp -r build/addons/gdwiiinput ./addons/
+          cp -r build-artifacts/build/addons/gdwiiinput/* ./addons/gdwiiinput/
 
-          # Overlay the built platform folders from artifacts on top
-          cp -r artifacts/*/linux addon-temp/linux || true
-          cp -r artifacts/*/windows addon-temp/windows || true
+      - name: Zip addon
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.LIBNAME }}-zip
+          path: GDWiiInput-v${{ github.event.inputs.version }}.zip
 
-      - name: Zip addon starting at addons/gdwiiinput folder
+      - name: Create zip file
         run: |
-          mkdir -p zip-root/addons
-          mv addon-temp zip-root/addons/gdwiiinput
-          cd zip-root
-          zip -r ../GDWiiInput-v${{ github.event.inputs.version }}.zip addons/gdwiiinput
+          zip -r GDWiiInput-v${{ github.event.inputs.version }}.zip addons/gdwiiinput
 
-      - name: Upload final zip
+      - name: Upload final zip artifact
         uses: actions/upload-artifact@v4
         with:
           name: GDWiiInput
