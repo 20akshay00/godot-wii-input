@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=3 uid="uid://cu33gj36ltgis"]
 
-[ext_resource type="Script" uid="uid://bkrebomnas7th" path="res://main.gd" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://cu3nq3m24o7v4" path="res://rumble_example.gd" id="2_0xm2m"]
-[ext_resource type="Script" uid="uid://d3wmu3ntm80vo" path="res://gyro_example.gd" id="2_272bh"]
-[ext_resource type="Script" uid="uid://c76pe086forc1" path="res://joystick_example.gd" id="3_1bvp3"]
-[ext_resource type="Script" uid="uid://c04pu5r23vykv" path="res://led_example.gd" id="3_h2yge"]
-[ext_resource type="Shader" uid="uid://cep1ufijo23fd" path="res://loading_circle.gdshader" id="5_7mycd"]
+[ext_resource type="Script" uid="uid://dr0tkt6g5qp3q" path="res://feature_examples/main.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://gjfgvg47wcm6" path="res://feature_examples/rumble_example.gd" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://cqw1cjxkvwcdy" path="res://feature_examples/gyro_example.gd" id="2_272bh"]
+[ext_resource type="Script" uid="uid://bvqwcmxx7k0en" path="res://feature_examples/joystick_example.gd" id="3_1bvp3"]
+[ext_resource type="Script" uid="uid://c04pu5r23vykv" path="res://feature_examples/led_example.gd" id="3_h2yge"]
+[ext_resource type="Shader" uid="uid://c7okud5b6of0o" path="res://loading_circle.gdshader" id="5_7mycd"]
 [ext_resource type="Texture2D" uid="uid://ct1kjd6ndhlqn" path="res://icon.svg" id="5_lquwl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_272bh"]
@@ -40,6 +40,11 @@ B : automatic cycle"
 
 [node name="GyroExample" type="Node2D" parent="."]
 script = ExtResource("2_272bh")
+
+[node name="Cursor" type="Sprite2D" parent="GyroExample"]
+visible = false
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_lquwl")
 
 [node name="Title" type="Label" parent="."]
 visible = false

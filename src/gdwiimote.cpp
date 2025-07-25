@@ -195,13 +195,14 @@ void GDWiimote::handle_event(double delta)
     // update GamePadMotion state if motion plus is enabled
     if (process_motion)
     {
+        // uses a Y-up, right-handed coordinate system
         motion_state.ProcessMotion(
-            wm->exp.mp.angle_rate_gyro.pitch,
-            wm->exp.mp.angle_rate_gyro.yaw,
             wm->exp.mp.angle_rate_gyro.roll,
-            wm->gforce.x,
+            wm->exp.mp.angle_rate_gyro.yaw,
+            wm->exp.mp.angle_rate_gyro.pitch,
             wm->gforce.y,
             wm->gforce.z,
+            wm->gforce.x,
             delta);
     }
 
