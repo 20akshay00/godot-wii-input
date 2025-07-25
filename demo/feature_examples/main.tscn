@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://cqw1cjxkvwcdy" path="res://feature_examples/gyro_example.gd" id="2_272bh"]
 [ext_resource type="Script" uid="uid://bvqwcmxx7k0en" path="res://feature_examples/joystick_example.gd" id="3_1bvp3"]
 [ext_resource type="Script" uid="uid://c04pu5r23vykv" path="res://feature_examples/led_example.gd" id="3_h2yge"]
-[ext_resource type="Shader" uid="uid://c7okud5b6of0o" path="res://loading_circle.gdshader" id="5_7mycd"]
+[ext_resource type="Shader" uid="uid://cep1ufijo23fd" path="res://loading_circle.gdshader" id="5_7mycd"]
 [ext_resource type="Texture2D" uid="uid://ct1kjd6ndhlqn" path="res://icon.svg" id="5_lquwl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_272bh"]
