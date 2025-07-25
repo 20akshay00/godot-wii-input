@@ -1,35 +1,26 @@
-name: Manual Build & Release
+name: Build & Package GDExtension
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: Version number (e.g. 1.0.0)
+        description: 0.1.0
         required: true
 
 env:
-  LIBNAME: GDWiiInput
-  ADDON_DIR: build/addons/gdwiiinput
-
-concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  ADDON_BUILD_DIR: build/addons/gdwiiinput
+  ADDON_ZIP_ROOT: addons/gdwiiinput
 
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
         include:
-          - identifier: windows-release
-            os: windows-latest
-            target: template_release
+          - os: windows-latest
             platform: windows
             arch: x86_64
-          - identifier: linux-release
-            os: ubuntu-latest
-            target: template_release
+          - os: ubuntu-latest
             platform: linux
             arch: x86_64
 
@@ -37,45 +28,34 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: true
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
-      - name: Install SCons
-        run: python -m pip install scons
+      - name: Setup Python and install SCons
+        run: |
+          python -m pip install --upgrade pip
+          pip install scons
+          scons --version
 
       - name: Install Linux dependencies
-        if: ${{ matrix.platform == 'linux' }}
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -qqq build-essential pkg-config libbluetooth-dev
+        if: matrix.platform == 'linux'
+        run: sudo apt-get update && sudo apt-get install -y build-essential pkg-config libbluetooth-dev
 
-      - name: Cache godot-cpp
+      - name: Cache scons cache
         uses: actions/cache@v4
         with:
-          path: godot-cpp
-          key: ${{ runner.os }}-godot-cpp-${{ matrix.identifier }}
-          restore-keys: |
-            ${{ runner.os }}-godot-cpp-
+          path: .scons_cache
+          key: ${{ runner.os }}-scons-cache-${{ matrix.platform }}-${{ matrix.arch }}
 
-      - name: Compile extension
-        run: scons target=${{ matrix.target }} platform=${{ matrix.platform }} arch=${{ matrix.arch }}
+      - name: Build extension
+        env:
+          SCONS_CACHE: ${{ github.workspace }}/.scons_cache
+        run: scons platform=${{ matrix.platform }} arch=${{ matrix.arch }} target=template_release
 
-      - name: Prepare output folder
-        run: mkdir -p ${{ env.ADDON_DIR }}/${{ matrix.platform }}
-
-      - name: Move built library
-        run: mv demo/bin/*${{ matrix.platform }}* ${{ env.ADDON_DIR }}/${{ matrix.platform }}/ || true
-        shell: bash
-
-      - name: Upload artifacts
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.identifier }}
-          path: ${{ env.ADDON_DIR }}
+          name: build-${{ matrix.platform }}
+          path: ${{ env.ADDON_BUILD_DIR }}
 
   package:
     needs: build
@@ -83,24 +63,28 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+        with:
+          submodules: true
 
-      - name: Download all artifacts
+      - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
-      - name: Assemble final addon
+      - name: Prepare final addon folder
         run: |
-          cp -r build/addons/gdwiiinput dist_addon
-          cp -r artifacts/*/build/addons/gdwiiinput/* dist_addon/
-          
-      - name: Zip addon
-        uses: vimtor/action-zip@v1
-        with:
-          files: dist_addon
-          dest: GDWiiInput-v${{ github.event.inputs.version }}.zip
+          mkdir -p ${ADDON_BUILD_DIR}
+          # Copy your existing build/addons/gdwiiinput files (plugin, gdextension, licenses etc)
+          cp -r build/addons/gdwiiinput/* ${ADDON_BUILD_DIR}/
+          # Merge downloaded build artifacts into the build folder
+          cp -r artifacts/build/addons/gdwiiinput/* ${ADDON_BUILD_DIR}/
 
-      - name: Upload final zip
+      - name: Zip final addon
+        run: |
+          cd build
+          zip -r ../GDWiiInput-v${{ github.event.inputs.version }}.zip addons/gdwiiinput
+
+      - name: Upload final zip artifact
         uses: actions/upload-artifact@v4
         with:
           name: GDWiiInput
