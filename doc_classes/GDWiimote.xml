@@ -125,7 +125,7 @@
 			<return type="void" />
 			<description>
 				Reset the previously computed gyroscope calibration data.
-				[b] Note: [/b] This requires enabling motion processing.
+				[b]Note:[/b] This requires enabling motion processing.
 			</description>
 		</method>
 		<method name="set_accel_threshold">
@@ -220,28 +220,28 @@
 			<return type="void" />
 			<description>
 				Start the calibration process for the Wiimote's gyroscope. The Wiimote must be kept still (probably on a flat surface) for a few seconds. The calibration must then be manually completed by calling [method stop_gyro_calibration].
-				[b] Note: [/b] This requires enabling motion processing.
+				[b]Note:[/b] This requires enabling motion processing.
 			</description>
 		</method>
 		<method name="start_nunchuk_joystick_calibration">
 			<return type="void" />
 			<description>
 				Start the calibration process for the Nunchuk's joystick. At the moment of calling this method, the Nunchuk's joystick should be centered and not moving. During the calibration process, the Nunchuk's joystick should be moved around to capture its range of motion. The calibration must then be manually completed by calling [method stop_nunchuk_calibration].
-				[b] Note: [/b] This stops firing [InputEventJoypadMotion] until the calibration is complete.
+				[b]Note:[/b] This stops firing [InputEventJoypadMotion] until the calibration is complete.
 			</description>
 		</method>
 		<method name="stop_gyro_calibration">
 			<return type="void" />
 			<description>
 				Stop the calibration process for the Wiimote's gyroscope.
-				[b] Note: [/b] This requires enabling motion processing.
+				[b]Note:[/b] This requires enabling motion processing.
 			</description>
 		</method>
 		<method name="stop_nunchuk_joystick_calibration">
 			<return type="void" />
 			<description>
 				Stop the calibration process for the Nunchuk's joystick. This should be called after [method start_nunchuk_calibration] to finalize the calibration data.
-				[b] Note: [/b] This resumes firing [InputEventJoypadMotion] after the calibration is complete.
+				[b]Note:[/b] This resumes firing [InputEventJoypadMotion] after the calibration is complete.
 			</description>
 		</method>
 		<method name="toggle_rumble">

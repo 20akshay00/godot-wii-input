@@ -372,7 +372,7 @@ Pulse the rumble motor for a specified duration in *milliseconds*.
 
 Reset the previously computed gyroscope calibration data.
 
-\ ** Note: ** This requires enabling motion processing.
+\ **Note:** This requires enabling motion processing.
 
 .. rst-class:: classref-item-separator
 
@@ -538,7 +538,7 @@ Set whether the rumble motor is enabled or disabled.
 
 Start the calibration process for the Wiimote's gyroscope. The Wiimote must be kept still (probably on a flat surface) for a few seconds. The calibration must then be manually completed by calling :ref:`stop_gyro_calibration()<class_GDWiimote_method_stop_gyro_calibration>`.
 
-\ ** Note: ** This requires enabling motion processing.
+\ **Note:** This requires enabling motion processing.
 
 .. rst-class:: classref-item-separator
 
@@ -552,7 +552,7 @@ Start the calibration process for the Wiimote's gyroscope. The Wiimote must be k
 
 Start the calibration process for the Nunchuk's joystick. At the moment of calling this method, the Nunchuk's joystick should be centered and not moving. During the calibration process, the Nunchuk's joystick should be moved around to capture its range of motion. The calibration must then be manually completed by calling :ref:`stop_nunchuk_calibration()<class_GDWiimote_method_stop_nunchuk_calibration>`.
 
-\ ** Note: ** This stops firing ``InputEventJoypadMotion`` until the calibration is complete.
+\ **Note:** This stops firing ``InputEventJoypadMotion`` until the calibration is complete.
 
 .. rst-class:: classref-item-separator
 
@@ -566,7 +566,7 @@ Start the calibration process for the Nunchuk's joystick. At the moment of calli
 
 Stop the calibration process for the Wiimote's gyroscope.
 
-\ ** Note: ** This requires enabling motion processing.
+\ **Note:** This requires enabling motion processing.
 
 .. rst-class:: classref-item-separator
 
@@ -580,7 +580,7 @@ Stop the calibration process for the Wiimote's gyroscope.
 
 Stop the calibration process for the Nunchuk's joystick. This should be called after :ref:`start_nunchuk_calibration()<class_GDWiimote_method_start_nunchuk_calibration>` to finalize the calibration data.
 
-\ ** Note: ** This resumes firing ``InputEventJoypadMotion`` after the calibration is complete.
+\ **Note:** This resumes firing ``InputEventJoypadMotion`` after the calibration is complete.
 
 .. rst-class:: classref-item-separator
 
