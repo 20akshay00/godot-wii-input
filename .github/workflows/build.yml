@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Version number (e.g. 0.1.0)
+        description: Version tag (e.g. 0.1.0)
         required: true
 
 env:
@@ -39,23 +39,22 @@ jobs:
         if: matrix.platform == 'linux'
         run: sudo apt-get update && sudo apt-get install -y build-essential pkg-config libbluetooth-dev
 
-      - name: Cache SCons
+      - name: Cache scons cache
         uses: actions/cache@v4
         with:
           path: .scons_cache
-          key: ${{ runner.os }}-scons-${{ matrix.platform }}-${{ matrix.arch }}
+          key: ${{ runner.os }}-scons-cache-${{ matrix.platform }}-${{ matrix.arch }}
 
       - name: Build extension
         env:
           SCONS_CACHE: ${{ github.workspace }}/.scons_cache
-        run: |
-          scons platform=${{ matrix.platform }} arch=${{ matrix.arch }} target=template_release
+        run: scons platform=${{ matrix.platform }} arch=${{ matrix.arch }} target=template_release
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-${{ matrix.platform }}
-          path: ${{ env.ADDON_BUILD_DIR }}
+          path: build/addons/gdwiiinput
 
   package:
     needs: build
@@ -74,11 +73,16 @@ jobs:
       - name: Prepare final addon folder
         run: |
           mkdir -p ${ADDON_BUILD_DIR}
-          cp -r addons/gdwiiinput/* ${ADDON_BUILD_DIR}/
           cp -r artifacts/build-*/addons/gdwiiinput/* ${ADDON_BUILD_DIR}/
+          cp -r build/addons/gdwiiinput/* ${ADDON_BUILD_DIR}/
 
-      - name: Upload final addon folder as artifact (no zip)
+      - name: Zip final addon
+        run: |
+          cd build
+          zip -r ../GDWiiInput-v${{ github.event.inputs.version }}.zip addons/gdwiiinput
+
+      - name: Upload final zip artifact
         uses: actions/upload-artifact@v4
         with:
-          name: GDWiiInput-v${{ github.event.inputs.version }}
-          path: ${ADDON_BUILD_DIR}
+          name: GDWiiInput
+          path: GDWiiInput-v${{ github.event.inputs.version }}.zip
