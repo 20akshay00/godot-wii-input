@@ -75,8 +75,11 @@ jobs:
         run: |
           mkdir -p ${ADDON_BUILD_DIR}
           # Merge downloaded build artifacts into the build folder
-          cp -r artifacts/build/addons/gdwiiinput/* ${ADDON_BUILD_DIR}/
-
+          for platform in windows linux; do
+            if [ -d artifacts/build-${platform}/addons/gdwiiinput ]; then
+              cp -r artifacts/build-${platform}/addons/gdwiiinput/* ${ADDON_BUILD_DIR}/
+            fi
+          done
       - name: Zip final addon
         run: |
           cd build
