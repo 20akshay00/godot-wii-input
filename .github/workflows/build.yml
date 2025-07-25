@@ -57,6 +57,6 @@ jobs:
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
         with:
-          name: GDWiiInput-all
+          name: GDWiiInput-v${{ github.event.inputs.version }}
           pattern: GDWiiInput-*
           delete-merged: true
