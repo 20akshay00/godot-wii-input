@@ -31,7 +31,7 @@ func _process(delta: float) -> void:
 func exit():
 	wiimote.set_motion_sensing(false)
 	wiimote.set_motion_plus(false)
-	cursor.hide()
+	wiimote.set_motion_processing(false)
 	cursor.hide()
 
 func calibrate_gyro(dt: float = 5.) -> void:
