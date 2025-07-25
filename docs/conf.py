@@ -176,7 +176,7 @@ html_title = supported_languages[language] % ("(" + version + ")")
 # VCS options: https://docs.readthedocs.io/en/latest/vcs.html#github
 html_context = {
     "display_github": not is_i18n,  # Integrate GitHub
-    "github_user": "ivorforce",  # Username
+    "github_user": "20akshay00",  # Username
     "github_repo": "GDWiiInput",  # Repo name
     "github_version": "main",  # Version
     "conf_py_path": "/docs/",  # Path in the checkout to the docs root
