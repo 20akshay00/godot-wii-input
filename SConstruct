@@ -33,7 +33,7 @@ env.Append(LIBPATH=["libs/"])
 if env["platform"] == "windows":
     env.Append(LIBS=["wiiuse", "ws2_32", "setupapi", "hid"])
 else:
-    env.Append(LIBS=["wiiuse"])
+    env.Append(LIBS=["wiiuse", "bluetooth"])
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(

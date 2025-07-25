@@ -4,7 +4,7 @@
   <img src="./resources/GDWiiInputLogo.png" />
 </p>
 
-**GDWiiInput** is a Godot interface for communication with the Wii remote and its accessories, powered by [Wiiuse](https://github.com/wiiuse/wiiuse). This is my first GDExtension and the project is still a work in progress, so any contributions or tips are very welcome!
+**GDWiiInput** is a Godot (v4.4+) interface for communication with the Wii remote and its accessories, powered by [Wiiuse](https://github.com/wiiuse/wiiuse). This is my first GDExtension and the project is still a work in progress, so any contributions or tips are very welcome!
 
 ## Features
 
@@ -27,13 +27,14 @@
 - Better Nunchuk deadzone detection
 
 ## Connecting Wiimotes
+On linux, the BlueZ bluetooth drivers are required(`sudo apt install libbluetooth3 bluez`).
 
 - **Linux**: After calling `WiimoteManager.connect_wiimotes()`, press 1+2 on the Wiimotes to connect.
 - **Windows**: The Bluetooth stack on Windows can be quirky. If you're using a Bluetooth passthrough device like the [Dolphinbar](https://www.mayflash.com/product/W010.html), it should work similarly to Linux. Alternatively, you can use something like [WiiPair](https://github.com/jordanbtucker/WiiPair) or use continuous scanning in [Dolphin Emulator](https://github.com/dolphin-emu/dolphin) to connect the Wiimotes before launching the Godot session. Ideally, a port of whatever Dolphin Emulator uses will be a long-term solution.
 
 Upon successful connection, the LED should light up, and you’ll feel a rumble just like the standard connection with the Wii.
 
-## Compiling the Project
+## Compiling the GDExtension
 
 This project is made for Godot 4.4+.
 
@@ -43,20 +44,40 @@ This project is made for Godot 4.4+.
     ```
 2. Build the `godot-cpp` bindings:
     ```
-    cd godot-cpp; scons platform=<platform>; cd ..
+    cd godot-wii-input/godot-cpp; scons platform=<platform>; cd ..
     ```
 3. Build the `gdwiiinput` extension:
     ```
     scons platform=<platform>
     ```
 
-After this, you should be able to run the demo project in Godot. Once the extension matures, it may be published to the Godot Asset Library with pre-built binaries. Note that the Wiiuse shared libraries for Windows and Linux are already included, so you don’t need to build them yourself for now.
+After this, you should be able to run the demo project in Godot.
+
+## Building Wiiuse
+This project builds Wiiuse as a static library as provided in `/libs`. The instructions below are just for reference.
+
+### Linux
+The BlueZ bluetooth drivers and dev-files are a dependency that can be installed as follows.
+```
+sudo apt install libbluetooth-dev libbluetooth3 bluez
+```
+Wiiuse can then be built with the following flags.
+```
+cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON ..
+make
+```
+
+### Windows
+```
+& "C:\Program Files\CMake\bin\cmake.exe" -S .. -B build -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS_RELEASE="/MT" -DCMAKE_CXX_FLAGS_RELEASE="/MT"
+& "C:\Program Files\CMake\bin\cmake.exe" --build build --config Release
+```
 
 ## Current Limitations
 
 - **No built-in pairing handling for Windows.**
-- **Tested only on Windows and Linux**. I currently don't have access to a Mac.
-- **Limited hardware testing**. I have a MotionPlus Wiimote and a third-party Nunchuk (no sensor bar), so I can’t test all possible setups.
+- **Extreme latency in Linux.** Not sure if its just my system or some issue with Wiiuse.
+- **Limited hardware testing.** I have a MotionPlus Wiimote and a third-party Nunchuk (no sensor bar), so I can’t test all possible setups.
 
 ## Permanent Limitations
 
