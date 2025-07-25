@@ -7,23 +7,16 @@ on:
         description: Version tag (e.g. 0.1.0)
         required: true
 
-env:
-  ADDON_BUILD_DIR: build/addons/gdwiiinput
-  ADDON_ZIP_ROOT: addons/gdwiiinput
-
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
     strategy:
+        fail-fast: false
       matrix:
-        include:
-          - os: windows-latest
-            platform: windows
-            arch: x86_64
-          - os: ubuntu-latest
-            platform: linux
-            arch: x86_64
-
+        target:
+          - { platform: linux, arch: x86_64, os: ubuntu-22.04 }
+          - { platform: windows, arch: x86_64, os: windows-latest }
+        build_target_type: ["template_debug", "template_release"]
+    runs-on:  ${{ matrix.target.os }}
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -36,52 +29,33 @@ jobs:
           pip install scons
 
       - name: Install Linux dependencies
-        if: matrix.platform == 'linux'
+        if: matrix.target.platform == 'linux'
         run: sudo apt-get update && sudo apt-get install -y build-essential pkg-config libbluetooth-dev
 
       - name: Cache scons cache
         uses: actions/cache@v4
         with:
           path: .scons_cache
-          key: ${{ runner.os }}-scons-cache-${{ matrix.platform }}-${{ matrix.arch }}
+          key: ${{ matrix.target.os }}-scons-cache-${{ matrix.target.platform }}-${{ matrix.target.arch }}
 
-      - name: Build extension
+      - name: Build GDWiiInput
         env:
           SCONS_CACHE: ${{ github.workspace }}/.scons_cache
-        run: scons platform=${{ matrix.platform }} arch=${{ matrix.arch }} target=template_release
+        run: scons target=${{ matrix.build_target_type }} platform=${{ matrix.target.platform }} arch=${{ matrix.target.arch }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: build-${{ matrix.platform }}
-          path: build/addons/gdwiiinput
-
+          name: GDWiiInput-${{ matrix.target.platform }}-${{ matrix.target.arch }}-${{ matrix.build_target_type }}
+          path: |
+            ${{ github.workspace }}/build/**
   package:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
         with:
-          submodules: true
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-
-      - name: Prepare final addon folder
-        run: |
-          mkdir -p build/addons/gdwiiinput
-          cp -r artifacts/build-*/addons/gdwiiinput/* build/addons/gdwiiinput/
-
-      - name: Zip final addon
-        run: |
-          cd build
-          zip -r ../GDWiiInput-v${{ github.event.inputs.version }}.zip addons/gdwiiinput
-
-      - name: Upload final zip artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: GDWiiInput
-          path: GDWiiInput-v${{ github.event.inputs.version }}.zip
+          name: GDWiiInput-all
+          pattern: GDWiiInput-*
+          delete-merged: true
