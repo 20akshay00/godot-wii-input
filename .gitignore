@@ -9,3 +9,4 @@
 *.so
 *.dblite
 demo2
+__pycache__
