@@ -68,6 +68,9 @@ public:
     void toggle_rumble();
     void pulse_rumble(double duration_msec);
 
+    // Battery
+    float get_battery_level() const;
+
     // Motion sensing
     void set_motion_sensing(bool enable);
     void set_motion_plus(bool enable);
@@ -108,6 +111,7 @@ public:
     godot::Vector3 get_nunchuk_raw_orientation() const;      // wiiuse
     godot::Vector3 get_nunchuk_smoothed_orientation() const; // wiiuse
 
-    // Battery
-    float get_battery_level() const;
+    // Wii board
+    godot::Array get_board_raw_data() const;
+    godot::Array get_board_interpolated_weights() const;
 };

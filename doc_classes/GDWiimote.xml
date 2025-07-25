@@ -20,10 +20,22 @@
 				Get the battery level of the Wiimote, as a percentage (0-100).
 			</description>
 		</method>
+		<method name="get_board_interpolated_weights" qualifiers="const">
+			<return type="Array" />
+			<description>
+			Get the interpolated weight per sensor in kgs. The order is (top left, top right, bottom left, bottom right).
+			</description>
+		</method>
+		<method name="get_board_raw_data" qualifiers="const">
+			<return type="Array" />
+			<description>
+			Get the raw readings per sensor in ???. The order is (top left, top right, bottom left, bottom right).
+			</description>
+		</method>
 		<method name="get_fusion_orientation">
 			<return type="Quaternion" />
 			<description>
-				Get the current orientation of the Wiimote as a quaternion. This is calculated using the accelerometer and gyroscope data. 
+				Get the current orientation of the Wiimote as a quaternion. This is calculated using the accelerometer and gyroscope data.
 			</description>
 		</method>
 		<method name="get_led" qualifiers="const">

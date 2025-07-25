@@ -97,11 +97,19 @@ void GDWiimote::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("set_nunchuk_joystick_deadzone", "dz"), &GDWiimote::set_nunchuk_joystick_deadzone);
     godot::ClassDB::bind_method(godot::D_METHOD("set_nunchuk_joystick_threshold", "dt"), &GDWiimote::set_nunchuk_joystick_threshold);
 
+    // Wii board
+    godot::ClassDB::bind_method(godot::D_METHOD("get_board_raw_data"), &GDWiimote::get_board_raw_data);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_board_interpolated_weights"), &GDWiimote::get_board_interpolated_weights);
+
     ADD_SIGNAL(godot::MethodInfo("nunchuk_inserted",
                                  godot::PropertyInfo(godot::Variant::INT, "device_id")));
     ADD_SIGNAL(godot::MethodInfo("nunchuk_removed",
                                  godot::PropertyInfo(godot::Variant::INT, "device_id")));
     ADD_SIGNAL(godot::MethodInfo("wiimote_disconnected",
+                                 godot::PropertyInfo(godot::Variant::INT, "device_id")));
+    ADD_SIGNAL(godot::MethodInfo("board_inserted",
+                                 godot::PropertyInfo(godot::Variant::INT, "device_id")));
+    ADD_SIGNAL(godot::MethodInfo("board_removed",
                                  godot::PropertyInfo(godot::Variant::INT, "device_id")));
 }
 
@@ -218,6 +226,16 @@ void GDWiimote::handle_event(double delta)
     case WIIUSE_NUNCHUK_REMOVED:
         emit_signal("nunchuk_removed", device_id);
         DEBUG_PRINT("Nunchuk removed on Wiimote ", device_id);
+        break;
+
+    case WIIUSE_WII_BOARD_CTRL_INSERTED:
+        emit_signal("board_inserted", device_id);
+        DEBUG_PRINT("Board inserted on Wiimote ", device_id);
+        break;
+
+    case WIIUSE_WII_BOARD_CTRL_REMOVED:
+        emit_signal("board_removed", device_id);
+        DEBUG_PRINT("Board removed on Wiimote ", device_id);
         break;
 
     case WIIUSE_UNEXPECTED_DISCONNECT:
