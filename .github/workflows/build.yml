@@ -74,8 +74,8 @@ jobs:
       - name: Prepare final addon folder
         run: |
           mkdir -p ${ADDON_BUILD_DIR}
-          # Copy your existing build/addons/gdwiiinput files (plugin, gdextension, licenses etc)
-          cp -r build/addons/gdwiiinput/* ${ADDON_BUILD_DIR}/
+          # Copy original source files (plugin, gdextension, licenses etc) from addons, NOT build folder
+          cp -r addons/gdwiiinput/* ${ADDON_BUILD_DIR}/
           # Merge downloaded build artifacts into the build folder
           cp -r artifacts/build/addons/gdwiiinput/* ${ADDON_BUILD_DIR}/
 
