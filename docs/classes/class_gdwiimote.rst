@@ -276,7 +276,7 @@ Get the current smoothed tilt data computed from the acceleration data of the Nu
 
 ``Vector2`` **get_player_space_gyro**\ (\ yaw_relax_factor\: ``float``\ ) :ref:`🔗<class_GDWiimote_method_get_player_space_gyro>`
 
-Check `{GamepadMotionHelpers' documentation} <{https://github.com/JibbSmart/GamepadMotionHelpers}>`__ for more information on how to use this method.
+Check `GamepadMotionHelpers' documentation <{https://github.com/JibbSmart/GamepadMotionHelpers}>`__ for more information on how to use this method.
 
 .. rst-class:: classref-item-separator
 
@@ -350,7 +350,7 @@ Get the current smoothed tilt data computed from the acceleration data of the Wi
 
 ``Vector2`` **get_world_space_gyro**\ (\ side_reduction_threshold\: ``float``\ ) :ref:`🔗<class_GDWiimote_method_get_world_space_gyro>`
 
-Check `{GamepadMotionHelpers' documentation} <{https://github.com/JibbSmart/GamepadMotionHelpers}>`__ for more information on how to use this method.
+Check `GamepadMotionHelpers' documentation <{https://github.com/JibbSmart/GamepadMotionHelpers}>`__ for more information on how to use this method.
 
 .. rst-class:: classref-item-separator
 
@@ -428,11 +428,11 @@ Set the gyroscope calibration mode. The ``mode`` parameter can be one of the fol
 
 - 0: ``CalibrationMode::Manual`` - No auto-calibration. This is the default.
 
-- 1: ``CalibrationMode::Stillness`` - CalibrationMode::Stillnes
+- 1: ``CalibrationMode::Stillness`` - Automatically try to detect when the controller is being held still and update the calibration offset accordingly.
 
-- 2: ``CalibrationMode::SensorFusion`` - Calculate an angular velocity from changes in the gravity direction as detected by the accelerometer.
+- 2: ``CalibrationMode::SensorFusion`` - Calculate an angular velocity from changes in the gravity direction as detected by the accelerometer. If these are steady enough, use them to make corrections to the calibration offset. This will only apply to relevant axes.
 
-Check `{GamepadMotionHelpers' documentation} <{https://github.com/JibbSmart/GamepadMotionHelpers}>`__ for more information
+Check `GamepadMotionHelpers' documentation <{https://github.com/JibbSmart/GamepadMotionHelpers}>`__ for more information
 
 .. rst-class:: classref-item-separator
 
