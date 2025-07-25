@@ -3,7 +3,7 @@
 Introduction
 ============================
 
-`GDWiiInput <https://github.com/20akshay00/GDWiiInput>`__ is a tensor math and scientific computation library for the `Godot Engine <https://godotengine.org>`__.
+`GDWiiInput <https://github.com/20akshay00/GDWiiInput>` is a tensor math and scientific computation library for the `Godot Engine <https://godotengine.org>`.
 
 
 Motivation
