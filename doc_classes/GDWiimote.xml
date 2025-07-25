@@ -73,7 +73,7 @@
 			<return type="Vector2" />
 			<param index="0" name="yaw_relax_factor" type="float" />
 			<description>
-				Check [url={https://github.com/JibbSmart/GamepadMotionHelpers}]{GamepadMotionHelpers' documentation}[/url] for more information on how to use this method.
+				Check [url={https://github.com/JibbSmart/GamepadMotionHelpers}]GamepadMotionHelpers' documentation[/url] for more information on how to use this method.
 			</description>
 		</method>
 		<method name="get_processed_accel">
@@ -111,7 +111,7 @@
 			<return type="Vector2" />
 			<param index="0" name="side_reduction_threshold" type="float" />
 			<description>
-				Check [url={https://github.com/JibbSmart/GamepadMotionHelpers}]{GamepadMotionHelpers' documentation}[/url] for more information on how to use this method.
+				Check [url={https://github.com/JibbSmart/GamepadMotionHelpers}]GamepadMotionHelpers' documentation[/url] for more information on how to use this method.
 			</description>
 		</method>
 		<method name="initialize_nunchuk">
@@ -153,9 +153,9 @@
 			<description>
 				Set the gyroscope calibration mode. The [code]mode[/code] parameter can be one of the following:
 				- 0: [code]CalibrationMode::Manual[/code] - No auto-calibration. This is the default.
-				- 1: [code]CalibrationMode::Stillness[/code] - CalibrationMode::Stillnes
-				- 2: [code]CalibrationMode::SensorFusion[/code] - Calculate an angular velocity from changes in the gravity direction as detected by the accelerometer.
-				Check [url={https://github.com/JibbSmart/GamepadMotionHelpers}]{GamepadMotionHelpers' documentation}[/url] for more information
+				- 1: [code]CalibrationMode::Stillness[/code] - Automatically try to detect when the controller is being held still and update the calibration offset accordingly.
+				- 2: [code]CalibrationMode::SensorFusion[/code] - Calculate an angular velocity from changes in the gravity direction as detected by the accelerometer. If these are steady enough, use them to make corrections to the calibration offset. This will only apply to relevant axes.
+				Check [url={https://github.com/JibbSmart/GamepadMotionHelpers}]GamepadMotionHelpers' documentation[/url] for more information
 			</description>
 		</method>
 		<method name="set_leds">

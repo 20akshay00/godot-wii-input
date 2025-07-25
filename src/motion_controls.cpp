@@ -1,7 +1,7 @@
 #include "gdwiimote.h"
 #include <godot_cpp/variant/quaternion.hpp>
 
-// Enable/sisable motion sensing capabilities
+// Enable/disable motion sensing capabilities
 void GDWiimote::set_motion_sensing(bool enable)
 {
     if (wm)
