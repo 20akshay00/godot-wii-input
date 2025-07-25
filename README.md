@@ -1,7 +1,7 @@
 # GDWiiInput – WIP!
 
 <p align="center">
-  <img src="./resources/GDWiiInputLogo.png" />
+  <img src="./resources/GDWiiInputBanner.png" />
 </p>
 
 > **Supported Platforms:** Windows & Linux with **Godot 4.4+**
