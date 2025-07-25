@@ -1,5 +1,3 @@
-# GDWiiInput – WIP!
-
 <p align="center">
   <img src="./resources/GDWiiInputBanner.png" />
 </p>
