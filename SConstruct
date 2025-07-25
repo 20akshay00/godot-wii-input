@@ -2,6 +2,8 @@
 import os
 from SCons.Script import ARGUMENTS
 
+libname = "gdwiiinput"
+
 env = SConscript("godot-cpp/SConstruct")
 
 env.Append(CPPPATH=["src/", "include/"])
@@ -26,24 +28,24 @@ if platform == "windows":
 else:
     env.Append(LIBS=["wiiuse", "bluetooth"])
 
-# Output directory (default: demo/bin)
-out_dir = ARGUMENTS.get("out", "demo/bin")
+# Output directory
+out_dir = ARGUMENTS.get("out", f"demo/addons/{libname}/{platform}")
 target = env["target"]
 suffix = env["suffix"]
 shlib = env["SHLIBSUFFIX"]
 
 # Output path setup
 if platform == "macos":
-    lib_path = f"{out_dir}/gdwiiinput.{platform}.{target}.framework/gdwiiinput.{platform}.{target}"
+    lib_path = f"{out_dir}/{libname}.{platform}.{target}.framework/{libname}.{platform}.{target}"
     library = env.SharedLibrary(lib_path, source=sources)
 elif platform == "ios":
     if env.get("ios_simulator", False):
-        lib_path = f"{out_dir}/gdwiiinput.{platform}.{target}.simulator"
+        lib_path = f"{out_dir}/{libname}.{platform}.{target}.simulator"
     else:
-        lib_path = f"{out_dir}/gdwiiinput.{platform}.{target}"
+        lib_path = f"{out_dir}/{libname}.{platform}.{target}"
     library = env.StaticLibrary(lib_path, source=sources)
 else:
-    lib_path = f"{out_dir}/gdwiiinput{suffix}{shlib}"
+    lib_path = f"{out_dir}/{libname}{suffix}{shlib}"
     library = env.SharedLibrary(lib_path, source=sources)
 
 Default(library)
