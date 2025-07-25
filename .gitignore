@@ -8,5 +8,5 @@
 *.os
 *.so
 *.dblite
-demo2
+*.venv
 __pycache__
