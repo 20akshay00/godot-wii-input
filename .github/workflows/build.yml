@@ -1,6 +1,7 @@
 name: Builds
 
-on: push
+on: 
+  workflow_dispatch:
 
 env:
   LIBNAME: GDWiiInput
