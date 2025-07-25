@@ -35,7 +35,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .scons_cache
-          key: ${{ matrix.target.os }}-scons-cache-${{ matrix.target.platform }}-${{ matrix.target.arch }}
+          key: ${{ matrix.target.os }}-scons-cache-${{ matrix.target.platform }}-${{ matrix.target.arch }}-${{ matrix.build_target_type }}
 
       - name: Build GDWiiInput
         env:
