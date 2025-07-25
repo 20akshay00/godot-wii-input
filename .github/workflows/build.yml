@@ -4,12 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 0.1
+        description: 'Version (e.g. 0.1)'
         required: true
 
 env:
   LIBNAME: GDWiiInput
-  ADDON_DIR: addons/gdwiiinput
+  BUILD_ADDON_DIR: build/addons/gdwiiinput
+  ZIP_ROOT_DIR: addons/gdwiiinput
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -67,17 +68,24 @@ jobs:
         run: |
           scons target=${{ matrix.target }} platform=${{ matrix.platform }} arch=${{ matrix.arch }}
 
-      - name: Move built library
+      - name: Move built library (Linux)
+        if: ${{ matrix.platform == 'linux' }}
         run: |
-          mkdir -p ${{ env.ADDON_DIR }}/${{ matrix.platform }}
-          mv demo/bin/*${{ matrix.platform }}* ${{ env.ADDON_DIR }}/${{ matrix.platform }}/ || true
+          mkdir -p ${{ env.BUILD_ADDON_DIR }}/linux
+          mv demo/bin/*linux* ${{ env.BUILD_ADDON_DIR }}/linux/ || true
         shell: bash
+
+      - name: Move built library (Windows)
+        if: ${{ matrix.platform == 'windows' }}
+        run: |
+          mkdir -p ${{ env.BUILD_ADDON_DIR }}/windows
+          powershell -Command "Move-Item -Path 'demo/bin/*windows*' -Destination '${{ env.BUILD_ADDON_DIR }}/windows/' -ErrorAction SilentlyContinue"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.identifier }}
-          path: ${{ env.ADDON_DIR }}
+          path: ${{ env.BUILD_ADDON_DIR }}
 
   package:
     needs: build
@@ -91,17 +99,21 @@ jobs:
         with:
           path: artifacts
 
-      - name: Assemble final addon
+      - name: Prepare addon folder
         run: |
-          mkdir -p dist/${{ env.ADDON_DIR }}
-          cp -r addons/gdwiiinput/* dist/${{ env.ADDON_DIR }}/
-          cp -r artifacts/*/${{ env.ADDON_DIR }}/* dist/${{ env.ADDON_DIR }}/
+          # Copy your existing addon files from build/addons/gdwiiinput to a temp folder
+          cp -r build/addons/gdwiiinput addon-temp
 
-      - name: Zip addon
-        uses: vimtor/action-zip@v1
-        with:
-          files: dist/addons/gdwiiinput
-          dest: GDWiiInput-v${{ github.event.inputs.version }}.zip
+          # Overlay the built platform folders from artifacts on top
+          cp -r artifacts/*/linux addon-temp/linux || true
+          cp -r artifacts/*/windows addon-temp/windows || true
+
+      - name: Zip addon starting at addons/gdwiiinput folder
+        run: |
+          mkdir -p zip-root/addons
+          mv addon-temp zip-root/addons/gdwiiinput
+          cd zip-root
+          zip -r ../GDWiiInput-v${{ github.event.inputs.version }}.zip addons/gdwiiinput
 
       - name: Upload final zip
         uses: actions/upload-artifact@v4
