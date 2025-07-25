@@ -5,7 +5,7 @@ Connecting the Wiimotes
 
 To begin using the extension, we first need to setup a global autoload which is a :ref:`WiimoteManager <class_WiimoteManager>` node. This node is responsible for managing all Wiimote connections and polling.
 
-An important thing to note is that GDWiiInput expects all remotes (and their expansions) to be connected before the session starts. The session must then begin by calling :ref:`WiimoteManager.connect_wiimotes() <class_WiimoteManager_method_connect_wiimotes>` which scans for any Wiimotes already paired at that time.  
+An important thing to note is that GDWiiInput expects all remotes (and their expansions) to be connected to the device **before the session starts**. The session then begins by calling :ref:`WiimoteManager.connect_wiimotes() <class_WiimoteManager_method_connect_wiimotes>` which scans for any Wiimotes already paired at that time.  
 You can also configure the maximum number of allowed remotes using the exported property :ref:`max_wiimotes <class_WiimoteManager_property_max_wiimotes>`.
 
 So before launching the session, the Wiimotes have to be connected to the device. The Wiimote uses Bluetooth, making PC connection possible. However, it communicates using some non-standard and outdated Bluetooth protocols, which can cause inconsistent behavior across operating systems.
@@ -18,7 +18,7 @@ On Linux, the BlueZ Bluetooth stack is required:
 
    sudo apt install libbluetooth3 bluez
 
-After calling ``WiimoteManager.connect_wiimotes()``, press 1+2 on the Wiimote to initiate pairing.
+After calling :ref:`WiimoteManager.connect_wiimotes() <class_WiimoteManager_method_connect_wiimotes>`, press 1+2 on the Wiimote to initiate pairing.
 
 Windows
 -------

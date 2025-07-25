@@ -2,9 +2,9 @@
 
 Building the GDExtension
 ===========================
-There is not much to be gained as a user from compiling this yourself as GDWiiInput is available on the Godot Asset library as well. This page is intended as a reference for contributors.
+If you are interested in contributing to this project, following are the steps to compile GDWiiInput locally.
 
-Requirements: Godot 4.4+, Python, SCons, CMake.
+**Requirements:** Godot 4.4+, Python, SCons, CMake.
 
 1. Clone the repository:
 
@@ -32,6 +32,7 @@ Wiiuse Compilation
 ===========================
 
 This project uses Wiiuse as a static library from the ``/libs`` directory so compiling it again is not necessary.
+
 **Linux dependencies:**
 
 .. code-block:: bash

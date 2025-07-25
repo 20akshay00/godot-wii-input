@@ -2,9 +2,7 @@
 GDWiiInput Documentation
 ============================
 
-`GDWiiInput <https://github.com/20akshay00/godot-wii-input>`__ is a GDExtension for the `Godot Engine <https://godotengine.org>`__ that enables communication with Wii Remotes and their accessories using the `Wiiuse <https://github.com/wiiuse/wiiuse>`__ library.
-
-It supports input from the Wiimote, Nunchuk, and Wii Balance Board. Core features include button mapping into Godot’s input system, motion and rumble support, LED control, and access to motion sensors.
+`GDWiiInput <https://github.com/20akshay00/godot-wii-input>`__ is a GDExtension for the `Godot Engine <https://godotengine.org>`__ that enables communication with the Wiimote and its accessories using the `Wiiuse <https://github.com/wiiuse/wiiuse>`__ library. It currently supports input from the Wiimote, Nunchuk, and Wii Balance Board.
 
 Features
 ============
