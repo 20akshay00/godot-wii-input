@@ -5,7 +5,7 @@ var wiimote: GDWiimote
 @export_multiline var help: String
 
 func init() -> void:
-	wiimote = WiimoteManager.get_connected_wiimotes()[0]
+	wiimote = GDWiimoteServer.get_connected_wiimotes()[0]
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED

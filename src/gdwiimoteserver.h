@@ -7,12 +7,12 @@
 
 #include "gdwiimote.h"
 
-class WiimoteManager : public godot::Object
+class GDWiimoteServer : public godot::Object
 {
-    GDCLASS(WiimoteManager, godot::Object);
+    GDCLASS(GDWiimoteServer, godot::Object);
 
 private:
-    static WiimoteManager *singleton; // static instance
+    static GDWiimoteServer *singleton; // static instance
 
     int max_wiimotes = 4;
     int num_connected = -1; // -1 means not connected
@@ -24,8 +24,8 @@ protected:
     static void _bind_methods();
 
 public:
-    WiimoteManager();
-    ~WiimoteManager();
+    GDWiimoteServer();
+    ~GDWiimoteServer();
 
     void set_max_wiimotes(int max);
     int get_max_wiimotes() const;

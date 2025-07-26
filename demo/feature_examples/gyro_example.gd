@@ -6,7 +6,7 @@ var wiimote: GDWiimote
 var _is_calibrated := false
 
 func init() -> void:
-	wiimote = WiimoteManager.get_connected_wiimotes()[0]
+	wiimote = GDWiimoteServer.get_connected_wiimotes()[0]
 	wiimote.set_motion_sensing(true)
 	wiimote.set_motion_plus(true)
 	wiimote.set_motion_processing(true)

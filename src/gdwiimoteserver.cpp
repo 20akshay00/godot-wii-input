@@ -1,4 +1,4 @@
-#include "wiimotemanager.h"
+#include "GDWiimoteServer.h"
 #include <godot_cpp/variant/utility_functions.hpp>
 
 #include <godot_cpp/classes/engine.hpp>
@@ -9,37 +9,37 @@
 
 #include "debug.h"
 
-void WiimoteManager::_bind_methods()
+void GDWiimoteServer::_bind_methods()
 {
-    godot::ClassDB::bind_method(godot::D_METHOD("set_max_wiimotes", "max"), &WiimoteManager::set_max_wiimotes);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_max_wiimotes"), &WiimoteManager::get_max_wiimotes);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_max_wiimotes", "max"), &GDWiimoteServer::set_max_wiimotes);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_max_wiimotes"), &GDWiimoteServer::get_max_wiimotes);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::INT, "max_wiimotes"), "set_max_wiimotes", "get_max_wiimotes");
 
-    godot::ClassDB::bind_method(godot::D_METHOD("connect_wiimotes"), &WiimoteManager::connect_wiimotes);
-    godot::ClassDB::bind_method(godot::D_METHOD("finalize_connection"), &WiimoteManager::finalize_connection);
-    godot::ClassDB::bind_method(godot::D_METHOD("disconnect_wiimotes"), &WiimoteManager::disconnect_wiimotes);
-    godot::ClassDB::bind_method(godot::D_METHOD("get_connected_wiimotes"), &WiimoteManager::get_connected_wiimotes);
+    godot::ClassDB::bind_method(godot::D_METHOD("connect_wiimotes"), &GDWiimoteServer::connect_wiimotes);
+    godot::ClassDB::bind_method(godot::D_METHOD("finalize_connection"), &GDWiimoteServer::finalize_connection);
+    godot::ClassDB::bind_method(godot::D_METHOD("disconnect_wiimotes"), &GDWiimoteServer::disconnect_wiimotes);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_connected_wiimotes"), &GDWiimoteServer::get_connected_wiimotes);
 
-    godot::ClassDB::bind_method(godot::D_METHOD("start_polling"), &WiimoteManager::enable_polling);
-    godot::ClassDB::bind_method(godot::D_METHOD("stop_polling"), &WiimoteManager::disable_polling);
-    godot::ClassDB::bind_method(godot::D_METHOD("poll"), &WiimoteManager::poll);
+    godot::ClassDB::bind_method(godot::D_METHOD("start_polling"), &GDWiimoteServer::enable_polling);
+    godot::ClassDB::bind_method(godot::D_METHOD("stop_polling"), &GDWiimoteServer::disable_polling);
+    godot::ClassDB::bind_method(godot::D_METHOD("poll"), &GDWiimoteServer::poll);
 }
 
-WiimoteManager *WiimoteManager::singleton = nullptr;
+GDWiimoteServer *GDWiimoteServer::singleton = nullptr;
 
-WiimoteManager::WiimoteManager()
+GDWiimoteServer::GDWiimoteServer()
 {
-    ERR_FAIL_COND_MSG(singleton != nullptr, "WiimoteManager singleton already exists!");
+    ERR_FAIL_COND_MSG(singleton != nullptr, "GDWiimoteServer singleton already exists!");
     singleton = this;
 }
 
-WiimoteManager::~WiimoteManager()
+GDWiimoteServer::~GDWiimoteServer()
 {
     disconnect_wiimotes();
     singleton = nullptr;
 }
 
-void WiimoteManager::set_max_wiimotes(int max)
+void GDWiimoteServer::set_max_wiimotes(int max)
 {
     if (num_connected >= 0)
     {
@@ -49,12 +49,12 @@ void WiimoteManager::set_max_wiimotes(int max)
     max_wiimotes = godot::MAX(1, godot::MIN(max, 16)); // kind of an arbitrary limit
 }
 
-int WiimoteManager::get_max_wiimotes() const
+int GDWiimoteServer::get_max_wiimotes() const
 {
     return max_wiimotes;
 }
 
-void WiimoteManager::connect_wiimotes()
+void GDWiimoteServer::connect_wiimotes()
 {
     if (num_connected >= 0)
     {
@@ -87,7 +87,7 @@ void WiimoteManager::connect_wiimotes()
     return;
 }
 
-godot::TypedArray<GDWiimote> WiimoteManager::finalize_connection()
+godot::TypedArray<GDWiimote> GDWiimoteServer::finalize_connection()
 {
     // Wrap each connected wiimote
     gdwiimotes.clear();
@@ -115,7 +115,7 @@ godot::TypedArray<GDWiimote> WiimoteManager::finalize_connection()
     return gdwiimotes;
 }
 
-void WiimoteManager::disconnect_wiimotes()
+void GDWiimoteServer::disconnect_wiimotes()
 {
     if (num_connected < 0)
         return;
@@ -144,12 +144,12 @@ void WiimoteManager::disconnect_wiimotes()
     disable_polling();
 }
 
-void WiimoteManager::enable_polling()
+void GDWiimoteServer::enable_polling()
 {
     godot::SceneTree *tree = Object::cast_to<godot::SceneTree>(godot::Engine::get_singleton()->get_main_loop());
     if (tree)
     {
-        godot::Callable cb = callable_mp(this, &WiimoteManager::poll);
+        godot::Callable cb = callable_mp(this, &GDWiimoteServer::poll);
 
         if (tree->is_connected("process_frame", cb))
         {
@@ -162,12 +162,12 @@ void WiimoteManager::enable_polling()
     }
 }
 
-void WiimoteManager::disable_polling()
+void GDWiimoteServer::disable_polling()
 {
     godot::SceneTree *tree = Object::cast_to<godot::SceneTree>(godot::Engine::get_singleton()->get_main_loop());
     if (tree)
     {
-        godot::Callable cb = callable_mp(this, &WiimoteManager::poll);
+        godot::Callable cb = callable_mp(this, &GDWiimoteServer::poll);
 
         if (tree->is_connected("process_frame", cb))
         {
@@ -180,7 +180,7 @@ void WiimoteManager::disable_polling()
     }
 }
 
-void WiimoteManager::poll()
+void GDWiimoteServer::poll()
 {
     if ((num_connected < 0) || !wiimotes)
         return;

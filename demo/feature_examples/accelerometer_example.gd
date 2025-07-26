@@ -7,7 +7,7 @@ var _is_calibrated = true
 @export var SPEED: float = 500.
 
 func init() -> void:
-	wiimote = WiimoteManager.get_connected_wiimotes()[0]
+	wiimote = GDWiimoteServer.get_connected_wiimotes()[0]
 	wiimote.set_motion_sensing(true)
 	cursor.show()
 	cursor.global_position = get_viewport().get_visible_rect().size / 2

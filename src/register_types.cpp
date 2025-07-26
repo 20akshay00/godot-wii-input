@@ -1,6 +1,6 @@
 #include "register_types.h"
 
-#include "wiimotemanager.h"
+#include "GDWiimoteServer.h"
 
 #include <godot_cpp/classes/engine.hpp>
 #include <gdextension_interface.h>
@@ -9,7 +9,7 @@
 
 using namespace godot;
 
-static WiimoteManager *wiimote_manager_singleton = nullptr;
+static GDWiimoteServer *wiimote_server_singleton = nullptr;
 
 void initialize_example_module(ModuleInitializationLevel p_level)
 {
@@ -19,12 +19,12 @@ void initialize_example_module(ModuleInitializationLevel p_level)
     }
 
     GDREGISTER_RUNTIME_CLASS(GDWiimote);
-    GDREGISTER_RUNTIME_CLASS(WiimoteManager)
+    GDREGISTER_RUNTIME_CLASS(GDWiimoteServer)
 
-    if (!wiimote_manager_singleton)
+    if (!wiimote_server_singleton)
     {
-        wiimote_manager_singleton = memnew(WiimoteManager);
-        Engine::get_singleton()->register_singleton("WiimoteManager", wiimote_manager_singleton);
+        wiimote_server_singleton = memnew(GDWiimoteServer);
+        Engine::get_singleton()->register_singleton("GDWiimoteServer", wiimote_server_singleton);
     }
 }
 
@@ -33,11 +33,11 @@ void uninitialize_example_module(ModuleInitializationLevel p_level)
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
         return;
 
-    if (wiimote_manager_singleton)
+    if (wiimote_server_singleton)
     {
-        Engine::get_singleton()->unregister_singleton("WiimoteManager");
-        memdelete(wiimote_manager_singleton);
-        wiimote_manager_singleton = nullptr;
+        Engine::get_singleton()->unregister_singleton("GDWiimoteServer");
+        memdelete(wiimote_server_singleton);
+        wiimote_server_singleton = nullptr;
     }
 }
 
