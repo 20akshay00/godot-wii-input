@@ -8,8 +8,9 @@ Features
 ============
 
 - **Button Input**: All Wiimote button and joystick inputs (including Nunchuk) are mapped into Godot's input system.
-- **Motion Data**: Access raw accelerometer and gyroscope data. Basic processing is available using `GamepadMotionHelpers <https://github.com/JibbSmart/GamepadMotionHelpers>`__ (experimental).
 - **LED & Rumble**: Control the Wiimote’s LEDs and trigger rumble feedback.
+- **IR Data**: Access the positions and sizes of upto 4 IR clusters detected by the IR camera.
+- **Motion Data**: Access raw accelerometer and gyroscope data. Basic processing is available using `GamepadMotionHelpers <https://github.com/JibbSmart/GamepadMotionHelpers>`__ (experimental).
 
 Table of Contents
 ============================

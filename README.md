@@ -15,6 +15,7 @@
 
 - **Button Input**: All button presses, including the Nunchuk joystick motion, are routed through Godot's Input system. (Check the demo project to see the mappings)
 - **LED Control & Rumble Feedback**: Control the LED lights on the Wiimote and trigger rumble feedback.
+- **IR Data**: Access the positions and sizes of upto 4 IR clusters detected by the IR camera.
 - **Motion Control**: In addition to access to raw accelerometer and gyroscope data, there are also basic motion control processing utilities from [GamepadMotionHelpers](https://github.com/JibbSmart/GamepadMotionHelpers) (**currently not reliable!**).
 
 ## Limitations
