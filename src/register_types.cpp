@@ -1,6 +1,6 @@
 #include "register_types.h"
 
-#include "GDWiimoteServer.h"
+#include "gdwiimoteserver.h"
 
 #include <godot_cpp/classes/engine.hpp>
 #include <gdextension_interface.h>
