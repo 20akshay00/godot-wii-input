@@ -219,6 +219,7 @@ if not on_rtd:
     html_css_files.append("css/dev.css")
 
 html_js_files = [
+    "https://code.jquery.com/jquery-3.6.0.min.js",
     "js/custom.js",  # Increment the number at the end when the file changes to bust the cache.
 ]
 
