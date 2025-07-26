@@ -101,6 +101,19 @@ void GDWiimote::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("get_board_raw_data"), &GDWiimote::get_board_raw_data);
     godot::ClassDB::bind_method(godot::D_METHOD("get_board_interpolated_weights"), &GDWiimote::get_board_interpolated_weights);
 
+    // IR
+    godot::ClassDB::bind_method(godot::D_METHOD("is_ir_active"), &GDWiimote::is_ir_active);
+    godot::ClassDB::bind_method(godot::D_METHOD("set_ir", "enable"), &GDWiimote::set_ir);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_ir_cursor_distance"), &GDWiimote::get_ir_cursor_distance);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_ir_cursor_calculated_position"), &GDWiimote::get_ir_cursor_calculated_position);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_ir_cursor_absolute_coordinate"), &GDWiimote::get_ir_cursor_absolute_coordinate);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_ir_num_dots"), &GDWiimote::get_ir_num_dots);
+
+    godot::ClassDB::bind_method(godot::D_METHOD("get_ir_dot_raw_position", "index"), &GDWiimote::get_ir_dot_raw_position);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_ir_dot_interpolated_position", "index"), &GDWiimote::get_ir_dot_interpolated_position);
+    godot::ClassDB::bind_method(godot::D_METHOD("get_ir_dot_size", "index"), &GDWiimote::get_ir_dot_size);
+    godot::ClassDB::bind_method(godot::D_METHOD("is_ir_dot_visible", "index"), &GDWiimote::is_ir_dot_visible);
+
     ADD_SIGNAL(godot::MethodInfo("nunchuk_inserted",
                                  godot::PropertyInfo(godot::Variant::INT, "device_id")));
     ADD_SIGNAL(godot::MethodInfo("nunchuk_removed",

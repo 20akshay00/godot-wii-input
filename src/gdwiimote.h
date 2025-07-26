@@ -114,4 +114,17 @@ public:
     // Wii board
     godot::Array get_board_raw_data() const;
     godot::Array get_board_interpolated_weights() const;
+
+    // IR
+    bool is_ir_active();
+    void set_ir(bool enable);
+    float get_ir_cursor_distance();
+    godot::Vector2 get_ir_cursor_calculated_position();
+    godot::Vector2 get_ir_cursor_absolute_coordinate();
+    int get_ir_num_dots();
+
+    godot::Vector2 get_ir_dot_raw_position(int index);
+    godot::Vector2 get_ir_dot_interpolated_position(int index);
+    float get_ir_dot_size(int index);
+    bool is_ir_dot_visible(int index);
 };

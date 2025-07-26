@@ -23,19 +23,64 @@
 		<method name="get_board_interpolated_weights" qualifiers="const">
 			<return type="Array" />
 			<description>
-			Get the interpolated weight per sensor in kgs. The order is (top left, top right, bottom left, bottom right).
+				Get the interpolated weight per sensor in kgs. The order is (top left, top right, bottom left, bottom right).
 			</description>
 		</method>
 		<method name="get_board_raw_data" qualifiers="const">
 			<return type="Array" />
 			<description>
-			Get the raw readings per sensor in ???. The order is (top left, top right, bottom left, bottom right).
+				Get the raw readings per sensor in ???. The order is (top left, top right, bottom left, bottom right).
 			</description>
 		</method>
 		<method name="get_fusion_orientation">
 			<return type="Quaternion" />
 			<description>
 				Get the current orientation of the Wiimote as a quaternion. This is calculated using the accelerometer and gyroscope data.
+			</description>
+		</method>
+		<method name="get_ir_cursor_absolute_coordinate">
+			<return type="Vector2" />
+			<description>
+				Get the absolute coordinate of the IR cursor.
+			</description>
+		</method>
+		<method name="get_ir_cursor_calculated_position">
+			<return type="Vector2" />
+			<description>
+				Get the position of the IR cursor calculated using a reference of two fixed IR points below the screen (i.e, the sensor bar).
+			</description>
+		</method>
+		<method name="get_ir_cursor_distance">
+			<return type="float" />
+			<description>
+				Get the distance of the remote from the sensor bar.
+			</description>
+		</method>
+		<method name="get_ir_dot_interpolated_position">
+			<return type="Vector2" />
+			<param index="0" name="index" type="int" />
+			<description>
+				Get the interpolated position of `dots[index]`. `index` must be in range (0-3).
+			</description>
+		</method>
+		<method name="get_ir_dot_raw_position">
+			<return type="Vector2" />
+			<param index="0" name="index" type="int" />
+			<description>
+				Get the raw position of `dots[index]` with range (0-1023) and (0-767) for the x and y coordinates, respectively. `index` must be in range (0-3).
+			</description>
+		</method>
+		<method name="get_ir_dot_size">
+			<return type="float" />
+			<param index="0" name="index" type="int" />
+			<description>
+				Get the approximate size of `dots[index]` with range (0-15).
+			</description>
+		</method>
+		<method name="get_ir_num_dots">
+			<return type="int" />
+			<description>
+				Get the number of dots currently being tracked (maximum 4).
 			</description>
 		</method>
 		<method name="get_led" qualifiers="const">
@@ -120,6 +165,19 @@
 				Initialize the Nunchuk accessory with default calibration values. This should be called immediately after the Nunchuk is connected.
 			</description>
 		</method>
+		<method name="is_ir_active">
+			<return type="bool" />
+			<description>
+				Check if IR functionality is enabled.
+			</description>
+		</method>
+		<method name="is_ir_dot_visible">
+			<return type="bool" />
+			<param index="0" name="index" type="int" />
+			<description>
+				Check if `dots[index]` is currently visible.
+			</description>
+		</method>
 		<method name="is_nunchuk_connected" qualifiers="const">
 			<return type="bool" />
 			<description>
@@ -156,6 +214,13 @@
 				- 1: [code]CalibrationMode::Stillness[/code] - Automatically try to detect when the controller is being held still and update the calibration offset accordingly.
 				- 2: [code]CalibrationMode::SensorFusion[/code] - Calculate an angular velocity from changes in the gravity direction as detected by the accelerometer. If these are steady enough, use them to make corrections to the calibration offset. This will only apply to relevant axes.
 				Check [url={https://github.com/JibbSmart/GamepadMotionHelpers}]GamepadMotionHelpers' documentation[/url] for more information
+			</description>
+		</method>
+		<method name="set_ir">
+			<return type="void" />
+			<param index="0" name="enable" type="bool" />
+			<description>
+				Enable or disable reporting of IR data. Used to save power when IR sensing is not needed.
 			</description>
 		</method>
 		<method name="set_leds">
@@ -264,6 +329,18 @@
 		</method>
 	</methods>
 	<signals>
+		<signal name="board_inserted">
+			<param index="0" name="device_id" type="int" />
+			<description>
+				Emitted when a Wii Balance board accessory is connected to the Wiimote. The [code]device_id[/code] parameter indicates which Wiimote the board is connected to. This is not reliable in the middle of an ongoing session.
+			</description>
+		</signal>
+		<signal name="board_removed">
+			<param index="0" name="device_id" type="int" />
+			<description>
+				Emitted when a Wii Balance board accessory is disconnected from the Wiimote. The [code]device_id[/code] parameter indicates which Wiimote the board is connected to. This is not reliable in the middle of an ongoing session.
+			</description>
+		</signal>
 		<signal name="nunchuk_inserted">
 			<param index="0" name="device_id" type="int" />
 			<description>

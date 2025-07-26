@@ -15,3 +15,4 @@
 
 #### Bugs
 - WiimoteManager overrides Node.process_mode for some reason
+- exposes enums for IR position

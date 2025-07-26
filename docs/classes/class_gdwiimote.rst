@@ -22,83 +22,103 @@ Methods
 .. table::
    :widths: auto
 
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Vector3``    | :ref:`get_accel<class_GDWiimote_method_get_accel>`\ (\ ) |const|                                                      |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``float``      | :ref:`get_battery_level<class_GDWiimote_method_get_battery_level>`\ (\ ) |const|                                      |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Array``      | :ref:`get_board_interpolated_weights<class_GDWiimote_method_get_board_interpolated_weights>`\ (\ ) |const|            |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Array``      | :ref:`get_board_raw_data<class_GDWiimote_method_get_board_raw_data>`\ (\ ) |const|                                    |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Quaternion`` | :ref:`get_fusion_orientation<class_GDWiimote_method_get_fusion_orientation>`\ (\ )                                    |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``bool``       | :ref:`get_led<class_GDWiimote_method_get_led>`\ (\ led_index\: ``int``\ ) |const|                                     |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Vector3``    | :ref:`get_nunchuk_accel<class_GDWiimote_method_get_nunchuk_accel>`\ (\ ) |const|                                      |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Vector3``    | :ref:`get_nunchuk_raw_accel<class_GDWiimote_method_get_nunchuk_raw_accel>`\ (\ ) |const|                              |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Vector3``    | :ref:`get_nunchuk_raw_orientation<class_GDWiimote_method_get_nunchuk_raw_orientation>`\ (\ ) |const|                  |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Vector3``    | :ref:`get_nunchuk_smoothed_orientation<class_GDWiimote_method_get_nunchuk_smoothed_orientation>`\ (\ ) |const|        |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Vector2``    | :ref:`get_player_space_gyro<class_GDWiimote_method_get_player_space_gyro>`\ (\ yaw_relax_factor\: ``float``\ )        |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Vector3``    | :ref:`get_processed_accel<class_GDWiimote_method_get_processed_accel>`\ (\ )                                          |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Vector3``    | :ref:`get_raw_accel<class_GDWiimote_method_get_raw_accel>`\ (\ ) |const|                                              |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Vector3``    | :ref:`get_raw_gyro<class_GDWiimote_method_get_raw_gyro>`\ (\ ) |const|                                                |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Vector3``    | :ref:`get_raw_orientation<class_GDWiimote_method_get_raw_orientation>`\ (\ ) |const|                                  |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Vector3``    | :ref:`get_smoothed_orientation<class_GDWiimote_method_get_smoothed_orientation>`\ (\ ) |const|                        |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``Vector2``    | :ref:`get_world_space_gyro<class_GDWiimote_method_get_world_space_gyro>`\ (\ side_reduction_threshold\: ``float``\ )  |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`initialize_nunchuk<class_GDWiimote_method_initialize_nunchuk>`\ (\ )                                            |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | ``bool``       | :ref:`is_nunchuk_connected<class_GDWiimote_method_is_nunchuk_connected>`\ (\ ) |const|                                |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`pulse_rumble<class_GDWiimote_method_pulse_rumble>`\ (\ duration_msec\: ``float``\ )                             |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`reset_gyro_calibration<class_GDWiimote_method_reset_gyro_calibration>`\ (\ )                                    |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`set_accel_threshold<class_GDWiimote_method_set_accel_threshold>`\ (\ threshold\: ``int``\ )                     |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`set_gyro_calibration_mode<class_GDWiimote_method_set_gyro_calibration_mode>`\ (\ mode\: ``int``\ )              |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`set_leds<class_GDWiimote_method_set_leds>`\ (\ led_indices\: ``Array``\ )                                       |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`set_motion_plus<class_GDWiimote_method_set_motion_plus>`\ (\ enable\: ``bool``\ )                               |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`set_motion_processing<class_GDWiimote_method_set_motion_processing>`\ (\ enable\: ``bool``\ )                   |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`set_motion_sensing<class_GDWiimote_method_set_motion_sensing>`\ (\ enable\: ``bool``\ )                         |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`set_nunchuk_accel_threshold<class_GDWiimote_method_set_nunchuk_accel_threshold>`\ (\ threshold\: ``int``\ )     |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`set_nunchuk_joystick_deadzone<class_GDWiimote_method_set_nunchuk_joystick_deadzone>`\ (\ dz\: ``float``\ )      |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`set_nunchuk_joystick_threshold<class_GDWiimote_method_set_nunchuk_joystick_threshold>`\ (\ dt\: ``float``\ )    |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`set_nunchuk_orient_threshold<class_GDWiimote_method_set_nunchuk_orient_threshold>`\ (\ threshold\: ``float``\ ) |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`set_orient_threshold<class_GDWiimote_method_set_orient_threshold>`\ (\ threshold\: ``float``\ )                 |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`set_rumble<class_GDWiimote_method_set_rumble>`\ (\ enabled\: ``bool``\ )                                        |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`start_gyro_calibration<class_GDWiimote_method_start_gyro_calibration>`\ (\ )                                    |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`start_nunchuk_joystick_calibration<class_GDWiimote_method_start_nunchuk_joystick_calibration>`\ (\ )            |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`stop_gyro_calibration<class_GDWiimote_method_stop_gyro_calibration>`\ (\ )                                      |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`stop_nunchuk_joystick_calibration<class_GDWiimote_method_stop_nunchuk_joystick_calibration>`\ (\ )              |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
-   | |void|         | :ref:`toggle_rumble<class_GDWiimote_method_toggle_rumble>`\ (\ )                                                      |
-   +----------------+-----------------------------------------------------------------------------------------------------------------------+
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector3``    | :ref:`get_accel<class_GDWiimote_method_get_accel>`\ (\ ) |const|                                                        |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``float``      | :ref:`get_battery_level<class_GDWiimote_method_get_battery_level>`\ (\ ) |const|                                        |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Array``      | :ref:`get_board_interpolated_weights<class_GDWiimote_method_get_board_interpolated_weights>`\ (\ ) |const|              |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Array``      | :ref:`get_board_raw_data<class_GDWiimote_method_get_board_raw_data>`\ (\ ) |const|                                      |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Quaternion`` | :ref:`get_fusion_orientation<class_GDWiimote_method_get_fusion_orientation>`\ (\ )                                      |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector2``    | :ref:`get_ir_cursor_absolute_coordinate<class_GDWiimote_method_get_ir_cursor_absolute_coordinate>`\ (\ )                |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector2``    | :ref:`get_ir_cursor_calculated_position<class_GDWiimote_method_get_ir_cursor_calculated_position>`\ (\ )                |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``float``      | :ref:`get_ir_cursor_distance<class_GDWiimote_method_get_ir_cursor_distance>`\ (\ )                                      |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector2``    | :ref:`get_ir_dot_interpolated_position<class_GDWiimote_method_get_ir_dot_interpolated_position>`\ (\ index\: ``int``\ ) |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector2``    | :ref:`get_ir_dot_raw_position<class_GDWiimote_method_get_ir_dot_raw_position>`\ (\ index\: ``int``\ )                   |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``float``      | :ref:`get_ir_dot_size<class_GDWiimote_method_get_ir_dot_size>`\ (\ index\: ``int``\ )                                   |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``int``        | :ref:`get_ir_num_dots<class_GDWiimote_method_get_ir_num_dots>`\ (\ )                                                    |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``bool``       | :ref:`get_led<class_GDWiimote_method_get_led>`\ (\ led_index\: ``int``\ ) |const|                                       |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector3``    | :ref:`get_nunchuk_accel<class_GDWiimote_method_get_nunchuk_accel>`\ (\ ) |const|                                        |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector3``    | :ref:`get_nunchuk_raw_accel<class_GDWiimote_method_get_nunchuk_raw_accel>`\ (\ ) |const|                                |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector3``    | :ref:`get_nunchuk_raw_orientation<class_GDWiimote_method_get_nunchuk_raw_orientation>`\ (\ ) |const|                    |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector3``    | :ref:`get_nunchuk_smoothed_orientation<class_GDWiimote_method_get_nunchuk_smoothed_orientation>`\ (\ ) |const|          |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector2``    | :ref:`get_player_space_gyro<class_GDWiimote_method_get_player_space_gyro>`\ (\ yaw_relax_factor\: ``float``\ )          |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector3``    | :ref:`get_processed_accel<class_GDWiimote_method_get_processed_accel>`\ (\ )                                            |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector3``    | :ref:`get_raw_accel<class_GDWiimote_method_get_raw_accel>`\ (\ ) |const|                                                |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector3``    | :ref:`get_raw_gyro<class_GDWiimote_method_get_raw_gyro>`\ (\ ) |const|                                                  |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector3``    | :ref:`get_raw_orientation<class_GDWiimote_method_get_raw_orientation>`\ (\ ) |const|                                    |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector3``    | :ref:`get_smoothed_orientation<class_GDWiimote_method_get_smoothed_orientation>`\ (\ ) |const|                          |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``Vector2``    | :ref:`get_world_space_gyro<class_GDWiimote_method_get_world_space_gyro>`\ (\ side_reduction_threshold\: ``float``\ )    |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`initialize_nunchuk<class_GDWiimote_method_initialize_nunchuk>`\ (\ )                                              |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``bool``       | :ref:`is_ir_active<class_GDWiimote_method_is_ir_active>`\ (\ )                                                          |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``bool``       | :ref:`is_ir_dot_visible<class_GDWiimote_method_is_ir_dot_visible>`\ (\ index\: ``int``\ )                               |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | ``bool``       | :ref:`is_nunchuk_connected<class_GDWiimote_method_is_nunchuk_connected>`\ (\ ) |const|                                  |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`pulse_rumble<class_GDWiimote_method_pulse_rumble>`\ (\ duration_msec\: ``float``\ )                               |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`reset_gyro_calibration<class_GDWiimote_method_reset_gyro_calibration>`\ (\ )                                      |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_accel_threshold<class_GDWiimote_method_set_accel_threshold>`\ (\ threshold\: ``int``\ )                       |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_gyro_calibration_mode<class_GDWiimote_method_set_gyro_calibration_mode>`\ (\ mode\: ``int``\ )                |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_ir<class_GDWiimote_method_set_ir>`\ (\ enable\: ``bool``\ )                                                   |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_leds<class_GDWiimote_method_set_leds>`\ (\ led_indices\: ``Array``\ )                                         |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_motion_plus<class_GDWiimote_method_set_motion_plus>`\ (\ enable\: ``bool``\ )                                 |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_motion_processing<class_GDWiimote_method_set_motion_processing>`\ (\ enable\: ``bool``\ )                     |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_motion_sensing<class_GDWiimote_method_set_motion_sensing>`\ (\ enable\: ``bool``\ )                           |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_nunchuk_accel_threshold<class_GDWiimote_method_set_nunchuk_accel_threshold>`\ (\ threshold\: ``int``\ )       |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_nunchuk_joystick_deadzone<class_GDWiimote_method_set_nunchuk_joystick_deadzone>`\ (\ dz\: ``float``\ )        |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_nunchuk_joystick_threshold<class_GDWiimote_method_set_nunchuk_joystick_threshold>`\ (\ dt\: ``float``\ )      |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_nunchuk_orient_threshold<class_GDWiimote_method_set_nunchuk_orient_threshold>`\ (\ threshold\: ``float``\ )   |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_orient_threshold<class_GDWiimote_method_set_orient_threshold>`\ (\ threshold\: ``float``\ )                   |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`set_rumble<class_GDWiimote_method_set_rumble>`\ (\ enabled\: ``bool``\ )                                          |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`start_gyro_calibration<class_GDWiimote_method_start_gyro_calibration>`\ (\ )                                      |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`start_nunchuk_joystick_calibration<class_GDWiimote_method_start_nunchuk_joystick_calibration>`\ (\ )              |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`stop_gyro_calibration<class_GDWiimote_method_stop_gyro_calibration>`\ (\ )                                        |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`stop_nunchuk_joystick_calibration<class_GDWiimote_method_stop_nunchuk_joystick_calibration>`\ (\ )                |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
+   | |void|         | :ref:`toggle_rumble<class_GDWiimote_method_toggle_rumble>`\ (\ )                                                        |
+   +----------------+-------------------------------------------------------------------------------------------------------------------------+
 
 .. rst-class:: classref-section-separator
 
@@ -108,6 +128,30 @@ Methods
 
 Signals
 -------
+
+.. _class_GDWiimote_signal_board_inserted:
+
+.. rst-class:: classref-signal
+
+**board_inserted**\ (\ device_id\: ``int``\ ) :ref:`🔗<class_GDWiimote_signal_board_inserted>`
+
+Emitted when a Wii Balance board accessory is connected to the Wiimote. The ``device_id`` parameter indicates which Wiimote the board is connected to. This is not reliable in the middle of an ongoing session.
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_GDWiimote_signal_board_removed:
+
+.. rst-class:: classref-signal
+
+**board_removed**\ (\ device_id\: ``int``\ ) :ref:`🔗<class_GDWiimote_signal_board_removed>`
+
+Emitted when a Wii Balance board accessory is disconnected from the Wiimote. The ``device_id`` parameter indicates which Wiimote the board is connected to. This is not reliable in the middle of an ongoing session.
+
+.. rst-class:: classref-item-separator
+
+----
 
 .. _class_GDWiimote_signal_nunchuk_inserted:
 
@@ -205,6 +249,90 @@ Get the raw readings per sensor in ???. The order is (top left, top right, botto
 ``Quaternion`` **get_fusion_orientation**\ (\ ) :ref:`🔗<class_GDWiimote_method_get_fusion_orientation>`
 
 Get the current orientation of the Wiimote as a quaternion. This is calculated using the accelerometer and gyroscope data.
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_GDWiimote_method_get_ir_cursor_absolute_coordinate:
+
+.. rst-class:: classref-method
+
+``Vector2`` **get_ir_cursor_absolute_coordinate**\ (\ ) :ref:`🔗<class_GDWiimote_method_get_ir_cursor_absolute_coordinate>`
+
+Get the absolute coordinate of the IR cursor.
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_GDWiimote_method_get_ir_cursor_calculated_position:
+
+.. rst-class:: classref-method
+
+``Vector2`` **get_ir_cursor_calculated_position**\ (\ ) :ref:`🔗<class_GDWiimote_method_get_ir_cursor_calculated_position>`
+
+Get the position of the IR cursor calculated using a reference of two fixed IR points below the screen (i.e, the sensor bar).
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_GDWiimote_method_get_ir_cursor_distance:
+
+.. rst-class:: classref-method
+
+``float`` **get_ir_cursor_distance**\ (\ ) :ref:`🔗<class_GDWiimote_method_get_ir_cursor_distance>`
+
+Get the distance of the remote from the sensor bar.
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_GDWiimote_method_get_ir_dot_interpolated_position:
+
+.. rst-class:: classref-method
+
+``Vector2`` **get_ir_dot_interpolated_position**\ (\ index\: ``int``\ ) :ref:`🔗<class_GDWiimote_method_get_ir_dot_interpolated_position>`
+
+Get the interpolated position of `dots\ ``index``\ `. `index` must be in range (0-3).
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_GDWiimote_method_get_ir_dot_raw_position:
+
+.. rst-class:: classref-method
+
+``Vector2`` **get_ir_dot_raw_position**\ (\ index\: ``int``\ ) :ref:`🔗<class_GDWiimote_method_get_ir_dot_raw_position>`
+
+Get the raw position of `dots\ ``index``\ ` with range (0-1023) and (0-767) for the x and y coordinates, respectively. `index` must be in range (0-3).
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_GDWiimote_method_get_ir_dot_size:
+
+.. rst-class:: classref-method
+
+``float`` **get_ir_dot_size**\ (\ index\: ``int``\ ) :ref:`🔗<class_GDWiimote_method_get_ir_dot_size>`
+
+Get the approximate size of `dots\ ``index``\ ` with range (0-15).
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_GDWiimote_method_get_ir_num_dots:
+
+.. rst-class:: classref-method
+
+``int`` **get_ir_num_dots**\ (\ ) :ref:`🔗<class_GDWiimote_method_get_ir_num_dots>`
+
+Get the number of dots currently being tracked (maximum 4).
 
 .. rst-class:: classref-item-separator
 
@@ -368,6 +496,30 @@ Initialize the Nunchuk accessory with default calibration values. This should be
 
 ----
 
+.. _class_GDWiimote_method_is_ir_active:
+
+.. rst-class:: classref-method
+
+``bool`` **is_ir_active**\ (\ ) :ref:`🔗<class_GDWiimote_method_is_ir_active>`
+
+Check if IR functionality is enabled.
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_GDWiimote_method_is_ir_dot_visible:
+
+.. rst-class:: classref-method
+
+``bool`` **is_ir_dot_visible**\ (\ index\: ``int``\ ) :ref:`🔗<class_GDWiimote_method_is_ir_dot_visible>`
+
+Check if `dots\ ``index``\ ` is currently visible.
+
+.. rst-class:: classref-item-separator
+
+----
+
 .. _class_GDWiimote_method_is_nunchuk_connected:
 
 .. rst-class:: classref-method
@@ -433,6 +585,18 @@ Set the gyroscope calibration mode. The ``mode`` parameter can be one of the fol
 - 2: ``CalibrationMode::SensorFusion`` - Calculate an angular velocity from changes in the gravity direction as detected by the accelerometer. If these are steady enough, use them to make corrections to the calibration offset. This will only apply to relevant axes.
 
 Check `GamepadMotionHelpers' documentation <{https://github.com/JibbSmart/GamepadMotionHelpers}>`__ for more information
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_GDWiimote_method_set_ir:
+
+.. rst-class:: classref-method
+
+|void| **set_ir**\ (\ enable\: ``bool``\ ) :ref:`🔗<class_GDWiimote_method_set_ir>`
+
+Enable or disable reporting of IR data. Used to save power when IR sensing is not needed.
 
 .. rst-class:: classref-item-separator
 
