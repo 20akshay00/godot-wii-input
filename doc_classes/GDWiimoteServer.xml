@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="WiimoteManager" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+<class name="GDWiimoteServer" inherits="Object" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
-		A manager for handling multiple Wiimote controllers.
+		An engine singleton for handling multiple Wiimote controllers.
 	</brief_description>
 	<description>
-		The [WiimoteManager] node should be added as a global singleton (autoload) in your project settings in order to manage Wiimote interactions during the session. It handles connecting, disconnecting, and polling multiple Wiimotes, providing access to their features through the [GDWiimote] class.
+		The [GDWiimoteServer] object manages Wiimote interactions during the session. It handles connecting, disconnecting, and polling multiple Wiimotes, providing access to their features through the [GDWiimote] class.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -25,7 +25,7 @@
 				    # Initialize loading screen
 				    # ... 
 
-				    WiimoteManager.connect_wiimotes()
+				    GDWiimoteServer.connect_wiimotes()
 				    call_deferred("_on_connection_complete")
 
 				func _on_connection_complete():
@@ -33,7 +33,7 @@
 				    # ...
 
 				    # Retrieve connected Wiimotes 
-				    var connected_wiimotes = WiimoteManager.finalize_connection()
+				    var connected_wiimotes = GDWiimoteServer.finalize_connection()
 				[/gdscript]
 				[/codeblocks]
 			</description>
@@ -57,6 +57,12 @@
 				Get an array of currently connected [GDWiimote] instances. This will include all Wiimotes that have been successfully connected and initialized.
 			</description>
 		</method>
+		<method name="poll">
+			<return type="void" />
+			<description>
+				Manually poll the state of all Wiimotes. This is useful if you want to poll mid-frame or have a custom main loop, as the default polling connects to the scene tree.
+			</description>
+		</method>
 		<method name="start_polling">
 			<return type="void" />
 			<description>
@@ -73,6 +79,5 @@
 	<members>
 		<member name="max_wiimotes" type="int" setter="set_max_wiimotes" getter="get_max_wiimotes" default="4">
 		</member>
-		<member name="process_mode" type="int" setter="set_process_mode" getter="get_process_mode" overrides="Node" enum="Node.ProcessMode" default="4" />
 	</members>
 </class>

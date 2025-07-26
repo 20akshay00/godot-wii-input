@@ -19,5 +19,5 @@ Variant types
 
     class_variant
     class_gdwiimote
-    class_wiimotemanager
+    class_gdwiimoteserver
 

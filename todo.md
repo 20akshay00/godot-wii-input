@@ -3,7 +3,6 @@
 
 #### Roadmap
 
-- change wiimotemanager from node to object
 - Fix gyro processsing (pointer, orientation)
 - Speaker support
 
@@ -13,5 +12,4 @@
 - MotionPlus attachment support
 
 #### Bugs
-- WiimoteManager overrides Node.process_mode for some reason
 - exposes enums for IR position

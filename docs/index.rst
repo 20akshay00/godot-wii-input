@@ -38,5 +38,5 @@ Table of Contents
    :caption: Class Reference
    :name: sec-class-ref
 
-   classes/class_wiimotemanager
+   classes/class_gdwiimoteserver
    classes/class_gdwiimote
