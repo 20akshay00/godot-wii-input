@@ -1,4 +1,4 @@
-#include "GDWiimoteServer.h"
+#include "gdwiimoteserver.h"
 #include <godot_cpp/variant/utility_functions.hpp>
 
 #include <godot_cpp/classes/engine.hpp>
