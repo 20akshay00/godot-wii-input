@@ -212,14 +212,14 @@ html_extra_path = ["robots.txt", "google7747f782ed971a55.html"]
 html_css_files = [
     "css/algolia.css",
     "https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css",
-    "css/custom.css",  # Increment the number at the end when the file changes to bust the cache.
+    # "css/custom.css",  # Increment the number at the end when the file changes to bust the cache.
 ]
 
 if not on_rtd:
     html_css_files.append("css/dev.css")
 
 html_js_files = [
-    "js/custom.js",  # Increment the number at the end when the file changes to bust the cache.
+    # "js/custom.js",  # Increment the number at the end when the file changes to bust the cache.
 ]
 
 # Output file base name for HTML help builder

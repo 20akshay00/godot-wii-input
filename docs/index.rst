@@ -27,7 +27,7 @@ Table of Contents
 .. toctree::
    :maxdepth: 1
    :caption: Contribute
-   :name: sec-learn
+   :name: sec-contribute
 
    contribute/building
    contribute/alternatives
@@ -37,5 +37,5 @@ Table of Contents
    :caption: Class Reference
    :name: sec-class-ref
 
-   classes/class_gdwiimote
    classes/class_wiimotemanager
+   classes/class_gdwiimote
