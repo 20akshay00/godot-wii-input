@@ -176,7 +176,7 @@ Get an array of currently connected :ref:`GDWiimote<class_GDWiimote>` instances.
 
 |void| **start_polling**\ (\ ) :ref:`🔗<class_WiimoteManager_method_start_polling>`
 
-Start polling the connected Wiimotes for input data. This will enable the Wiimotes to send updates about their state, such as button presses and motion data. ** Polling is enabled by default.**
+Start polling the connected Wiimotes for input data. This will enable the Wiimotes to send updates about their state, such as button presses and motion data. **Polling is enabled by default.**
 
 .. rst-class:: classref-item-separator
 

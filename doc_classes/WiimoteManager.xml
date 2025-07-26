@@ -60,7 +60,7 @@
 		<method name="start_polling">
 			<return type="void" />
 			<description>
-				Start polling the connected Wiimotes for input data. This will enable the Wiimotes to send updates about their state, such as button presses and motion data. [b] Polling is enabled by default.[/b]
+				Start polling the connected Wiimotes for input data. This will enable the Wiimotes to send updates about their state, such as button presses and motion data. [b]Polling is enabled by default.[/b]
 			</description>
 		</method>
 		<method name="stop_polling">

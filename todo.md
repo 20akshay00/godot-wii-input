@@ -3,14 +3,15 @@
 
 #### Roadmap
 
-- Gyro-based pointer controls
-- Speaker support
 - IR data support
-- Automatic releases with GitHub Actions
+- Fix gyro processsing (pointer, orientation)
+- Speaker support
 
 #### Wishlist
 
 - Standalone Bluetooth connection without external programs
 - MotionPlus attachment support
-- Motion board integration
-- Better Nunchuk deadzone detection
+
+
+#### Bugs
+- WiimoteManager overrides Node.process_mode for some reason

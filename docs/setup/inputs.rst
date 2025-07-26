@@ -22,13 +22,13 @@ All button presses are routed through Godot's Input system. Since some Wiimote b
 +-------------------+-------------------+---------------------------------------------------------------+
 | Nunchuk Z Button  | Joypad Button 10  | Right Shoulder (Xbox: RB, Sony: R1, Nintendo: R)              |
 +-------------------+-------------------+---------------------------------------------------------------+
-| D-Pad Up          | Joypad Button 11  |                                                               |
+| D-Pad Up          | Joypad Button 11  | D-Pad Up                                                      |
 +-------------------+-------------------+---------------------------------------------------------------+
-| D-Pad Down        | Joypad Button 12  |                                                               |
+| D-Pad Down        | Joypad Button 12  | D-Pad Down                                                    |
 +-------------------+-------------------+---------------------------------------------------------------+
-| D-Pad Left        | Joypad Button 13  |                                                               |
+| D-Pad Left        | Joypad Button 13  | D-Pad Left                                                    |
 +-------------------+-------------------+---------------------------------------------------------------+
-| D-Pad Right       | Joypad Button 14  |                                                               |
+| D-Pad Right       | Joypad Button 14  | D-Pad Right                                                   |
 +-------------------+-------------------+---------------------------------------------------------------+
 
-The Nunchuk joystick motion is reported as an ``InputEventJoypadMotion``, so it can be accessed through the standard ``Joypad Axis`` fields in the InputMap. All other input such as accelerometer and gyroscope readings do not have a counterpart in the Input system and must be retrieved manually (although they are polled automatically) through the various functions of :ref:`GDWiimote <class_GDWiimote>`.
+The Nunchuk joystick motion is reported as an ``InputEventJoypadMotion``, so it can be accessed through the standard ``Joypad Axis`` fields in the InputMap. All other input such as IR, accelerometer and gyroscope readings do not have a counterpart in the Input system and must be retrieved manually (although they are polled automatically) through the various functions of :ref:`GDWiimote <class_GDWiimote>`.
