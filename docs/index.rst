@@ -32,6 +32,7 @@ Table of Contents
 
    contribute/building
    contribute/alternatives
+   contribute/changelog
 
 .. toctree::
    :maxdepth: 2
