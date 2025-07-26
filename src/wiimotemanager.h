@@ -19,9 +19,6 @@ private:
 
     wiimote **wiimotes = nullptr;            // raw wiimote pointers
     godot::TypedArray<GDWiimote> gdwiimotes; // wrapped GDWiimotes
-    bool is_polling = false;
-
-    void _process();
 
 protected:
     static void _bind_methods();
@@ -29,8 +26,6 @@ protected:
 public:
     WiimoteManager();
     ~WiimoteManager();
-
-    void initialize_process_hook(); // connect to process loop
 
     void set_max_wiimotes(int max);
     int get_max_wiimotes() const;

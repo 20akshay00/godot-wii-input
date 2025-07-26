@@ -45,23 +45,6 @@ WiimoteManager::~WiimoteManager()
     singleton = nullptr;
 }
 
-void WiimoteManager::initialize_process_hook()
-{
-    SceneTree *tree = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
-    if (tree)
-    {
-        Callable cb = callable_mp(this, &WiimoteManager::_process);
-        if (!tree->is_connected("process_frame", cb))
-        {
-            tree->connect("process_frame", cb);
-        }
-    }
-    else
-    {
-        DEBUG_PRINT("Cannot find scene tree!");
-    }
-}
-
 void WiimoteManager::set_max_wiimotes(int max)
 {
     if (num_connected >= 0)
@@ -107,10 +90,6 @@ void WiimoteManager::connect_wiimotes()
     }
 
     UtilityFunctions::print("Wiimotes found: ", found, ", connected: ", num_connected);
-
-    // connect to the SceneTree's process loop
-    initialize_process_hook();
-
     return;
 }
 
@@ -137,7 +116,8 @@ TypedArray<GDWiimote> WiimoteManager::finalize_connection()
         wiiuse_rumble(wiimotes[i], 0);
     }
 
-    is_polling = true;
+    enable_polling();
+
     return gdwiimotes;
 }
 
@@ -167,17 +147,43 @@ void WiimoteManager::disconnect_wiimotes()
 
     gdwiimotes.clear();
     num_connected = -1; // reset connection state
-    is_polling = false;
+    disable_polling();
 }
 
 void WiimoteManager::enable_polling()
 {
-    is_polling = true;
+    SceneTree *tree = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+    if (tree)
+    {
+        Callable cb = callable_mp(this, &WiimoteManager::poll);
+
+        if (tree->is_connected("process_frame", cb))
+        {
+            godot::UtilityFunctions::print("Polling is already enabled!");
+        }
+        else
+        {
+            tree->connect("process_frame", cb);
+        }
+    }
 }
 
 void WiimoteManager::disable_polling()
 {
-    is_polling = false;
+    SceneTree *tree = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+    if (tree)
+    {
+        Callable cb = callable_mp(this, &WiimoteManager::poll);
+
+        if (tree->is_connected("process_frame", cb))
+        {
+            tree->disconnect("process_frame", cb);
+        }
+        else
+        {
+            godot::UtilityFunctions::print("Polling is already disabled!");
+        }
+    }
 }
 
 void WiimoteManager::poll()
@@ -200,13 +206,5 @@ void WiimoteManager::poll()
 
             gdwm->handle_event();
         }
-    }
-}
-
-void WiimoteManager::_process()
-{
-    if (is_polling)
-    {
-        poll();
     }
 }
