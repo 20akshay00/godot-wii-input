@@ -28,12 +28,12 @@ func _process(delta: float) -> void:
 	
 func _thread_connect_wiimotes():
 	# assigns wiiuse structures
-	GDWiimoteManager.connect_wiimotes()
+	WiimoteManager.connect_wiimotes()
 	call_deferred("_on_connection_complete")
 
 func _on_connection_complete():
 	# allocate GDWiimote objects
-	wiimote = GDWiimoteManager.finalize_connection()[0]
+	wiimote = WiimoteManager.finalize_connection()[0]
 	loading_circle.hide()
 	connection_complete = true
 	

@@ -1,5 +1,6 @@
 #include "gdwiimote.h"
 #include <godot_cpp/variant/quaternion.hpp>
+#include <godot_cpp/classes/time.hpp>
 
 // Enable/disable motion sensing capabilities
 void GDWiimote::set_motion_sensing(bool enable)
@@ -33,6 +34,7 @@ void GDWiimote::set_motion_plus(bool enable)
 void GDWiimote::set_motion_processing(bool enable)
 {
     process_motion = enable;
+    prev_poll_time = godot::Time::get_singleton()->get_ticks_msec() / 1000.;
 }
 
 // Motion thresholds

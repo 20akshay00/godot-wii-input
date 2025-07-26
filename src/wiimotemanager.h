@@ -1,23 +1,27 @@
 #ifndef WIIMOTE_MANAGER_H
 #define WIIMOTE_MANAGER_H
 
-#include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/variant/array.hpp>
 #include <godot_cpp/core/class_db.hpp>
 #include <wiiuse.h>
 
 #include "gdwiimote.h"
 
-class WiimoteManager : public godot::Node
+class WiimoteManager : public godot::Object
 {
-    GDCLASS(WiimoteManager, godot::Node);
+    GDCLASS(WiimoteManager, godot::Object);
 
 private:
+    static WiimoteManager *singleton; // static instance
+
     int max_wiimotes = 4;
     int num_connected = -1; // -1 means not connected
 
     wiimote **wiimotes = nullptr;            // raw wiimote pointers
     godot::TypedArray<GDWiimote> gdwiimotes; // wrapped GDWiimotes
+    bool is_polling = false;
+
+    void _process();
 
 protected:
     static void _bind_methods();
@@ -25,6 +29,8 @@ protected:
 public:
     WiimoteManager();
     ~WiimoteManager();
+
+    void initialize_process_hook(); // connect to process loop
 
     void set_max_wiimotes(int max);
     int get_max_wiimotes() const;
@@ -37,9 +43,9 @@ public:
     void disconnect_wiimotes();
 
     // Poll for events
-    void _process(double delta) override;
-    void start_polling();
-    void stop_polling();
+    void enable_polling();
+    void disable_polling();
+    void poll();
 
     // Access connected GDWiimotes
     godot::TypedArray<GDWiimote> get_connected_wiimotes() const { return gdwiimotes; }

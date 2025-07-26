@@ -5,7 +5,7 @@ var led: int = 1
 var wiimote: GDWiimote
 
 func init():
-	wiimote = GDWiimoteManager.get_connected_wiimotes()[0]
+	wiimote = WiimoteManager.get_connected_wiimotes()[0]
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED

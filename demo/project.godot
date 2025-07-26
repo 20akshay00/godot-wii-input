@@ -15,10 +15,6 @@ run/main_scene="uid://cu33gj36ltgis"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
-[autoload]
-
-GDWiimoteManager="*res://wiimote_manager.tscn"
-
 [input]
 
 A={

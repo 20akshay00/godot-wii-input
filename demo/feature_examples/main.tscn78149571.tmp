@@ -1,0 +1,90 @@
+[gd_scene load_steps=10 format=3 uid="uid://cu33gj36ltgis"]
+
+[ext_resource type="Script" uid="uid://dr0tkt6g5qp3q" path="res://feature_examples/main.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://gjfgvg47wcm6" path="res://feature_examples/rumble_example.gd" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://cqw1cjxkvwcdy" path="res://feature_examples/gyro_example.gd" id="2_272bh"]
+[ext_resource type="Script" uid="uid://bvqwcmxx7k0en" path="res://feature_examples/joystick_example.gd" id="3_1bvp3"]
+[ext_resource type="Script" uid="uid://c04pu5r23vykv" path="res://feature_examples/led_example.gd" id="3_h2yge"]
+[ext_resource type="Script" uid="uid://bilscy47te6vi" path="res://feature_examples/accelerometer_example.gd" id="5_3w5bj"]
+[ext_resource type="Shader" uid="uid://c7okud5b6of0o" path="res://loading_circle.gdshader" id="5_7mycd"]
+[ext_resource type="Texture2D" uid="uid://ct1kjd6ndhlqn" path="res://icon.svg" id="5_lquwl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_272bh"]
+shader = ExtResource("5_7mycd")
+shader_parameter/thickness = 0.1
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/speed = 1.0
+shader_parameter/arc_width = 5.5
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_ig7tw")
+
+[node name="RumbleExample" type="Node2D" parent="."]
+script = ExtResource("2_0xm2m")
+help = "+ : start rumble
+- : stop rumble
+A : toggle rumble state
+B : pulse rumble state"
+
+[node name="JoystickExample" type="Node2D" parent="."]
+script = ExtResource("3_1bvp3")
+help = "minus : stop printing joystick data
+plus : start printing joystick data
+A : toggle calibration"
+
+[node name="LEDExample" type="Node2D" parent="."]
+script = ExtResource("3_h2yge")
+help = "minus : light up all LEDs
+plus : show LEDs status
+A : manual cycle
+B : automatic cycle"
+
+[node name="AccelerometerExample" type="Node2D" parent="."]
+script = ExtResource("5_3w5bj")
+help = "Hold the remote sideways with the D-pad on the left."
+
+[node name="Cursor" type="Sprite2D" parent="AccelerometerExample"]
+visible = false
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_lquwl")
+
+[node name="GyroExample" type="Node2D" parent="."]
+script = ExtResource("2_272bh")
+
+[node name="Cursor" type="Sprite2D" parent="GyroExample"]
+visible = false
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_lquwl")
+
+[node name="Title" type="Label" parent="."]
+visible = false
+offset_left = 40.0
+offset_top = 35.0
+offset_right = 188.0
+offset_bottom = 85.0
+theme_override_font_sizes/font_size = 36
+text = "Example"
+
+[node name="Help" type="Label" parent="."]
+visible = false
+offset_left = 46.0
+offset_top = 153.0
+offset_right = 394.0
+offset_bottom = 203.0
+theme_override_font_sizes/font_size = 36
+text = "Instructions go here"
+
+[node name="LoadingCircle" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="LoadingCircle"]
+material = SubResource("ShaderMaterial_272bh")
+position = Vector2(583, 319)
+texture = ExtResource("5_lquwl")
+
+[node name="Label" type="Label" parent="LoadingCircle"]
+offset_left = 393.0
+offset_top = 431.0
+offset_right = 778.0
+offset_bottom = 476.0
+theme_override_font_sizes/font_size = 32
+text = "Searching for Wiimotes..."

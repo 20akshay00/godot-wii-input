@@ -16,12 +16,12 @@ func _process(delta: float) -> void:
 
 func _thread_connect_wiimotes():
 	# assigns wiiuse structures
-	GDWiimoteManager.connect_wiimotes()
+	WiimoteManager.connect_wiimotes()
 	call_deferred("_on_connection_complete")
 
 func _on_connection_complete():
 	# allocate GDWiimote objects
-	var wiimotes = GDWiimoteManager.finalize_connection()
+	var wiimotes = WiimoteManager.finalize_connection()
 	loading_circle.hide()
 	$Title.show()
 	$Help.show()

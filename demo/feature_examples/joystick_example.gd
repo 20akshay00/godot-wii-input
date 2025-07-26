@@ -8,7 +8,7 @@ var wiimote: GDWiimote
 @export_multiline var help: String
 
 func init() -> void:
-	wiimote = GDWiimoteManager.get_connected_wiimotes()[0]
+	wiimote = WiimoteManager.get_connected_wiimotes()[0]
 	_is_connected = wiimote.is_nunchuk_connected()
 	if not _is_connected:
 		print("Nunchuk not connected!")

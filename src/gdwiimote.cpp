@@ -1,5 +1,6 @@
 #include "gdwiimote.h"
 #include <godot_cpp/classes/input_event_joypad_button.hpp>
+#include <godot_cpp/classes/time.hpp>
 
 #include <thread>
 #include <chrono>
@@ -209,7 +210,7 @@ void GDWiimote::relay_button(nunchuk_t *nc, int ncbtn, godot::JoyButton godot_bt
 }
 
 // Handle wm->event
-void GDWiimote::handle_event(double delta)
+void GDWiimote::handle_event()
 {
     if (!wm)
         return;
@@ -217,6 +218,8 @@ void GDWiimote::handle_event(double delta)
     // update GamePadMotion state if motion plus is enabled
     if (process_motion)
     {
+        double current_poll_time = godot::Time::get_singleton()->get_ticks_msec() / 1000.;
+
         // uses a Y-up, right-handed coordinate system
         motion_state.ProcessMotion(
             wm->exp.mp.angle_rate_gyro.roll,
@@ -225,7 +228,9 @@ void GDWiimote::handle_event(double delta)
             wm->gforce.y,
             wm->gforce.z,
             wm->gforce.x,
-            delta);
+            current_poll_time - prev_poll_time);
+
+        prev_poll_time = current_poll_time;
     }
 
     switch (wm->event)

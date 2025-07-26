@@ -32,6 +32,8 @@ private:
     bool is_calibrating_nunchuk = false;
     bool process_motion = false;
 
+    double prev_poll_time = 0.;
+
 protected:
     static void _bind_methods();
 
@@ -46,7 +48,7 @@ public:
     wiimote *get_wiimote_ptr() const { return wm; }
 
     // Core per-device event processing
-    void handle_event(double delta);
+    void handle_event();
 
     // Button relays (Wiimote + Nunchuk)
     void relay_button(wiimote *wm, int wiibtn, godot::JoyButton godot_btn);

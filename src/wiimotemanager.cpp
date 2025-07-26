@@ -1,11 +1,19 @@
 #include "wiimotemanager.h"
 #include <godot_cpp/variant/utility_functions.hpp>
+
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/scene_tree.hpp>
 
 #include <thread>
 #include <chrono>
 
+#include "debug.h"
+
 using namespace godot;
+
+void notification()
+{
+}
 
 void WiimoteManager::_bind_methods()
 {
@@ -18,26 +26,40 @@ void WiimoteManager::_bind_methods()
     ClassDB::bind_method(D_METHOD("disconnect_wiimotes"), &WiimoteManager::disconnect_wiimotes);
     ClassDB::bind_method(D_METHOD("get_connected_wiimotes"), &WiimoteManager::get_connected_wiimotes);
 
-    ClassDB::bind_method(D_METHOD("start_polling"), &WiimoteManager::start_polling);
-    ClassDB::bind_method(D_METHOD("stop_polling"), &WiimoteManager::stop_polling);
+    ClassDB::bind_method(D_METHOD("start_polling"), &WiimoteManager::enable_polling);
+    ClassDB::bind_method(D_METHOD("stop_polling"), &WiimoteManager::disable_polling);
+    ClassDB::bind_method(D_METHOD("poll"), &WiimoteManager::poll);
 }
+
+WiimoteManager *WiimoteManager::singleton = nullptr;
 
 WiimoteManager::WiimoteManager()
 {
-    // Do not auto-connect in editor
-    if (Engine::get_singleton()->is_editor_hint())
-    {
-        set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
-    }
-    else
-    {
-        set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
-    }
+    ERR_FAIL_COND_MSG(singleton != nullptr, "WiimoteManager singleton already exists!");
+    singleton = this;
 }
 
 WiimoteManager::~WiimoteManager()
 {
     disconnect_wiimotes();
+    singleton = nullptr;
+}
+
+void WiimoteManager::initialize_process_hook()
+{
+    SceneTree *tree = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+    if (tree)
+    {
+        Callable cb = callable_mp(this, &WiimoteManager::_process);
+        if (!tree->is_connected("process_frame", cb))
+        {
+            tree->connect("process_frame", cb);
+        }
+    }
+    else
+    {
+        DEBUG_PRINT("Cannot find scene tree!");
+    }
 }
 
 void WiimoteManager::set_max_wiimotes(int max)
@@ -47,39 +69,12 @@ void WiimoteManager::set_max_wiimotes(int max)
         UtilityFunctions::print("Cannot change max_wiimotes while connected!");
         return;
     }
-    max_wiimotes = MAX(1, MIN(max, 16)); // kind of arbitrary limit
+    max_wiimotes = MAX(1, MIN(max, 16)); // kind of an arbitrary limit
 }
 
 int WiimoteManager::get_max_wiimotes() const
 {
     return max_wiimotes;
-}
-
-TypedArray<GDWiimote> WiimoteManager::finalize_connection()
-{
-    // Wrap each connected wiimote
-    gdwiimotes.clear();
-
-    for (int i = 0; i < num_connected; i++)
-    {
-        if (!wiimotes[i] || !WIIMOTE_IS_CONNECTED(wiimotes[i]))
-            continue;
-
-        Ref<GDWiimote> gdwm = memnew(GDWiimote(wiimotes[i], i));
-        gdwiimotes.push_back(gdwm);
-
-        // doesn't make sense to use gdwiimote.set_leds here since it requires a GDArray
-        wiiuse_set_leds(wiimotes[i], (i == 0) ? WIIMOTE_LED_1 : (i == 1) ? WIIMOTE_LED_2
-                                                            : (i == 2)   ? WIIMOTE_LED_3
-                                                                         : WIIMOTE_LED_4);
-        // briefly rumble to indicate connection
-        wiiuse_rumble(wiimotes[i], 1);
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        wiiuse_rumble(wiimotes[i], 0);
-    }
-
-    set_process_mode(Node::ProcessMode::PROCESS_MODE_INHERIT); // start polling
-    return gdwiimotes;
 }
 
 void WiimoteManager::connect_wiimotes()
@@ -113,7 +108,37 @@ void WiimoteManager::connect_wiimotes()
 
     UtilityFunctions::print("Wiimotes found: ", found, ", connected: ", num_connected);
 
+    // connect to the SceneTree's process loop
+    initialize_process_hook();
+
     return;
+}
+
+TypedArray<GDWiimote> WiimoteManager::finalize_connection()
+{
+    // Wrap each connected wiimote
+    gdwiimotes.clear();
+
+    for (int i = 0; i < num_connected; i++)
+    {
+        if (!wiimotes[i] || !WIIMOTE_IS_CONNECTED(wiimotes[i]))
+            continue;
+
+        Ref<GDWiimote> gdwm = memnew(GDWiimote(wiimotes[i], i));
+        gdwiimotes.push_back(gdwm);
+
+        // doesn't make sense to use gdwiimote.set_leds here since it requires a GDArray
+        wiiuse_set_leds(wiimotes[i], (i == 0) ? WIIMOTE_LED_1 : (i == 1) ? WIIMOTE_LED_2
+                                                            : (i == 2)   ? WIIMOTE_LED_3
+                                                                         : WIIMOTE_LED_4);
+        // briefly rumble to indicate connection
+        wiiuse_rumble(wiimotes[i], 1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        wiiuse_rumble(wiimotes[i], 0);
+    }
+
+    is_polling = true;
+    return gdwiimotes;
 }
 
 void WiimoteManager::disconnect_wiimotes()
@@ -142,20 +167,20 @@ void WiimoteManager::disconnect_wiimotes()
 
     gdwiimotes.clear();
     num_connected = -1; // reset connection state
-    set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
+    is_polling = false;
 }
 
-void WiimoteManager::start_polling()
+void WiimoteManager::enable_polling()
 {
-    set_process_mode(Node::ProcessMode::PROCESS_MODE_INHERIT);
+    is_polling = true;
 }
 
-void WiimoteManager::stop_polling()
+void WiimoteManager::disable_polling()
 {
-    set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
+    is_polling = false;
 }
 
-void WiimoteManager::_process(double delta)
+void WiimoteManager::poll()
 {
     if ((num_connected < 0) || !wiimotes)
         return;
@@ -173,7 +198,15 @@ void WiimoteManager::_process(double delta)
             if (!wm || !WIIMOTE_IS_CONNECTED(wm))
                 continue;
 
-            gdwm->handle_event(delta);
+            gdwm->handle_event();
         }
+    }
+}
+
+void WiimoteManager::_process()
+{
+    if (is_polling)
+    {
+        poll();
     }
 }
