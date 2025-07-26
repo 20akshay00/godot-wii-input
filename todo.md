@@ -3,7 +3,6 @@
 
 #### Roadmap
 
-- IR data support
 - Fix gyro processsing (pointer, orientation)
 - Speaker support
 
@@ -11,7 +10,6 @@
 
 - Standalone Bluetooth connection without external programs
 - MotionPlus attachment support
-
 
 #### Bugs
 - WiimoteManager overrides Node.process_mode for some reason
