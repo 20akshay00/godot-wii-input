@@ -20,7 +20,7 @@ Note that there is a breaking change!
 
 **Changed**
 
-- ``WiimoteManager`` has been renamed to ``GDWiimoteServer``. It is now an engine singleton by default and does not rely on the user to designate it as an autload.
+- ``WiimoteManager`` has been renamed to ``GDWiimoteServer``. It is now an engine singleton by default and does not rely on the user to designate it as an autoload.
 
 
 Version 0.1 - 2025-07-26
