@@ -73,7 +73,7 @@
 
   {% block body %}{% endblock %}
 
-  {% if (not meta or meta.get('allow_comments') != 'False') and godot_show_article_comments %}
+  <!-- {% if (not meta or meta.get('allow_comments') != 'False') and godot_show_article_comments %}
   <div id="godot-giscus">
     <hr>
     <h2>User-contributed notes</h2>
@@ -88,6 +88,6 @@
   <div class="articleComments">
     {%- block comments %}{% endblock %}
   </div>
-  {%- endif%}
+  {%- endif%} -->
 </div>
 {%- endblock %}

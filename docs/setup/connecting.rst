@@ -3,11 +3,11 @@
 Connecting the Wiimotes
 =======================
 
-To begin using the extension, we first need to setup a global autoload which is a :ref:`GDWiimoteServer <class_GDWiimoteServer>` node. This node is responsible for managing all Wiimote connections and polling. In what follows, we refer to Godot's in-editor project preview as well as the exported game as the *session*.
+In what follows, we refer to any instance of the game whether debug or exported as the *session*.
 
-An important thing to note is that GDWiiInput expects all remotes (and their expansions) to be connected to the PC **at the start of the session**. The Wiimote uses Bluetooth, making PC connection possible. However, it communicates using some non-standard and outdated Bluetooth protocols, which can cause inconsistent behavior across operating systems.
+GDWiiInput manages all Wiimote connections and input polling through the engine singleton :ref:`GDWiimoteServer <class_GDWiimoteServer>.`. An important thing to note is that the server expects all remotes (and their expansions) to be connected to the PC **at the start of the session**. 
 
-The session typically begins by scanning for connected (or discoverable, based on the OS) Wiimotes using :ref:`GDWiimoteServer.connect_wiimotes() <class_GDWiimoteServer_method_connect_wiimotes>` over a few seconds. The specifics of how to make the Wiimote discoverable to the function is described below.
+The session typically begins by scanning for connected (or discoverable, based on the OS) Wiimotes using :ref:`GDWiimoteServer.connect_wiimotes() <class_GDWiimoteServer_method_connect_wiimotes>` over a few seconds. The Wiimote uses Bluetooth, making PC connection possible. However, it communicates using some non-standard and outdated Bluetooth protocols, which can cause inconsistent behavior across operating systems. 
 
 Linux
 -----
