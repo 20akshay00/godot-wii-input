@@ -11,7 +11,7 @@
 [docs-stable-img]: https://img.shields.io/badge/docs-dev-blue.svg
 [docs-stable-url]: https://godot-wii-input.readthedocs.io/
 
-[asset-lib-img]: https://img.shields.io/badge/asset_lib-v2-blue.svg
+[asset-lib-img]: https://img.shields.io/badge/asset_lib-v0.2-blue.svg
 [asset-lib-url]: https://godotengine.org/asset-library/asset/4179
 
 ## Features
