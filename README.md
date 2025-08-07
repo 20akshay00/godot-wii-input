@@ -14,6 +14,9 @@
 [asset-lib-img]: https://img.shields.io/badge/asset_lib-v0.2-blue.svg
 [asset-lib-url]: https://godotengine.org/asset-library/asset/4179
 
+[gadget-img]: https://img.shields.io/badge/gadget-v0.2-blue.svg
+[gadget-url]: https://www.gadgetgodot.com/u/20akshay00/gdwiiinput
+
 ## Features
 
 - **Button Input**: All button presses, including the Nunchuk joystick motion, are routed through Godot's Input system. (Check the demo project to see the mappings)
@@ -24,4 +27,5 @@
 ## Limitations
 
 - **Third-party accessories** cannot be reliably supported due to the non-standard initialization methods they use.
+
 - **Controllers cannot be added/removed mid-session**. This includes Wiimotes and their extensions. Wiiuse assumes all devices are paired and connected at the start of the session, and unfortunately, adding or removing controllers afterward is not supported. While a solution exists using a direct HID layer, this is outside the scope of this project.
