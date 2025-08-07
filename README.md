@@ -6,7 +6,7 @@
 
 **GDWiiInput** is a Godot interface for communication with the Wii remote and its accessories, powered by [Wiiuse](https://github.com/wiiuse/wiiuse). Contributions are welcome!
 
-[![][docs-stable-img]][docs-stable-url] [![][asset-lib-img]][asset-lib-url] 
+[![][docs-stable-img]][docs-stable-url] [![][asset-lib-img]][asset-lib-url] [![][gadget-lib-img]][gadget-lib-url] 
 
 [docs-stable-img]: https://img.shields.io/badge/docs-dev-blue.svg
 [docs-stable-url]: https://godot-wii-input.readthedocs.io/
@@ -29,3 +29,4 @@
 - **Third-party accessories** cannot be reliably supported due to the non-standard initialization methods they use.
 
 - **Controllers cannot be added/removed mid-session**. This includes Wiimotes and their extensions. Wiiuse assumes all devices are paired and connected at the start of the session, and unfortunately, adding or removing controllers afterward is not supported. While a solution exists using a direct HID layer, this is outside the scope of this project.
+
