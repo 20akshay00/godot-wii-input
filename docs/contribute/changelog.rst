@@ -13,6 +13,13 @@ Here you will find the release notes for each version of the library. Each secti
 .. Upcoming Changes (main branch)
 .. ------------------------------
 
+Version 0.3 - 2025-09-01
+------------------------
+Note that there is a breaking change!
+
+- ``GDWiimoteServer.connect_wiimotes()`` has been renamed to ``GDWiimoteServer.initialize_connection()``. It now also takes an optional bool to automate initial pairing via WiiPair on windows although this is currently still experimental and disabled by default.
+
+
 Version 0.2 - 2025-07-26
 ------------------------
 
