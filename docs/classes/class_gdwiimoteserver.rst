@@ -139,7 +139,7 @@ Initiate the connection process for Wiimotes. This method will search for availa
 
 \ **Linux:** Press 1+2 on each Wiimote after this method is called.
 
-\ **Windows:** Pair the Wiimotes through Dolphin emulator or some other hidapi manager for Wii before calling this method.
+\ **Windows:** Pair the Wiimotes through Dolphin emulator or WiiPair before calling this method. Alternatively, you can call this method with the argument ``true`` to automatically handle (experimental) pairing mode using WiiPair. However, this does not work consistently and may require several attempts at times.
 
 \ **Note:** This method should be called only once at the start of the session. Subsequent calls will not reinitialize the connection process. This method is also blocking, so it may be prefered to call it in a separate thread.
 
