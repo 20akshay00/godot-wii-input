@@ -81,10 +81,27 @@ material = SubResource("ShaderMaterial_272bh")
 position = Vector2(583, 319)
 texture = ExtResource("5_lquwl")
 
-[node name="Label" type="Label" parent="LoadingCircle"]
-offset_left = 393.0
+[node name="Labels" type="Control" parent="LoadingCircle"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="LoadingCircle/Labels"]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 493.0
 offset_top = 431.0
-offset_right = 778.0
+offset_right = 677.0
 offset_bottom = 476.0
 theme_override_font_sizes/font_size = 32
-text = "Searching for Wiimotes..."
+text = "Searching..."
+
+[node name="Label2" type="Label" parent="LoadingCircle/Labels"]
+layout_mode = 0
+offset_left = 387.0
+offset_top = 166.0
+offset_right = 779.0
+offset_bottom = 211.0
+theme_override_font_sizes/font_size = 32
+text = "Press 1+2 on the Wiimote"

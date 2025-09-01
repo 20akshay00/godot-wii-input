@@ -42,13 +42,13 @@ Methods
    :widths: auto
 
    +----------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-   | |void|                                                         | :ref:`connect_wiimotes<class_GDWiimoteServer_method_connect_wiimotes>`\ (\ )                     |
-   +----------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
    | |void|                                                         | :ref:`disconnect_wiimotes<class_GDWiimoteServer_method_disconnect_wiimotes>`\ (\ )               |
    +----------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
    | :ref:`Array<class_Array>`\[:ref:`GDWiimote<class_GDWiimote>`\] | :ref:`finalize_connection<class_GDWiimoteServer_method_finalize_connection>`\ (\ )               |
    +----------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
    | :ref:`Array<class_Array>`\[:ref:`GDWiimote<class_GDWiimote>`\] | :ref:`get_connected_wiimotes<class_GDWiimoteServer_method_get_connected_wiimotes>`\ (\ ) |const| |
+   +----------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+   | |void|                                                         | :ref:`initialize_connection<class_GDWiimoteServer_method_initialize_connection>`\ (\ )           |
    +----------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
    | |void|                                                         | :ref:`poll<class_GDWiimoteServer_method_poll>`\ (\ )                                             |
    +----------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
@@ -90,48 +90,6 @@ Property Descriptions
 Method Descriptions
 -------------------
 
-.. _class_GDWiimoteServer_method_connect_wiimotes:
-
-.. rst-class:: classref-method
-
-|void| **connect_wiimotes**\ (\ ) :ref:`🔗<class_GDWiimoteServer_method_connect_wiimotes>`
-
-Initiate the connection process for Wiimotes. This method will search for available Wiimotes and connect them, allowing access to their features through the :ref:`GDWiimote<class_GDWiimote>` class. This must be followed by a call to :ref:`finalize_connection()<class_GDWiimoteServer_method_finalize_connection>` to complete the connection process and retrieve the connected Wiimotes.
-
-\ **Linux:** Press 1+2 on each Wiimote after this method is called.
-
-\ **Windows:** Pair the Wiimotes through Dolphin emulator or some other hidapi manager for Wii before calling this method.
-
-\ **Note:** This method should be called only once at the start of the session. Subsequent calls will not reinitialize the connection process. This method is also blocking, so it may be prefered to call it in a separate thread.
-
-
-.. tabs::
-
- .. code-tab:: gdscript
-
-    func _ready():
-        Thread.new().start(self, "_connect_wiimotes_thread")
-
-    func _connect_wiimotes_thread():
-        # Initialize loading screen
-        # ... 
-
-        GDWiimoteServer.connect_wiimotes()
-        call_deferred("_on_connection_complete")
-
-    func _on_connection_complete():
-        # Hide loading screen
-        # ...
-
-        # Retrieve connected Wiimotes 
-        var connected_wiimotes = GDWiimoteServer.finalize_connection()
-
-
-
-.. rst-class:: classref-item-separator
-
-----
-
 .. _class_GDWiimoteServer_method_disconnect_wiimotes:
 
 .. rst-class:: classref-method
@@ -165,6 +123,25 @@ Finalize the connection process and return an array of connected :ref:`GDWiimote
 :ref:`Array<class_Array>`\[:ref:`GDWiimote<class_GDWiimote>`\] **get_connected_wiimotes**\ (\ ) |const| :ref:`🔗<class_GDWiimoteServer_method_get_connected_wiimotes>`
 
 Get an array of currently connected :ref:`GDWiimote<class_GDWiimote>` instances. This will include all Wiimotes that have been successfully connected and initialized.
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_GDWiimoteServer_method_initialize_connection:
+
+.. rst-class:: classref-method
+
+|void| **initialize_connection**\ (\ ) :ref:`🔗<class_GDWiimoteServer_method_initialize_connection>`
+
+
+Initiate the connection process for Wiimotes. This method will search for available Wiimotes and connect them, allowing access to their features through the :ref:`GDWiimote<class_GDWiimote>` class. This must be followed by a call to :ref:`finalize_connection()<class_GDWiimoteServer_method_finalize_connection>` to complete the connection process and retrieve the connected Wiimotes.
+
+\ **Linux:** Press 1+2 on each Wiimote after this method is called.
+
+\ **Windows:** Pair the Wiimotes through Dolphin emulator or some other hidapi manager for Wii before calling this method.
+
+\ **Note:** This method should be called only once at the start of the session. Subsequent calls will not reinitialize the connection process. This method is also blocking, so it may be prefered to call it in a separate thread.
 
 .. rst-class:: classref-item-separator
 

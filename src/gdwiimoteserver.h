@@ -32,7 +32,7 @@ public:
 
     // Explicitly connect to Wiimotes, returns an Array of GDWiimote instances.
     godot::TypedArray<GDWiimote> finalize_connection();
-    void connect_wiimotes();
+    void initialize_connection(bool pair = false);
 
     // Disconnect and cleanup
     void disconnect_wiimotes();

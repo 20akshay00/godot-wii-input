@@ -9,35 +9,6 @@
 	<tutorials>
 	</tutorials>
 	<methods>
-		<method name="connect_wiimotes">
-			<return type="void" />
-			<description>
-				Initiate the connection process for Wiimotes. This method will search for available Wiimotes and connect them, allowing access to their features through the [GDWiimote] class. This must be followed by a call to [method finalize_connection] to complete the connection process and retrieve the connected Wiimotes.
-				[b]Linux:[/b] Press 1+2 on each Wiimote after this method is called.
-				[b]Windows:[/b] Pair the Wiimotes through Dolphin emulator or some other hidapi manager for Wii before calling this method.
-				[b]Note:[/b] This method should be called only once at the start of the session. Subsequent calls will not reinitialize the connection process. This method is also blocking, so it may be prefered to call it in a separate thread.
-				[codeblocks]
-				[gdscript]
-				func _ready():
-				    Thread.new().start(self, "_connect_wiimotes_thread")
-
-				func _connect_wiimotes_thread():
-				    # Initialize loading screen
-				    # ... 
-
-				    GDWiimoteServer.connect_wiimotes()
-				    call_deferred("_on_connection_complete")
-
-				func _on_connection_complete():
-				    # Hide loading screen
-				    # ...
-
-				    # Retrieve connected Wiimotes 
-				    var connected_wiimotes = GDWiimoteServer.finalize_connection()
-				[/gdscript]
-				[/codeblocks]
-			</description>
-		</method>
 		<method name="disconnect_wiimotes">
 			<return type="void" />
 			<description>
@@ -55,6 +26,11 @@
 			<return type="GDWiimote[]" />
 			<description>
 				Get an array of currently connected [GDWiimote] instances. This will include all Wiimotes that have been successfully connected and initialized.
+			</description>
+		</method>
+		<method name="initialize_connection">
+			<return type="void" />
+			<description>
 			</description>
 		</method>
 		<method name="poll">

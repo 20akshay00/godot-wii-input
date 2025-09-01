@@ -16,7 +16,7 @@ func _process(delta: float) -> void:
 
 func _thread_connect_wiimotes():
 	# assigns wiiuse structures
-	GDWiimoteServer.connect_wiimotes()
+	GDWiimoteServer.initialize_connection()
 	call_deferred("_on_connection_complete")
 
 func _on_connection_complete():

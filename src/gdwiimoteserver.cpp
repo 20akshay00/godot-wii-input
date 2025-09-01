@@ -1,4 +1,5 @@
 #include "gdwiimoteserver.h"
+#include "wiipair.h"
 #include <godot_cpp/variant/utility_functions.hpp>
 
 #include <godot_cpp/classes/engine.hpp>
@@ -15,7 +16,7 @@ void GDWiimoteServer::_bind_methods()
     godot::ClassDB::bind_method(godot::D_METHOD("get_max_wiimotes"), &GDWiimoteServer::get_max_wiimotes);
     ADD_PROPERTY(godot::PropertyInfo(godot::Variant::INT, "max_wiimotes"), "set_max_wiimotes", "get_max_wiimotes");
 
-    godot::ClassDB::bind_method(godot::D_METHOD("connect_wiimotes"), &GDWiimoteServer::connect_wiimotes);
+    godot::ClassDB::bind_method(godot::D_METHOD("initialize_connection"), &GDWiimoteServer::initialize_connection);
     godot::ClassDB::bind_method(godot::D_METHOD("finalize_connection"), &GDWiimoteServer::finalize_connection);
     godot::ClassDB::bind_method(godot::D_METHOD("disconnect_wiimotes"), &GDWiimoteServer::disconnect_wiimotes);
     godot::ClassDB::bind_method(godot::D_METHOD("get_connected_wiimotes"), &GDWiimoteServer::get_connected_wiimotes);
@@ -54,7 +55,7 @@ int GDWiimoteServer::get_max_wiimotes() const
     return max_wiimotes;
 }
 
-void GDWiimoteServer::connect_wiimotes()
+void GDWiimoteServer::initialize_connection(bool pair)
 {
     if (num_connected >= 0)
     {
@@ -64,8 +65,21 @@ void GDWiimoteServer::connect_wiimotes()
 
     // Allocate wiimote structures
     wiimotes = wiiuse_init(max_wiimotes);
-
     int found = wiiuse_find(wiimotes, max_wiimotes, 5);
+
+    if (found <= 0)
+    {
+        // First, pair any unpaired Wiimotes (Windows only)
+        godot::UtilityFunctions::print("Press 1+2 to pair Wiimotes.");
+
+        if (pair)
+        {
+            pair_wiimotes();
+            godot::UtilityFunctions::print("Press 1+2 to initialize connection.");
+            found = wiiuse_find(wiimotes, max_wiimotes, 5);
+        }
+    }
+
     if (found <= 0)
     {
         godot::UtilityFunctions::print("No Wiimotes found.");

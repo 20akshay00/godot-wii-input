@@ -4,7 +4,7 @@
 
 > **Supported Platforms:** Windows & Linux with **Godot 4.4+**
 
-**GDWiiInput** is a Godot interface for communication with the Wii remote and its accessories, powered by [Wiiuse](https://github.com/wiiuse/wiiuse). Contributions are welcome!
+**GDWiiInput** is a Godot interface for communication with the Wii remote and its accessories, powered by [Wiiuse](https://github.com/wiiuse/wiiuse).
 
 [![][docs-stable-img]][docs-stable-url] [![][asset-lib-img]][asset-lib-url] [![][gadget-img]][gadget-url] 
 
