@@ -67,17 +67,13 @@ void GDWiimoteServer::initialize_connection(bool pair)
     wiimotes = wiiuse_init(max_wiimotes);
     int found = wiiuse_find(wiimotes, max_wiimotes, 5);
 
-    if (found <= 0)
+    if ((found <= 0) && pair)
     {
         // First, pair any unpaired Wiimotes (Windows only)
         godot::UtilityFunctions::print("Press 1+2 to pair Wiimotes.");
-
-        if (pair)
-        {
-            pair_wiimotes();
-            godot::UtilityFunctions::print("Press 1+2 to initialize connection.");
-            found = wiiuse_find(wiimotes, max_wiimotes, 5);
-        }
+        pair_wiimotes();
+        godot::UtilityFunctions::print("Press 1+2 to initialize connection.");
+        found = wiiuse_find(wiimotes, max_wiimotes, 5);
     }
 
     if (found <= 0)
