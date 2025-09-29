@@ -14,7 +14,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if _is_calibrated and Input.is_action_just_pressed("A"):
-		_is_calibrated = false 
+		_is_calibrated = false
 		wiimote.reset_gyro_calibration()
 		wiimote.start_gyro_calibration()
 		print("Calibrating...")
@@ -28,7 +28,7 @@ func _process(delta: float) -> void:
 	
 func _thread_connect_wiimotes():
 	# assigns wiiuse structures
-	GDWiimoteServer.initialize_connection()
+	GDWiimoteServer.initialize_connection(false)
 	call_deferred("_on_connection_complete")
 
 func _on_connection_complete():
@@ -47,4 +47,3 @@ func _on_connection_complete():
 	get_tree().create_timer(6).timeout.connect(
 		func(): print("Calibration complete."); wiimote.stop_gyro_calibration(); _is_calibrated = true;
 		)
-	
