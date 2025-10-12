@@ -17,6 +17,11 @@
 [gadget-img]: https://img.shields.io/badge/gadget-v0.2-blue.svg
 [gadget-url]: https://www.gadgetgodot.com/u/20akshay00/gdwiiinput
 
+## How to use 
+Install the GDWiiInput extension from the Godot asset library from inside the Godot editor. If this does not work for some reason, you can directly grab a [release](https://github.com/20akshay00/godot-wii-input/releases) from this repository and unzip the `\addons` folder which must be placed in the root of your Godot project. 
+
+**Note:** If you clone this repository to run the demo project, the addon must still be manually installed first through either of the methods mentioned above!
+
 ## Features
 
 - **Button Input**: All button presses, including the Nunchuk joystick motion, are routed through Godot's Input system. (Check the demo project to see the mappings)
