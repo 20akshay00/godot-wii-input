@@ -270,6 +270,8 @@ void GDWiimote::handle_event()
         // Relay main Wiimote buttons
         relay_button(wm, WIIMOTE_BUTTON_A, godot::JoyButton::JOY_BUTTON_A);
         relay_button(wm, WIIMOTE_BUTTON_B, godot::JoyButton::JOY_BUTTON_B);
+        relay_button(wm, WIIMOTE_BUTTON_ONE, godot::JoyButton::JOY_BUTTON_X);
+        relay_button(wm, WIIMOTE_BUTTON_TWO, godot::JoyButton::JOY_BUTTON_Y);
         relay_button(wm, WIIMOTE_BUTTON_PLUS, godot::JoyButton::JOY_BUTTON_START);
         relay_button(wm, WIIMOTE_BUTTON_MINUS, godot::JoyButton::JOY_BUTTON_BACK);
         relay_button(wm, WIIMOTE_BUTTON_HOME, godot::JoyButton::JOY_BUTTON_GUIDE);

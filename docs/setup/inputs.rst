@@ -15,6 +15,10 @@ All button presses are routed through Godot's Input system. Since some Wiimote b
 +-------------------+-------------------+---------------------------------------------------------------+
 | B                 | Joypad Button 1   | Right Action (Xbox: B, Sony: Circle, Nintendo: A)             |
 +-------------------+-------------------+---------------------------------------------------------------+
+| 1                 | Joypad Button 2   | Left Action (Xbox: X, Sony: Square, Nintendo: Y)              |
++-------------------+-------------------+---------------------------------------------------------------+
+| 2                 | Joypad Button 3   | Top Action (Xbox: Y, Sony: Triangle, Nintendo: X)             |
++-------------------+-------------------+---------------------------------------------------------------+
 | Plus              | Joypad Button 6   | Start (Xbox: Menu, Sony: Options, Nintendo: +)                |
 +-------------------+-------------------+---------------------------------------------------------------+
 | Minus             | Joypad Button 4   | Select (Xbox: Back, Sony: Select, Nintendo: -)                |
